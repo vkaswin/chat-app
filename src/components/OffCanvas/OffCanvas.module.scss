@@ -1,0 +1,130 @@
+.offcanvas_enter {
+  .offcanvas[data-position="left"] {
+    animation: from-left 300ms ease-in-out forwards;
+  }
+  .offcanvas[data-position="right"] {
+    animation: from-right 300ms ease-in-out forwards;
+  }
+  .offcanvas[data-position="top"] {
+    animation: from-top 300ms ease-in-out forwards;
+  }
+  .offcanvas[data-position="bottom"] {
+    animation: from-bottom 300ms ease-in-out forwards;
+  }
+  .offcanvas_overlay {
+    animation: overlay-anime 300ms ease-in-out forwards;
+  }
+}
+
+.offcanvas_exit {
+  .offcanvas[data-position="left"] {
+    animation: from-left 300ms ease-in-out forwards reverse;
+  }
+  .offcanvas {
+    animation: from-right 300ms ease-in-out forwards reverse;
+  }
+  .offcanvas[data-position="top"] {
+    animation: from-top 300ms ease-in-out forwards reverse;
+  }
+  .offcanvas[data-position="bottom"] {
+    animation: from-bottom 300ms ease-in-out forwards reverse;
+  }
+  .offcanvas_overlay {
+    animation: overlay-anime 300ms ease-in-out forwards reverse;
+  }
+}
+
+.offcanvas {
+  position: fixed;
+  background-color: #ffffff;
+  z-index: 1050;
+}
+
+.offcanvas_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1049;
+}
+
+.offcanvas[data-position="left"],
+.offcanvas[data-position="right"] {
+  top: 0px;
+  min-width: 250px;
+  height: 100%;
+}
+
+.offcanvas[data-position="top"],
+.offcanvas[data-position="bottom"] {
+  left: 0px;
+  width: 100%;
+  min-height: 250px;
+}
+
+.offcanvas[data-position="left"] {
+  left: 0px;
+  --anime: from-left;
+}
+
+.offcanvas[data-position="right"] {
+  right: 0px;
+  --anime: from-right;
+}
+
+.offcanvas[data-position="top"] {
+  top: 0px;
+  --anime: from-top;
+}
+
+.offcanvas[data-position="bottom"] {
+  bottom: 0px;
+  --anime: from-bottom;
+}
+
+@keyframes from-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes from-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes from-bottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes from-top {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes overlay-anime {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

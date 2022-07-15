@@ -7,11 +7,11 @@ export const ProtectedRoute = ({
   component,
   isAuthPage = false,
 }) => {
-  const token = getCookie("authToken");
+  //   const token = getCookie("authToken");
 
-  if (isAuthenticated && !token) return <Navigate replace to="/auth/login" />;
+  //   if (isAuthenticated && !token) return <Navigate replace to="/auth/login" />;
 
-  if (isAuthPage && token) return <Navigate replace to="/app/profile" />;
+  //   if (isAuthPage && token) return <Navigate replace to="/app/profile" />;
 
   return component;
 };

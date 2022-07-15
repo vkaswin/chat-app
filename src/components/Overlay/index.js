@@ -1,18 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { classNames } from "utils";
+import { CSSTransition } from "react-transition-group";
 
-import "./Overlay.scss";
+import styles from "./Overlay.module.scss";
 
-export const Overlay = ({ isOpen, toggle, zIndex }) => {
+export const Overlay = ({ isOpen, toggle, zIndex, duration }) => {
   return (
-    <div
-      style={{ "--overlay-zindex": zIndex }}
-      className={classNames("rc-overlay", { show: isOpen })}
-      onClick={() => {
-        isOpen && toggle();
+    <CSSTransition
+      in={isOpen}
+      classNames={{
+        enterActive: styles.overlay_enter,
+        exitActive: styles.overlay_exit,
       }}
-    ></div>
+    >
+      <div
+        style={{
+          "--overlay-zindex": zIndex,
+          "--overlay-duration": `${duration}ms`,
+        }}
+        className={styles.overlay}
+        onClick={() => {
+          isOpen && toggle();
+        }}
+      ></div>
+    </CSSTransition>
   );
 };
 
@@ -24,6 +35,7 @@ Overlay.propTypes = {
 
 Overlay.defaultProps = {
   zIndex: 1025,
+  duration: 300,
   isOpen: false,
   toggle: () => {},
 };

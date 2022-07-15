@@ -20,20 +20,6 @@ export const debounce = (fn, delay) => {
   };
 };
 
-export const getBoundingClientRect = (element) => {
-  let rect = element.getBoundingClientRect();
-  return {
-    bottom: rect.bottom,
-    height: rect.height,
-    left: rect.left,
-    right: rect.right,
-    top: rect.top,
-    width: rect.width,
-    x: rect.x,
-    y: rect.y,
-  };
-};
-
 export const setCookie = ({ name, value, days }) => {
   let expireDate = new Date();
   expireDate.setTime(expireDate.getTime() + days * 24 * 60 * 60 * 1000);

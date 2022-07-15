@@ -1,5 +1,5 @@
-import React, { Fragment } from "react";
-import { DropDown, Avatar } from "components";
+import React, { Fragment, useState } from "react";
+import { DropDown, Avatar, OffCanvas } from "components";
 import { TextArea } from "./TextArea";
 import { Conversation } from "./Conversation";
 
@@ -21,6 +21,12 @@ export const Chats = () => {
     },
   ];
 
+  const [showInfo, setShowInfo] = useState(false);
+
+  const toggleInfo = () => {
+    setShowInfo(!showInfo);
+  };
+
   return (
     <Fragment>
       <Conversation />
@@ -40,9 +46,9 @@ export const Chats = () => {
           <i className="bx-search"></i>
           <i className="bxs-phone-call"></i>
           <i className="bx-video"></i>
-          <i className="bxs-info-circle"></i>
+          <i className="bxs-info-circle" onClick={toggleInfo}></i>
           <i className="bx-dots-vertical-rounded" id="more-option"></i>
-          <DropDown selector="#more-option">
+          <DropDown selector="#more-option" position="bottom-end">
             {moreDropDown.map(({ label, icon }, index) => {
               return (
                 <DropDown.Item key={index} className={styles.more_option}>
@@ -55,6 +61,14 @@ export const Chats = () => {
         </div>
       </div>
       <TextArea />
+      <OffCanvas
+        isOpen={showInfo}
+        position="right"
+        className={styles.profile_sidebar}
+        toggle={toggleInfo}
+      >
+        <div>helo</div>
+      </OffCanvas>
     </Fragment>
   );
 };

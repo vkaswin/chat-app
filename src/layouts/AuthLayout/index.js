@@ -9,13 +9,13 @@ const AuthLayout = () => {
   return (
     <div className={styles.auth_container}>
       <div className={styles.auth_left}>
-        <div class={styles.title}>
-          <i class="bxs-message-alt-detail"></i>
+        <div className={styles.title}>
+          <i className="bxs-message-alt-detail"></i>
           <b>Vue Chat App</b>
         </div>
         <img src={authImg} className={styles.auth_img} />
       </div>
-      <div class={styles.auth_right}>
+      <div className={styles.auth_right}>
         <Outlet />
       </div>
     </div>

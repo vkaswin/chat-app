@@ -1,0 +1,124 @@
+.emoji_enter {
+  .emoji_container {
+    .emoji_wrapper {
+      animation: emoji-anime 0.3s ease-in-out forwards;
+    }
+  }
+}
+.emoji_exit {
+  .emoji_container {
+    .emoji_wrapper {
+      animation: emoji-anime 0.3s ease-in-out forwards reverse;
+    }
+  }
+}
+.emoji_container {
+  z-index: 1052;
+  .emoji_wrapper {
+    max-width: 300px;
+    width: 100%;
+    background: #fff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    .emoji_header {
+      background-color: #f6f6f9;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      .emoji_type {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 10px;
+        cursor: pointer;
+        i {
+          color: #414744;
+          font-size: 18px;
+        }
+        &:hover {
+          background-color: #d6e7dd;
+        }
+      }
+      .close {
+        background-color: #eaeaf1;
+        color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        span {
+          font-size: 18px;
+        }
+      }
+    }
+    .search_emoji {
+      display: flex;
+      input {
+        background-color: #fff;
+        color: #495057;
+        border: 1px solid #f6f6f9;
+        padding: 10px 15px;
+        font-size: 14px;
+        width: 100%;
+        outline: none;
+      }
+      .search_icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        background-color: #f6f6f9;
+        cursor: pointer;
+        i {
+          font-size: 20px;
+          color: #414744;
+        }
+      }
+    }
+    .emoji_card {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-height: 265px;
+      overflow-y: auto;
+      padding: 15px;
+      scroll-behavior: smooth;
+      .emoji_title {
+        color: #414744;
+        margin-bottom: 5px;
+      }
+      .emoji_list {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        button {
+          background-color: transparent;
+          border: none;
+          padding: 10px 0px;
+          border-radius: 4px;
+          transition: background-color 0.2s ease-in-out;
+          font-size: 20px;
+          .emoji_icon {
+            transition: transform 0.2s ease-in-out;
+          }
+          &:hover {
+            background-color: #d6e7dd;
+            .emoji_icon {
+              transform: scale(1.3);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes emoji-anime {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}

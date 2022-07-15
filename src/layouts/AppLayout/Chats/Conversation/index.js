@@ -41,31 +41,37 @@ export const Conversation = () => {
         return (
           <div
             key={index}
-            className={classNames(styles.chat_wrapper, {
+            className={classNames(styles.conversation_wrapper, {
               [styles.end]: index % 2 === 0,
             })}
           >
-            <div className={styles.chat_card}>
-              <span>{msg}</span>
+            <div className={styles.chat_wrapper}>
+              <div className={styles.chat_card}>
+                <span>{msg}</span>
+              </div>
+              <div className={styles.options}>
+                <i
+                  className="bx-dots-vertical-rounded"
+                  id={`chat-option-${index}`}
+                ></i>
+                <DropDown
+                  selector={`#chat-option-${index}`}
+                  position="bottom-center"
+                >
+                  {dropDown.map(({ label, icon }, index) => {
+                    return (
+                      <DropDown.Item key={index} className={styles.chat_option}>
+                        <span>{label}</span>
+                        <i className={icon}></i>
+                      </DropDown.Item>
+                    );
+                  })}
+                </DropDown>
+              </div>
             </div>
-            <div className={styles.options}>
-              <i
-                className="bx-dots-vertical-rounded"
-                id={`chat-option-${index}`}
-              ></i>
-              <DropDown
-                selector={`#chat-option-${index}`}
-                position="bottom-start"
-              >
-                {dropDown.map(({ label, icon }, index) => {
-                  return (
-                    <DropDown.Item key={index} className={styles.chat_option}>
-                      <span>{label}</span>
-                      <i className={icon}></i>
-                    </DropDown.Item>
-                  );
-                })}
-              </DropDown>
+            <div className={styles.msg_time}>
+              <span>{datetime}</span>
+              <i className="bx bx-check-double" data-seen={true}></i>
             </div>
           </div>
         );

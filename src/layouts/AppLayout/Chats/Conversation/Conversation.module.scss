@@ -3,40 +3,67 @@
   padding: 90px 15px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  .chat_wrapper {
+  gap: 10px;
+  .conversation_wrapper {
     display: flex;
-    max-width: 75%;
-    gap: 5px;
-    cursor: pointer;
-    &:hover {
-      .options {
-        opacity: 1;
-      }
-    }
+    flex-direction: column;
+    gap: 10px;
     &:is(.end) {
-      flex-direction: row-reverse;
-      margin-left: auto;
-      .chat_card {
-        background-color: #c0ddc9;
+      .chat_wrapper {
+        flex-direction: row-reverse;
+        margin-left: auto;
+        .chat_card {
+          background-color: #c0ddc9;
+        }
+      }
+      .msg_time {
+        justify-content: flex-end;
+        i {
+          display: block;
+          color: #4eac6d;
+        }
       }
     }
-    .chat_card {
-      width: fit-content;
-      padding: 10px 15px;
-      background-color: #fff;
-      position: relative;
-      border-radius: 3px;
-      box-shadow: 0 2px 4px rgba(15, 34, 58, 0.12);
-      color: #495057;
-      font-size: 14px;
-    }
-    .options {
-      color: #495057;
-      font-size: 18px;
-      opacity: 0;
-      transition: opacity 0.2s ease-in-out;
+    .chat_wrapper {
+      display: flex;
+      max-width: 75%;
+      gap: 5px;
       cursor: pointer;
+      &:hover {
+        .options {
+          opacity: 1;
+        }
+      }
+      .chat_card {
+        width: fit-content;
+        padding: 10px 15px;
+        background-color: #fff;
+        position: relative;
+        border-radius: 3px;
+        box-shadow: 0 2px 4px rgba(15, 34, 58, 0.12);
+        color: #495057;
+        font-size: 14px;
+      }
+      .options {
+        color: #495057;
+        font-size: 18px;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+        cursor: pointer;
+      }
+    }
+    .msg_time {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 5px;
+      span {
+        color: #495057;
+        font-size: 13px;
+      }
+      i {
+        display: none;
+      }
     }
   }
 }

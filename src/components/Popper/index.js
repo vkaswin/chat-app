@@ -1,6 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
-import { getBoundingClientRect } from "utils";
 import { PopperPlacements } from "utils/constants";
 
 export const Popper = ({
@@ -40,17 +39,9 @@ export const Popper = ({
   };
 
   const handlePopper = () => {
-    const reference = getBoundingClientRect(referenceElement.current);
+    const reference = referenceElement.current?.getBoundingClientRect();
 
-    const popper = getBoundingClientRect(popperElement.current);
-
-    const { scrollX, scrollY } = window;
-
-    reference.x += scrollX;
-    reference.y += scrollY;
-
-    popper.x += scrollX;
-    popper.y += scrollY;
+    const popper = popperElement.current?.getBoundingClientRect();
 
     const { innerWidth, innerHeight } = window;
 
@@ -98,9 +89,8 @@ export const Popper = ({
   };
 
   const canPlaceOnBottom = ({ reference, popper, innerHeight }) => {
-    return (
-      innerHeight - (reference.y + reference.height + offset) > popper.height
-    );
+    let bottom = innerHeight - (reference.y + reference.height + offset);
+    return bottom > popper.height;
   };
 
   const placeOnLeftStart = (args) => {
@@ -300,9 +290,13 @@ export const Popper = ({
     const { reference, popper, innerWidth, isDefault = false } = args;
     if (isDefault || !canPlaceOnBottom(args)) return false;
     let right = innerWidth - reference.x;
+    let minValue = window.innerWidth - popper.width - offset - 10;
     let left =
       right < popper.width
-        ? Math.max(reference.x - (popper.width - right + offset), 10)
+        ? Math.min(
+            Math.max(reference.x - (popper.width - right + offset), 10),
+            minValue
+          )
         : reference.x;
     let top = reference.y + reference.height + offset;
     return {
@@ -320,9 +314,13 @@ export const Popper = ({
     if (!canPlaceOnBottom(args)) return false;
     const { reference, popper, innerWidth } = args;
     let right = innerWidth - reference.x;
+    let minValue = window.innerWidth - popper.width - offset - 10;
     let left =
       right < popper.width
-        ? Math.max(reference.x - (popper.width - right + offset), 10)
+        ? Math.min(
+            Math.max(reference.x - (popper.width - right + offset), 10),
+            minValue
+          )
         : Math.max(reference.x + (reference.width / 2 - popper.width / 2), 10);
     let top = reference.y + reference.height + offset;
     return {
@@ -421,16 +419,17 @@ export const Popper = ({
     arrow: { x, y } = {},
     placement,
   }) => {
+    const { scrollX, scrollY } = window;
     setState({
       popper: {
         ...state.popper,
-        transform: `translate(${X}px,${Y}px)`,
+        transform: `translate(${X + scrollX}px,${Y + scrollY}px)`,
       },
       ...(arrow && {
         arrow: {
           ...state.arrow,
-          left: `${x}px`,
-          top: `${y}px`,
+          left: `${x + scrollX}px`,
+          top: `${y + scrollY}px`,
         },
       }),
       position: placement ?? position,

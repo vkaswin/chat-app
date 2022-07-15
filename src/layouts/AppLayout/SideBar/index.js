@@ -115,7 +115,7 @@ export const SideBar = ({ theme = "light" }) => {
             {theme === "light" ? (
               <i classame="bx-moon"></i>
             ) : (
-              <i class="bx-sun"></i>
+              <i className="bx-sun"></i>
             )}
           </div>
           <div id="avatar">

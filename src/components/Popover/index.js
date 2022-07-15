@@ -23,12 +23,12 @@ export const Popover = ({ children, position, arrow, offset, selector }) => {
   useEffect(() => {
     if (selector.length === 0) return;
 
-    const ele = document.querySelector(selector);
+    const element = document.querySelector(selector);
 
-    if (!ele) return;
+    if (!element) return;
 
-    targetRef.current = ele;
-    ele.onclick = show;
+    targetRef.current = element;
+    element.onclick = show;
   }, []);
 
   const onEntered = (ele) => {
