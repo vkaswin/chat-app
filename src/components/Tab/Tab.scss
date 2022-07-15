@@ -1,0 +1,26 @@
+.tab-container {
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  background-color: white;
+  position: relative;
+  .tab-wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: max-content;
+    .tab-indicator {
+      position: absolute;
+      bottom: 0;
+      background-color: #2676d2;
+      transition: all 0.2s;
+      height: 4px;
+      border-radius: 4px 4px 0px 0px;
+    }
+  }
+}
+
+.tab-item {
+  min-width: max-content;
+  cursor: pointer;
+  padding: 7px 15px;
+}

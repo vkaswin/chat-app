@@ -1,0 +1,165 @@
+.rc-toast-container[data-position^="top"] {
+  .rc-toast {
+    margin-bottom: 1rem;
+  }
+}
+
+.rc-toast-container[data-position^="bottom"] {
+  .rc-toast {
+    margin-top: 1rem;
+  }
+}
+
+.rc-toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 320px;
+  color: white;
+  padding: 15px 25px 15px 10px;
+  filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.15));
+  cursor: pointer;
+  border-radius: 4px;
+  position: relative;
+  animation: var(--animation-show) 0.3s linear forwards;
+  &:is(.hide) {
+    animation: var(--animation-hide) 0.3s linear forwards;
+  }
+  .icon {
+    i {
+      font-size: 24px;
+    }
+  }
+  span {
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 1.2rem;
+  }
+  button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    i {
+      font-weight: normal;
+      font-size: 16px;
+    }
+    &:is(.hide) {
+      display: none;
+    }
+  }
+  .progress {
+    position: absolute;
+    height: 5px;
+    bottom: 0px;
+    left: 0px;
+    animation: rc_trackProgress var(--progress-animation) linear forwards;
+    overflow: hidden;
+    border-radius: 0px 0px 0px 4px;
+  }
+}
+
+.rc-toast[data-theme="coloured"][data-type="success"] {
+  background-color: var(--toast-success);
+}
+
+.rc-toast[data-theme="coloured"][data-type="error"] {
+  background-color: var(--toast-error);
+}
+
+.rc-toast[data-theme="coloured"][data-type="warning"] {
+  background-color: var(--toast-warning);
+}
+
+.rc-toast[data-theme="coloured"][data-type="info"] {
+  background-color: var(--toast-info);
+}
+
+.rc-toast[data-theme="light"] {
+  background-color: var(--toast-theme-light);
+  span {
+    color: var(--toast-text-gray);
+  }
+  button {
+    color: var(--toast-text-gray);
+  }
+}
+
+.rc-toast[data-theme="dark"] {
+  background-color: var(--toast-theme-dark);
+  span {
+    color: var(--toast-text-white);
+  }
+  button {
+    color: var(--toast-text-white);
+  }
+}
+
+.rc-toast[data-theme="coloured"] {
+  span {
+    color: var(--toast-text-white);
+  }
+  button {
+    color: var(--toast-text-white);
+  }
+}
+
+.rc-toast[data-theme="coloured"][data-type] {
+  .icon {
+    i {
+      color: var(--toast-text-white);
+    }
+  }
+}
+
+.rc-toast[data-type="success"] {
+  .icon {
+    i {
+      color: var(--toast-success);
+    }
+  }
+  .progress {
+    background-color: var(--toast-success);
+  }
+}
+
+.rc-toast[data-type="error"] {
+  .icon {
+    i {
+      color: var(--toast-error);
+    }
+  }
+  .progress {
+    background-color: var(--toast-error);
+  }
+}
+
+.rc-toast[data-type="warning"] {
+  .icon {
+    i {
+      color: var(--toast-warning);
+    }
+  }
+  .progress {
+    background-color: var(--toast-warning);
+  }
+}
+
+.rc-toast[data-type="info"] {
+  .icon {
+    i {
+      color: var(--toast-info);
+    }
+  }
+  .progress {
+    background-color: var(--toast-info);
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .rc-toast {
+    width: 100%;
+  }
+}

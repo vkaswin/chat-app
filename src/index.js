@@ -1,15 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, { Fragment } from "react";
+import ReactDOM from "react-dom/client";
+import { ProvideAuth } from "hooks/useAuth";
+import { Router } from "./router";
+import reportWebVitals from "./reportWebVitals";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+import "assets/scss/abstracts.scss";
+import { ToastContainer } from "components";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const App = () => {
+  return (
+    <Fragment>
+      <ProvideAuth>
+        <Router />
+        <ToastContainer />
+      </ProvideAuth>
+    </Fragment>
+  );
+};
+root.render(<App />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

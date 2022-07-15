@@ -1,0 +1,58 @@
+.popover_enter {
+  .menu {
+    animation: popover-anime 250ms ease-in-out forwards;
+  }
+}
+
+.popover_exit {
+  .menu {
+    animation: popover-anime 250ms ease-in-out forwards reverse;
+  }
+}
+
+.popover {
+  z-index: 1050;
+  .menu {
+    max-width: 250px;
+    background-color: #ffffff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%;
+    text-align: justify;
+    .arrow {
+      position: absolute;
+      border-width: 8px;
+      border-style: solid;
+      border-color: #ffffff transparent transparent transparent;
+      z-index: -1;
+    }
+    .arrow[data-position^="left"] {
+      transform: rotate(-90deg);
+      margin-left: -14px;
+    }
+    .arrow[data-position^="right"] {
+      transform: rotate(90deg);
+      margin-left: -1px;
+    }
+    .arrow[data-position^="top"] {
+      transform: rotate(0deg);
+      margin-top: -14px;
+    }
+    .arrow[data-position^="bottom"] {
+      transform: rotate(180deg);
+      margin-top: -1px;
+    }
+  }
+}
+
+@keyframes popover-anime {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}

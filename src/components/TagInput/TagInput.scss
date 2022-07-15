@@ -1,0 +1,30 @@
+.tag-container {
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  padding: 5px 10px;
+  width: 100%;
+  height: auto;
+}
+.tag-input {
+  border: none;
+  width: 85px;
+  outline: none;
+  font-size: 14px;
+}
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  .tags {
+    padding: 2px 5px;
+    border-radius: 2px;
+    font-size: 13px;
+    cursor: default;
+    .delete-tag {
+      font-size: 13px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+  }
+}
