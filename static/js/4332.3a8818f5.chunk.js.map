@@ -1,1 +1,0 @@
-{"version":3,"file":"static/js/4332.3a8818f5.chunk.js","mappings":"kJAUA,UARc,WACZ,OACE,0BACE,mCAGL,C","sources":["pages/Calls/index.js"],"sourcesContent":["import React from \"react\";\n\nconst Calls = () => {\n  return (\n    <div>\n      <h1>Calls</h1>\n    </div>\n  );\n};\n\nexport default Calls;\n"],"names":[],"sourceRoot":""}

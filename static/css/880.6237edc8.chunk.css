@@ -1,0 +1,2 @@
+html[data-theme] :root{transition:background-color,color;transition-duration:.3s;transition-timing-function:cubic-bezier(.075,.82,.165,1)}html[data-theme=dark] :root,html[data-theme=light] :root{--primary-clr:"green"}
+/*# sourceMappingURL=880.6237edc8.chunk.css.map*/
