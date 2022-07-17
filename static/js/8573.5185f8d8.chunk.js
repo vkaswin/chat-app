@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[8573],{8573:function(a,c,e){e.r(c);e(2791);var t=e(184);c.default=function(){return(0,t.jsx)("div",{children:(0,t.jsx)("h1",{children:"Chats"})})}}}]);
-//# sourceMappingURL=8573.5185f8d8.chunk.js.map

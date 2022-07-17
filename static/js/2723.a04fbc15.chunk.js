@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[2723],{2723:function(n,_,a){a.r(_),_.default={conversation_container:"Conversation_conversation_container__6wBY5",conversation_wrapper:"Conversation_conversation_wrapper__snJzP",end:"Conversation_end__Kjdak",chat_wrapper:"Conversation_chat_wrapper__FyiKP",chat_card:"Conversation_chat_card__-jtgC",msg_time:"Conversation_msg_time__DOXK4",options:"Conversation_options__mUos4",chat_option:"Conversation_chat_option__enVL0"}}}]);
-//# sourceMappingURL=2723.a04fbc15.chunk.js.map

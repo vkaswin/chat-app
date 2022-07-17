@@ -1,1 +1,0 @@
-{"version":3,"file":"static/js/8573.5185f8d8.chunk.js","mappings":"kJAUA,UARc,WACZ,OACE,0BACE,mCAGL,C","sources":["pages/Chats/index.js"],"sourcesContent":["import React from \"react\";\n\nconst Chats = () => {\n  return (\n    <div>\n      <h1>Chats</h1>\n    </div>\n  );\n};\n\nexport default Chats;\n"],"names":[],"sourceRoot":""}
