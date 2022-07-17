@@ -70,10 +70,10 @@ export const SideBar = ({ theme = "light" }) => {
   ];
 
   useLayoutEffect(() => {
-    let match = pathName.split("/")[2];
+    let match = pathName.split("/")[1];
     let index = tabs.findIndex(({ to }) => to === match);
 
-    let { clientHeight, offsetTop } = tabRef.current.children[index];
+    let { clientHeight, offsetTop } = tabRef.current?.children[index];
 
     indicatorRef.current.style.height = `${clientHeight}px`;
     indicatorRef.current.style.top = `${offsetTop}px`;

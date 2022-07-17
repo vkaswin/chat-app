@@ -8,5 +8,7 @@
     position: relative;
     background-image: url("../../assets/images/chat-bg.png");
     background-color: #e2ebe5;
+    max-width: 100%;
+    overflow-y: auto;
   }
 }

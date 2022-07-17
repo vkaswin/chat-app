@@ -103,10 +103,11 @@ export const Emoji = ({ toggle, isOpen, selector }) => {
                         return (
                           <div
                             key={index}
+                            id={`emoji-type-${index}`}
                             className={styles.emoji_type}
                             onClick={handleFocus(label)}
                           >
-                            <i className={icon} id={`emoji-type-${index}`}></i>
+                            <i className={icon}></i>
                             <Tooltip
                               position="top-center"
                               selector={`#emoji-type-${index}`}
@@ -117,8 +118,12 @@ export const Emoji = ({ toggle, isOpen, selector }) => {
                           </div>
                         );
                       })}
-                      <div className={styles.close} onClick={toggle}>
-                        <span id="emoji-close">&#10799;</span>
+                      <div
+                        id="emoji-close"
+                        className={styles.close}
+                        onClick={toggle}
+                      >
+                        <span>&#10799;</span>
                         <Tooltip
                           position="top-center"
                           selector={`#emoji-close`}

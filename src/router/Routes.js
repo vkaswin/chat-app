@@ -36,7 +36,7 @@ export const routes = [
     ],
   },
   {
-    path: "app",
+    path: "/",
     componentPath: "layouts/AppLayout",
     children: [
       {

@@ -76,7 +76,7 @@ export const Router = () => {
           <Route
             path="/"
             element={
-              <Navigate replace to={user ? "/app/profile" : "/auth/login"} />
+              <Navigate replace to={user ? "/profile" : "/auth/login"} />
             }
           />
           <Route path="*" element={<PageNotFound />} />
