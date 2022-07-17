@@ -12,6 +12,7 @@ export const OffCanvas = ({
   toggle,
   children,
   className,
+  overlay,
 }) => {
   return (
     <Portal>
@@ -31,12 +32,14 @@ export const OffCanvas = ({
           >
             {children}
           </div>
-          <div
-            className={styles.offcanvas_overlay}
-            onClick={() => {
-              isOpen && toggle();
-            }}
-          ></div>
+          {overlay && (
+            <div
+              className={styles.offcanvas_overlay}
+              onClick={() => {
+                isOpen && toggle();
+              }}
+            ></div>
+          )}
         </div>
       </CSSTransition>
     </Portal>
@@ -49,6 +52,7 @@ OffCanvas.propType = {
   toggle: PropTypes.func,
   children: PropTypes.node,
   className: PropTypes.string,
+  overlay: PropTypes.bool,
 };
 
 OffCanvas.defaultProps = {
@@ -56,4 +60,5 @@ OffCanvas.defaultProps = {
   position: "left",
   className: null,
   toggle: () => {},
+  overlay: true,
 };

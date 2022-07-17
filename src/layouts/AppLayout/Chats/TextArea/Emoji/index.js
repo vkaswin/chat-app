@@ -6,7 +6,7 @@ import emojis from "data/emoji.json";
 
 import styles from "./Emoji.module.scss";
 
-export const Emoji = ({ toggle, isOpen, selector }) => {
+export const Emoji = ({ toggle, isOpen, selector, onChange }) => {
   const types = [
     {
       label: "Smileys & People",
@@ -58,8 +58,6 @@ export const Emoji = ({ toggle, isOpen, selector }) => {
       ref: ele,
       onClose: toggle,
       doNotClose: (event) => {
-        console.log(event);
-        console.log(targetRef.current.contains(event));
         return targetRef.current.contains(event);
       },
     });
@@ -70,6 +68,11 @@ export const Emoji = ({ toggle, isOpen, selector }) => {
       `[data-emoji-title="${title}"]`
     );
     emojiRef.current.scrollTo(0, offsetTop - 95);
+  };
+
+  const handleEmoji = (emoji) => () => {
+    onChange(emoji);
+    toggle();
   };
 
   return (
@@ -152,7 +155,11 @@ export const Emoji = ({ toggle, isOpen, selector }) => {
                             <div className={styles.emoji_list}>
                               {list.map(({ emoji, description }, index) => {
                                 return (
-                                  <button key={index} title={description}>
+                                  <button
+                                    key={index}
+                                    title={description}
+                                    onClick={handleEmoji(emoji)}
+                                  >
                                     <div className={styles.emoji_icon}>
                                       {emoji}
                                     </div>

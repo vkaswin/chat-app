@@ -27,6 +27,10 @@ export const Chats = () => {
     setShowInfo(!showInfo);
   };
 
+  const sendMessage = (msg) => {
+    console.log(msg);
+  };
+
   return (
     <Fragment>
       <Conversation />
@@ -60,12 +64,13 @@ export const Chats = () => {
           </DropDown>
         </div>
       </div>
-      <TextArea />
+      <TextArea onSend={sendMessage} />
       <OffCanvas
         isOpen={showInfo}
         position="right"
         className={styles.profile_sidebar}
         toggle={toggleInfo}
+        overlay={false}
       >
         <div>helo</div>
       </OffCanvas>

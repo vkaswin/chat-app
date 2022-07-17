@@ -5,168 +5,161 @@
             "from_id": 2,
             "to_id": 1,
             "msg": "Good morning 😊",
-            "datetime": "10:07 am"
+            "has_dropDown": true,
+            "has_images": [],
+            "has_files": [],
+            "datetime": "10:07 am",
+            "isReplied": 2
         },
         {
             "id": 2,
             "from_id": 1,
             "to_id": 2,
+            "has_dropDown": true,
             "msg": "Good morning, How are you? What about our next meeting?",
-            "datetime": "10:12 am"
+            "has_images": [],
+            "has_files": [],
+            "datetime": "10:12 am",
+            "isReplied": 1
         },
         {
             "id": 3,
             "from_id": 2,
             "to_id": 1,
+            "has_dropDown": true,
             "msg": "Yeah everything is fine. Our next meeting tomorrow at 10.00 AM",
-            "datetime": "10:13 am"
+            "has_images": [],
+            "has_files": [],
+            "datetime": "10:13 am",
+            "isReplied": 2
         },
         {
             "id": 4,
             "from_id": 2,
             "to_id": 1,
+            "has_dropDown": true,
             "msg": "Hey, I'm going to meet a friend of mine at the department store. I have to buy some presents for my parents 🎁.",
-            "datetime": "10:13 am"
+            "has_images": [],
+            "has_files": [],
+            "datetime": "10:13 am",
+            "isReplied": 2
         },
         {
             "id": 5,
             "from_id": 1,
             "to_id": 2,
             "msg": "Wow that's great",
-            "datetime": "10:14 am"
-        },
-        {
-            "id": 6,
-            "from_id": 2,
-            "to_id": 1,
-            "msg": "@Jean Berwick, Please Assign AB-123 to me",
-            "datetime": "10:15 am"
-        },
-        {
-            "id": 7,
-            "from_id": 1,
-            "to_id": 2,
-            "msg": "Wow that's great",
-            "datetime": "10:16 am"
-        },
-        {
-            "id": 8,
-            "from_id": 2,
-            "to_id": 1,
-            "msg": "Okay, Sure",
-            "datetime": "10:20 am"
-        },
-        {
-            "id": 1,
-            "from_id": 2,
-            "to_id": 1,
-            "msg": "Good morning 😊",
-            "datetime": "10:07 am"
-        },
-        {
-            "id": 2,
-            "from_id": 1,
-            "to_id": 2,
-            "msg": "Good morning, How are you? What about our next meeting?",
-            "datetime": "10:12 am"
+            "has_dropDown": true,
+            "has_images": [],
+            "has_files": [],
+            "datetime": "10:14 am",
+            "isReplied": 1
         },
         {
             "id": 3,
             "from_id": 2,
             "to_id": 1,
+            "has_dropDown": true,
             "msg": "Yeah everything is fine. Our next meeting tomorrow at 10.00 AM",
-            "datetime": "10:13 am"
+            "has_images": [],
+            "has_files": [],
+            "datetime": "10:13 am",
+            "isReplied": 2
         },
         {
             "id": 4,
             "from_id": 2,
             "to_id": 1,
+            "has_dropDown": true,
             "msg": "Hey, I'm going to meet a friend of mine at the department store. I have to buy some presents for my parents 🎁.",
-            "datetime": "10:13 am"
-        },
-        {
-            "id": 5,
-            "from_id": 1,
-            "to_id": 2,
-            "msg": "Wow that's great",
-            "datetime": "10:14 am"
+            "has_images": [],
+            "has_files": [],
+            "datetime": "10:13 am",
+            "isReplied": 2
         },
         {
             "id": 6,
             "from_id": 2,
             "to_id": 1,
-            "msg": "@Jean Berwick, Please Assign AB-123 to me",
-            "datetime": "10:15 am"
+            "msg": "Wow that's great",
+            "has_dropDown": false,
+            "has_images": [
+                "assets/images/small/img-1.jpg",
+                "assets/images/small/img-2.jpg"
+            ],
+            "has_files": [],
+            "datetime": "10:15 am",
+            "isReplied": 1
         },
         {
             "id": 7,
             "from_id": 1,
             "to_id": 2,
-            "msg": "Wow that's great",
-            "datetime": "10:16 am"
+            "has_dropDown": false,
+            "msg": "Yeah everything is fine.",
+            "has_images": null,
+            "has_files": [
+                "assets/images/pdf/design-phase-1-approved.pdf"
+            ],
+            "datetime": "10:16 am",
+            "isReplied": 1
         },
         {
-            "id": 8,
-            "from_id": 2,
-            "to_id": 1,
-            "msg": "Okay, Sure",
-            "datetime": "10:20 am"
-        },
-        {
-            "id": 1,
-            "from_id": 2,
-            "to_id": 1,
-            "msg": "Good morning 😊",
-            "datetime": "10:07 am"
-        },
-        {
-            "id": 2,
+            "id": 7,
             "from_id": 1,
             "to_id": 2,
-            "msg": "Good morning, How are you? What about our next meeting?",
-            "datetime": "10:12 am"
+            "has_dropDown": false,
+            "msg": "Yeah everything is fine.",
+            "has_images": null,
+            "has_files": [
+                "assets/images/pdf/design-phase-1-approved.pdf"
+            ],
+            "datetime": "10:16 am",
+            "isReplied": 1
         },
         {
             "id": 3,
             "from_id": 2,
             "to_id": 1,
+            "has_dropDown": true,
             "msg": "Yeah everything is fine. Our next meeting tomorrow at 10.00 AM",
-            "datetime": "10:13 am"
+            "has_images": [],
+            "has_files": [],
+            "datetime": "10:13 am",
+            "isReplied": 2
         },
         {
             "id": 4,
             "from_id": 2,
             "to_id": 1,
+            "has_dropDown": true,
             "msg": "Hey, I'm going to meet a friend of mine at the department store. I have to buy some presents for my parents 🎁.",
-            "datetime": "10:13 am"
+            "has_images": [],
+            "has_files": [],
+            "datetime": "10:13 am",
+            "isReplied": 2
         },
         {
-            "id": 5,
-            "from_id": 1,
-            "to_id": 2,
-            "msg": "Wow that's great",
-            "datetime": "10:14 am"
-        },
-        {
-            "id": 6,
+            "id": 3,
             "from_id": 2,
             "to_id": 1,
-            "msg": "@Jean Berwick, Please Assign AB-123 to me",
-            "datetime": "10:15 am"
+            "has_dropDown": true,
+            "msg": "Yeah everything is fine. Our next meeting tomorrow at 10.00 AM",
+            "has_images": [],
+            "has_files": [],
+            "datetime": "10:13 am",
+            "isReplied": 2
         },
         {
-            "id": 7,
-            "from_id": 1,
-            "to_id": 2,
-            "msg": "Wow that's great",
-            "datetime": "10:16 am"
-        },
-        {
-            "id": 8,
+            "id": 4,
             "from_id": 2,
             "to_id": 1,
-            "msg": "Okay, Sure",
-            "datetime": "10:20 am"
+            "has_dropDown": true,
+            "msg": "Hey, I'm going to meet a friend of mine at the department store. I have to buy some presents for my parents 🎁.",
+            "has_images": [],
+            "has_files": [],
+            "datetime": "10:13 am",
+            "isReplied": 2
         }
     ]
 }

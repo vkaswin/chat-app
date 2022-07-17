@@ -17,8 +17,8 @@ export const Router = () => {
           <Route
             path="/"
             element={
-              <Navigate replace to="/profile" />
-              //   <Navigate replace to={user ? "/profile" : "/auth/login"} />
+              <Navigate replace to="/chats" />
+              //   <Navigate replace to={user ? "/chats" : "/auth/login"} />
             }
           />
           {routes.map(

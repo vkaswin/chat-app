@@ -2,13 +2,26 @@
   display: grid;
   grid-template-columns: 300px 1fr;
   height: 100%;
-  max-height: 100vh;
+  max-height: 100%;
   margin-left: 75px;
   .chat_container {
     position: relative;
     background-image: url("../../assets/images/chat-bg.png");
     background-color: #e2ebe5;
-    max-width: 100%;
+    max-height: calc(100% - 162px);
+    height: 100%;
+    margin-top: 81px;
+    padding: 30px 7px 30px 15px;
     overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: gray;
+      border-radius: 10px;
+    }
   }
 }

@@ -15,11 +15,6 @@ export const SideBar = ({ theme = "light" }) => {
 
   const tabs = [
     {
-      icon: "bx-user-circle",
-      label: "Profile",
-      to: "profile",
-    },
-    {
       icon: "bx-conversation",
       label: "Chats",
       to: "chats",
@@ -38,6 +33,11 @@ export const SideBar = ({ theme = "light" }) => {
       icon: "bx-bookmarks",
       label: "Bookmars",
       to: "bookmarks",
+    },
+    {
+      icon: "bx-user-circle",
+      label: "Profile",
+      to: "profile",
     },
     {
       icon: "bx-cog",
