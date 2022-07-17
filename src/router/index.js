@@ -14,6 +14,13 @@ export const Router = () => {
     <Suspense fallback={<div>Loading...</div>}>
       <HashRouter>
         <Routes>
+          <Route
+            path="/"
+            element={
+              <Navigate replace to="/profile" />
+              //   <Navigate replace to={user ? "/profile" : "/auth/login"} />
+            }
+          />
           {routes.map(
             ({
               path,
@@ -73,12 +80,6 @@ export const Router = () => {
               }
             }
           )}
-          <Route
-            path="/"
-            element={
-              <Navigate replace to={user ? "/profile" : "/auth/login"} />
-            }
-          />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </HashRouter>
