@@ -2,16 +2,48 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import styles from "./Avatar.module.scss";
+import { classNames } from "utils";
 
-export const Avatar = ({ src, size, outline, status, userName }) => {
+export const Avatar = ({
+  src,
+  size,
+  outline,
+  status = false,
+  userName,
+  outlineSize = 3,
+  upload = false,
+}) => {
+  const colors = [
+    "#EF4770",
+    "#4eac6e",
+    "#6F6F6F",
+    "#DCB604",
+    "#199393",
+    "#029ACD",
+  ];
+
+  const getRandomColor = () => {
+    let index = Math.floor(Math.random() * colors.length);
+    return colors[index];
+  };
+
   return (
-    <div className={styles.avatar} style={{ "--size": `${size}px` }}>
-      {outline ? (
-        <img src={src} className={styles.outline} />
-      ) : src ? (
+    <div
+      className={classNames(styles.avatar, {
+        [styles.outline]: outline,
+      })}
+      style={{
+        "--size": `${size}px`,
+        ...(outline && { "--outline-size": `${outlineSize}px` }),
+      }}
+    >
+      {src ? (
         <img src={src} />
       ) : (
-        <div className={styles.random_avatar}>
+        <div
+          className={styles.random_avatar}
+          style={{ "--avatar-bg": getRandomColor() }}
+        >
           <span>
             {userName.charAt(0)}
             {userName.split(" ")?.[1].charAt(0) ?? ""}
@@ -19,6 +51,11 @@ export const Avatar = ({ src, size, outline, status, userName }) => {
         </div>
       )}
       {status && <div className={styles.status}></div>}
+      {upload && (
+        <div className={styles.upload}>
+          <i className="bxs-camera"></i>
+        </div>
+      )}
     </div>
   );
 };
@@ -31,7 +68,7 @@ Avatar.propTypes = {
 };
 
 Avatar.defaultProps = {
-  src: "https://themesbrand.com/doot/layouts/assets/images/users/avatar-2.jpg",
+  src: null,
   size: 50,
   outline: false,
   status: false,

@@ -1,0 +1,60 @@
+.calls_container {
+  .call_card {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid #f6f6f9;
+    padding: 10px 15px;
+    .user {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      gap: 10px;
+      .call_info {
+        line-height: 20px;
+        span {
+          color: #5a636c;
+          font-size: 14px;
+        }
+        div {
+          display: flex;
+          align-items: center;
+          gap: 3px;
+          i {
+            font-size: 16px;
+            display: inline-block;
+          }
+          i[data-type="outgoing"] {
+            color: #ef4770;
+            transform: rotate(45deg);
+          }
+          i[data-type="incoming"] {
+            color: #4eac6e;
+            transform: rotate(45deg);
+          }
+          span {
+            color: #797c8c;
+            font-size: 12px;
+          }
+        }
+      }
+    }
+    .call_time {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      width: 75px;
+      b {
+        font-size: 12px;
+        font-weight: bold;
+        color: #797c8c;
+      }
+      i {
+        font-size: 20px;
+        color: #4eac6e;
+        cursor: pointer;
+      }
+    }
+  }
+}

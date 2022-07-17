@@ -1,0 +1,10 @@
+@import "./variables";
+
+@each $key, $val in $truncate {
+  .truncate-#{$key} {
+    display: -webkit-box;
+    -webkit-line-clamp: $val;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

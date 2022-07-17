@@ -1,13 +1,10 @@
 import React from "react";
-import data from "data/chats.json";
-
-import styles from "./Conversation.module.scss";
 import { classNames } from "utils";
 import { DropDown } from "components";
 
-export const Conversation = () => {
-  const { chats } = data;
+import styles from "./Conversation.module.scss";
 
+export const Conversation = ({ chats }) => {
   const dropDown = [
     {
       icon: "bx-share ms-2",

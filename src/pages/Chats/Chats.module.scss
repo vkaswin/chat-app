@@ -1,18 +1,6 @@
 .chat_list_container {
   background-color: #fff;
-  max-height: 100%;
-  overflow-y: auto;
   padding: 15px 0px;
-  &::-webkit-scrollbar {
-    width: 7px;
-  }
-  &::-webkit-scrollbar-track {
-    background: white;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: lightgray;
-    border-radius: 10px;
-  }
   .title {
     display: flex;
     justify-content: space-between;
@@ -71,8 +59,10 @@
       margin: 0px;
       background-color: #dbdbdd;
       color: #5a636c;
-      padding: 3px 5px;
+      padding: 3px 6px;
       border-radius: 4px;
+      font-weight: bold;
+      cursor: inherit;
     }
   }
 }

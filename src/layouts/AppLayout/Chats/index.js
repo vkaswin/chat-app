@@ -1,7 +1,8 @@
-import React, { Fragment, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { DropDown, Avatar, OffCanvas } from "components";
 import { TextArea } from "./TextArea";
 import { Conversation } from "./Conversation";
+import chatData from "data/chats.json";
 
 import styles from "./Chats.module.scss";
 
@@ -21,7 +22,14 @@ export const Chats = () => {
     },
   ];
 
+  const [chats, setChats] = useState(chatData.chats);
+
   const [showInfo, setShowInfo] = useState(false);
+
+  useLayoutEffect(() => {
+    const { scrollHeight } = document.body;
+    window.scrollTo(0, scrollHeight);
+  }, []);
 
   const toggleInfo = () => {
     setShowInfo(!showInfo);
@@ -32,8 +40,8 @@ export const Chats = () => {
   };
 
   return (
-    <Fragment>
-      <Conversation />
+    <div className={styles.chat_container}>
+      <Conversation chats={chats} />
       <div className={styles.chat_header}>
         <div className={styles.user_info}>
           <Avatar
@@ -74,6 +82,6 @@ export const Chats = () => {
       >
         <div>helo</div>
       </OffCanvas>
-    </Fragment>
+    </div>
   );
 };

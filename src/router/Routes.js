@@ -60,11 +60,6 @@ export const routes = [
         componentPath: "pages/Calls",
       },
       {
-        path: "bookmarks",
-        isAuthenticated: true,
-        componentPath: "pages/BookMarks",
-      },
-      {
         path: "settings",
         isAuthenticated: true,
         componentPath: "pages/Settings",

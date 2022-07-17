@@ -6,7 +6,7 @@ import { Avatar, DropDown, Tooltip } from "components";
 
 import styles from "./SideBar.module.scss";
 
-export const SideBar = ({ theme = "light" }) => {
+export const SideBar = ({ theme, toggleTheme }) => {
   let tabRef = useRef();
 
   let indicatorRef = useRef();
@@ -14,6 +14,11 @@ export const SideBar = ({ theme = "light" }) => {
   const { pathName } = useRouter();
 
   const tabs = [
+    {
+      icon: "bx-user-circle",
+      label: "Profile",
+      to: "profile",
+    },
     {
       icon: "bx-conversation",
       label: "Chats",
@@ -28,16 +33,6 @@ export const SideBar = ({ theme = "light" }) => {
       icon: "bx-phone-call",
       label: "Calls",
       to: "calls",
-    },
-    {
-      icon: "bx-bookmarks",
-      label: "Bookmars",
-      to: "bookmarks",
-    },
-    {
-      icon: "bx-user-circle",
-      label: "Profile",
-      to: "profile",
     },
     {
       icon: "bx-cog",
@@ -113,9 +108,9 @@ export const SideBar = ({ theme = "light" }) => {
         <div className={styles.bottom_nav}>
           <div className={styles.theme_icon}>
             {theme === "light" ? (
-              <i classame="bx-moon"></i>
+              <i className="bx-moon" onClick={toggleTheme("dark")}></i>
             ) : (
-              <i className="bx-sun"></i>
+              <i className="bx-sun" onClick={toggleTheme("light")}></i>
             )}
           </div>
           <div id="avatar">

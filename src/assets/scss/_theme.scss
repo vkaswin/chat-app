@@ -1,0 +1,19 @@
+html[data-theme] {
+  :root {
+    transition: background-color, color;
+    transition-duration: 300ms;
+    transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+}
+
+html[data-theme="light"] {
+  :root {
+    --primary-clr: "green";
+  }
+}
+
+html[data-theme="dark"] {
+  :root {
+    --primary-clr: "green";
+  }
+}

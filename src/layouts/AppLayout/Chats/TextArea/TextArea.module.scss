@@ -3,10 +3,11 @@
   right: 0px;
   bottom: 0px;
   width: calc(100% - 375px);
-  background-color: #e2ebe5;
-  border-top: 1px solid #eaeaf1;
+  height: 80px;
+  background-color: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(7px);
   backdrop-filter: blur(7px);
-  padding: 15px 30px;
+  padding: 0px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;

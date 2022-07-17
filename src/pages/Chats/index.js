@@ -7,7 +7,7 @@ import { classNames } from "utils";
 
 const Chats = () => {
   const { favourites, users, channels } = chatList;
-  console.log(favourites, users, channels);
+
   return (
     <div className={styles.chat_list_container}>
       <div className={styles.title}>
@@ -23,7 +23,7 @@ const Chats = () => {
           >
             <div className={styles.user}>
               <Avatar src={profile} userName={name} status={status} size={35} />
-              <span>{name}</span>
+              <span className="truncate-1">{name}</span>
             </div>
             {messagecount && <label>{messagecount}</label>}
           </div>
@@ -42,7 +42,7 @@ const Chats = () => {
           >
             <div className={styles.user}>
               <Avatar src={profile} userName={name} status={status} size={35} />
-              <span>{name}</span>
+              <span className="truncate-1">{name}</span>
             </div>
             {messagecount && <label>{messagecount}</label>}
           </div>
@@ -64,9 +64,9 @@ const Chats = () => {
           >
             <div className={styles.user}>
               <span>#</span>
-              <span>{name}</span>
+              <span className="truncate-1">{name}</span>
             </div>
-            {messagecount && <label>{messagecount}</label>}{" "}
+            {messagecount && <label>{messagecount}</label>}
           </div>
         );
       })}
