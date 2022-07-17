@@ -1,1 +1,0 @@
-{"version":3,"file":"static/js/9536.90382fb5.chunk.js","mappings":"sIAUA,UARiB,WACf,OACE,0BACE,sCAGL,C","sources":["pages/Register/index.js"],"sourcesContent":["import React from \"react\";\n\nconst Register = () => {\n  return (\n    <div>\n      <h1>Register</h1>\n    </div>\n  );\n};\n\nexport default Register;\n"],"names":[],"sourceRoot":""}

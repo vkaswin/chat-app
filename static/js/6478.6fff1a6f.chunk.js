@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkchat_app=self.webpackChunkchat_app||[]).push([[6478],{6478:function(c,p,t){c.exports=t.p+"static/media/boxicons.5fc889455954d2025848.eot"}}]);

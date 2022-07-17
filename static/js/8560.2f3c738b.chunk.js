@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkchat_app=self.webpackChunkchat_app||[]).push([[8560],{8560:function(p,a,t){p.exports=t.p+"static/media/auth-img.9302755e73810f6c27d2.png"}}]);
