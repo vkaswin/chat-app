@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkchat_app=self.webpackChunkchat_app||[]).push([[9467],{9467:function(c,e,n){n.r(e);n(2791);var a=n(184);e.default=function(){return(0,a.jsx)("div",{children:(0,a.jsx)("h1",{children:"LockScreen"})})}}}]);
+//# sourceMappingURL=9467.3db92df0.chunk.js.map

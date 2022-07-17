@@ -1,0 +1,1 @@
+{"version":3,"file":"static/js/1253.08637aab.chunk.js","mappings":"sIAUA,UARgB,WACd,OACE,0BACE,qCAGL,C","sources":["pages/Profile/index.js"],"sourcesContent":["import React from \"react\";\n\nconst Profile = () => {\n  return (\n    <div>\n      <h1>Profile</h1>\n    </div>\n  );\n};\n\nexport default Profile;\n"],"names":[],"sourceRoot":""}

@@ -1,0 +1,1 @@
+{"version":3,"file":"static/js/9467.3db92df0.chunk.js","mappings":"sIAUA,UARmB,WACjB,OACE,0BACE,wCAGL,C","sources":["pages/LockScreen/index.js"],"sourcesContent":["import React from \"react\";\n\nconst LockScreen = () => {\n  return (\n    <div>\n      <h1>LockScreen</h1>\n    </div>\n  );\n};\n\nexport default LockScreen;\n"],"names":[],"sourceRoot":""}

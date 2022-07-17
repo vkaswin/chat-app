@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkchat_app=self.webpackChunkchat_app||[]).push([[8192],{8192:function(p,a,c){p.exports=c.p+"static/media/Poppins-Bold.cdb29a5d7ccf57ff05a3.ttf"}}]);

@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkchat_app=self.webpackChunkchat_app||[]).push([[4844],{4844:function(e,c,a){a.r(c);a(2791);var n=a(184);c.default=function(){return(0,n.jsx)("div",{children:(0,n.jsx)("h1",{children:"RecoverPassword"})})}}}]);
+//# sourceMappingURL=4844.135263de.chunk.js.map
