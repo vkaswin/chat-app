@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, HashRouter } from "react-router-dom";
 import { useAuth } from "hooks";
 import { routes } from "router/Routes";
 import { ProtectedRoute } from "./ProtectedRoute";
@@ -12,7 +12,7 @@ export const Router = () => {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           {routes.map(
             ({
@@ -81,7 +81,7 @@ export const Router = () => {
           />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </Suspense>
   );
 };
