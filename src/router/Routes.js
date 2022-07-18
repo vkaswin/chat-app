@@ -1,69 +1,67 @@
 export const routes = [
   {
-    path: "auth",
-    componentPath: "layouts/AuthLayout",
-    children: [
-      {
-        path: "login",
-        isAuthPage: true,
-        componentPath: "pages/Login",
-      },
-      {
-        path: "register",
-        isAuthPage: true,
-        componentPath: "pages/Register",
-      },
-      {
-        path: "recover-password",
-        isAuthPage: true,
-        componentPath: "pages/RecoverPassword",
-      },
-      {
-        path: "change-password",
-        isAuthPage: true,
-        componentPath: "pages/Register",
-      },
-      {
-        path: "lock-screen",
-        isAuthPage: true,
-        componentPath: "pages/LockScreen",
-      },
-      {
-        path: "logout",
-        isAuthPage: true,
-        componentPath: "pages/Logout",
-      },
-    ],
+    path: "/login",
+    auth: false,
+    component: "pages/Login",
+    layout: "layouts/AuthLayout",
   },
   {
-    path: "/",
-    componentPath: "layouts/AppLayout",
-    children: [
-      {
-        path: "profile",
-        isAuthenticated: true,
-        componentPath: "pages/Profile",
-      },
-      {
-        path: "chats",
-        isAuthenticated: true,
-        componentPath: "pages/Chats",
-      },
-      {
-        path: "contacts",
-        isAuthenticated: true,
-        componentPath: "pages/Contacts",
-      },
-      {
-        path: "calls",
-        isAuthenticated: true,
-        componentPath: "pages/Calls",
-      },
-      {
-        path: "settings",
-        isAuthenticated: true,
-        componentPath: "pages/Settings",
-      },
-    ],
+    path: "/register",
+    auth: false,
+    component: "pages/Register",
+    layout: "layouts/AuthLayout",
+  },
+  {
+    path: "/recover-password",
+    auth: false,
+    component: "pages/RecoverPassword",
+    layout: "layouts/AuthLayout",
+  },
+  {
+    path: "/change-password",
+    auth: true,
+    component: "pages/Register",
+    layout: "layouts/AuthLayout",
+  },
+  {
+    path: "/lock-screen",
+    component: "pages/LockScreen",
+    layout: "layouts/AuthLayout",
+  },
+  {
+    path: "/logout",
+    auth: false,
+    component: "pages/Logout",
+    layout: "layouts/AuthLayout",
+  },
+  {
+    path: "/profile",
+    auth: true,
+    component: "pages/Profile",
+    layout: "layouts/AppLayout",
+  },
+  {
+    path: "/chats",
+    auth: true,
+    component: "pages/Chats",
+    layout: "layouts/AppLayout",
+  },
+  {
+    path: "/contacts",
+    auth: true,
+    component: "pages/Contacts",
+    layout: "layouts/AppLayout",
+  },
+  {
+    path: "/calls",
+    auth: true,
+    component: "pages/Calls",
+    layout: "layouts/AppLayout",
+  },
+  {
+    path: "/settings",
+    auth: true,
+    component: "pages/Settings",
+    layout: "layouts/AppLayout",
   },
 ];

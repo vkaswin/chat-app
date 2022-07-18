@@ -42,7 +42,6 @@ const Contacts = () => {
             : list,
       };
     });
-    console.log([...contacts, ...contactByAlphabets]);
     setContacts([...contacts, ...contactByAlphabets]);
   };
 

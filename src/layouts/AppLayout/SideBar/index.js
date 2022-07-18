@@ -17,27 +17,27 @@ export const SideBar = ({ theme, toggleTheme }) => {
     {
       icon: "bx-user-circle",
       label: "Profile",
-      to: "profile",
+      to: "/profile",
     },
     {
       icon: "bx-conversation",
       label: "Chats",
-      to: "chats",
+      to: "/chats",
     },
     {
       icon: "bxs-user-detail",
       label: "Contacts",
-      to: "contacts",
+      to: "/contacts",
     },
     {
       icon: "bx-phone-call",
       label: "Calls",
-      to: "calls",
+      to: "/calls",
     },
     {
       icon: "bx-cog",
       label: "Settings",
-      to: "settings",
+      to: "/settings",
     },
   ];
 
@@ -65,8 +65,7 @@ export const SideBar = ({ theme, toggleTheme }) => {
   ];
 
   useLayoutEffect(() => {
-    let match = pathName.split("/")[1];
-    let index = tabs.findIndex(({ to }) => to === match);
+    let index = tabs.findIndex(({ to }) => to === pathName);
 
     let { clientHeight, offsetTop } = tabRef.current?.children[index];
 
@@ -89,12 +88,13 @@ export const SideBar = ({ theme, toggleTheme }) => {
                 className={({ isActive }) =>
                   classNames(styles.nav_item, { [styles.active]: isActive })
                 }
+                id={`nav-${index}`}
               >
-                <i className={icon} id={label.toLowerCase()}></i>
+                <i className={icon}></i>
                 <Tooltip
                   offset={20}
                   position="right-center"
-                  selector={`#${label.toLowerCase()}`}
+                  selector={`#nav-${index}`}
                 >
                   <span>{label}</span>
                 </Tooltip>

@@ -2,16 +2,14 @@ import React from "react";
 import { Navigate } from "react-router";
 import { getCookie } from "utils";
 
-export const ProtectedRoute = ({
-  isAuthenticated,
-  component,
-  isAuthPage = false,
-}) => {
-  //   const token = getCookie("authToken");
+export const ProtectedRoute = ({ component, auth = true }) => {
+  const token = getCookie("authToken");
 
-  //   if (isAuthenticated && !token) return <Navigate replace to="/auth/login" />;
+  //   if (auth && token) return component;
 
-  //   if (isAuthPage && token) return <Navigate replace to="/app/profile" />;
+  //   if (auth && !token) return <Navigate replace to="/login" />;
+
+  //   if (auth === false && token) return <Navigate replace to="/profile" />;
 
   return component;
 };

@@ -1,12 +1,11 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
 import { SideBar } from "./SideBar";
 import { Chats } from "./Chats";
 import { useLocalStorage } from "hooks";
 
 import styles from "./AppLayout.module.scss";
 
-const AppLayout = () => {
+const AppLayout = ({ children }) => {
   const { getItem, setItem } = useLocalStorage();
 
   const [theme, setTheme] = useState();
@@ -29,9 +28,7 @@ const AppLayout = () => {
     <Fragment>
       <div className={styles.app_layout}>
         <div>
-          <div className={styles.pages_container}>
-            <Outlet />
-          </div>
+          <div className={styles.pages_container}>{children}</div>
         </div>
         <Chats />
       </div>
