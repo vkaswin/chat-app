@@ -7,7 +7,10 @@ const Settings = () => {
   return (
     <div className={styles.settings_container}>
       <div className={styles.settings_bg}>
-        <img src="https://themesbrand.com/doot/layouts/assets/images/small/img-4.jpg" />
+        <img
+          src="https://themesbrand.com/doot/layouts/assets/images/small/img-4.jpg"
+          className={styles.bg}
+        />
         <div className={styles.title}>
           <b>My Settings</b>
           <div className={styles.edit_bg}>

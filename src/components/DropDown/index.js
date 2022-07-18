@@ -18,10 +18,11 @@ const DropDownContext = createContext();
 export const DropDown = ({
   children,
   selector,
-  position,
+  placement,
   offset,
   trigger,
   className,
+  strategy,
 }) => {
   const targetRef = useRef();
 
@@ -75,10 +76,11 @@ export const DropDown = ({
         onEntered={onEntered}
       >
         <Popper
-          referenceElement={targetRef}
-          position={position}
+          referenceRef={targetRef}
+          placement={placement}
           offset={offset}
-          render={({ popper, arrow, position, ref }) => {
+          strategy={strategy}
+          render={({ popper, position, ref }) => {
             return (
               <DropDownContext.Provider value={{ hide }}>
                 <div
@@ -100,18 +102,20 @@ export const DropDown = ({
 
 DropDown.propTypes = {
   children: PropTypes.node.isRequired,
-  position: PropTypes.oneOf(PopperPlacements),
+  placement: PropTypes.oneOf(PopperPlacements),
   offset: PropTypes.number,
   trigger: PropTypes.oneOf(["click", "hover"]),
   className: PropTypes.string,
   selector: PropTypes.string.isRequired,
+  strategy: PropTypes.oneOf(["absolute", "fixed"]),
 };
 
 DropDown.defaultProps = {
-  position: "bottom-start",
+  placement: "bottom-start",
   offset: 10,
   trigger: "click",
   className: null,
+  strategy: "absolute",
 };
 
 const Item = ({ children, onClick, className }) => {

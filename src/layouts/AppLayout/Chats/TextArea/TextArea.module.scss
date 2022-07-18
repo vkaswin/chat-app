@@ -12,6 +12,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 15px;
+  z-index: 10;
   textarea {
     width: 100%;
     max-width: 80%;
@@ -51,5 +52,11 @@
       color: white;
       font-size: 24px;
     }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .chat_input {
+    width: 100%;
   }
 }

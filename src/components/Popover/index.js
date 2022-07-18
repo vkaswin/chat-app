@@ -7,7 +7,7 @@ import { CSSTransition } from "react-transition-group";
 
 import styles from "./Popover.module.scss";
 
-export const Popover = ({ children, position, arrow, offset, selector }) => {
+export const Popover = ({ children, placement, offset, selector }) => {
   const targetRef = useRef();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -54,12 +54,10 @@ export const Popover = ({ children, position, arrow, offset, selector }) => {
         onEntered={onEntered}
       >
         <Popper
-          referenceElement={targetRef}
-          position={position}
+          referenceRef={targetRef}
+          placement={placement}
           offset={offset}
-          arrowRect={16}
-          arrow={arrow}
-          render={({ popper, arrow, position, ref }) => {
+          render={({ popper, position, ref }) => {
             return (
               <div
                 ref={ref}
@@ -67,16 +65,7 @@ export const Popover = ({ children, position, arrow, offset, selector }) => {
                 data-position={position}
                 style={popper}
               >
-                <div className={styles.menu}>
-                  {children}
-                  {/* {arrow && (
-                  <div
-                    className={styles.arrow}
-                    style={arrow}
-                    data-position={position}
-                  ></div>
-                )} */}
-                </div>
+                <div className={styles.menu}>{children}</div>
               </div>
             );
           }}
@@ -88,16 +77,18 @@ export const Popover = ({ children, position, arrow, offset, selector }) => {
 
 Popover.propTypes = {
   children: PropTypes.node.isRequired,
-  position: PropTypes.oneOf(PopperPlacements),
+  placement: PropTypes.oneOf(PopperPlacements),
   offset: PropTypes.number,
   arrow: PropTypes.bool,
   className: PropTypes.string,
   selector: PropTypes.string.isRequired,
+  strategy: PropTypes.oneOf(["absolute", "fixed"]),
 };
 
 Popover.defaultProps = {
-  position: "top-center",
+  placement: "top-center",
   arrow: true,
   offset: 15,
   className: null,
+  strategy: "absolute",
 };

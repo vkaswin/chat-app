@@ -40,7 +40,7 @@ export const Chats = () => {
   };
 
   return (
-    <div className={styles.chat_container}>
+    <div className={styles.chat_wrapper}>
       <Conversation chats={chats} />
       <div className={styles.chat_header}>
         <div className={styles.user_info}>
@@ -60,7 +60,11 @@ export const Chats = () => {
           <i className="bx-video"></i>
           <i className="bxs-info-circle" onClick={toggleInfo}></i>
           <i className="bx-dots-vertical-rounded" id="more-option"></i>
-          <DropDown selector="#more-option" position="bottom-end">
+          <DropDown
+            strategy="fixed"
+            selector="#more-option"
+            placement="bottom-end"
+          >
             {moreDropDown.map(({ label, icon }, index) => {
               return (
                 <DropDown.Item key={index} className={styles.more_option}>

@@ -8,10 +8,11 @@ import styles from "./Tooltip.module.scss";
 
 export const Tooltip = ({
   children,
-  position,
+  placement,
   arrow,
   offset,
   className,
+  strategy,
   selector,
 }) => {
   const targetRef = useRef();
@@ -50,29 +51,20 @@ export const Tooltip = ({
         unmountOnExit
       >
         <Popper
-          referenceElement={targetRef}
-          position={position}
+          referenceRef={targetRef}
+          placement={placement}
           offset={offset}
-          arrowRect={16}
+          strategy={strategy}
           arrow={arrow}
-          render={({ popper, arrow, position, ref }) => {
+          render={({ popper, placement, ref }) => {
             return (
               <div
                 ref={ref}
                 className={styles.tooltip}
-                data-position={position}
+                data-placement={placement}
                 style={popper}
               >
-                <div className={styles.menu}>
-                  {children}
-                  {/* {arrow && (
-                    <div
-                      className={styles.arrow}
-                      style={arrow}
-                      data-position={position}
-                    ></div>
-                  )} */}
-                </div>
+                <div className={styles.menu}>{children}</div>
               </div>
             );
           }}
@@ -84,16 +76,18 @@ export const Tooltip = ({
 
 Tooltip.propTypes = {
   children: PropTypes.node.isRequired,
-  position: PropTypes.oneOf(PopperPlacements),
+  placement: PropTypes.oneOf(PopperPlacements),
   offset: PropTypes.number,
   arrow: PropTypes.bool,
   className: PropTypes.string,
   selector: PropTypes.string.isRequired,
+  strategy: PropTypes.oneOf(["absolute", "fixed"]),
 };
 
 Tooltip.defaultProps = {
-  position: "top-center",
+  placement: "top-center",
   arrow: true,
   offset: 10,
+  strategy: "absolute",
   className: null,
 };

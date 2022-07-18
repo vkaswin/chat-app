@@ -89,15 +89,16 @@ export const Emoji = ({ toggle, isOpen, selector, onChange }) => {
       >
         <div>
           <Popper
-            referenceElement={targetRef}
-            position="top-center"
+            referenceRef={targetRef}
+            placement="top-center"
             offset={20}
-            render={({ popper, position, ref }) => {
+            strategy="fixed"
+            render={({ popper, placement, ref }) => {
               return (
                 <div
                   ref={ref}
                   className={styles.emoji_container}
-                  data-position={position}
+                  data-position={placement}
                   style={popper}
                 >
                   <div className={styles.emoji_wrapper}>
@@ -112,7 +113,7 @@ export const Emoji = ({ toggle, isOpen, selector, onChange }) => {
                           >
                             <i className={icon}></i>
                             <Tooltip
-                              position="top-center"
+                              placement="top-center"
                               selector={`#emoji-type-${index}`}
                               offset={20}
                             >
@@ -128,7 +129,7 @@ export const Emoji = ({ toggle, isOpen, selector, onChange }) => {
                       >
                         <span>&#10799;</span>
                         <Tooltip
-                          position="top-center"
+                          placement="top-center"
                           selector={`#emoji-close`}
                           offset={15}
                         >

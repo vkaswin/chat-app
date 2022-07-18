@@ -1,5 +1,8 @@
-.chat_container {
-  position: relative;
+.chat_wrapper {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 100%;
   background-image: url("../../../assets/images/chat-bg.png");
   background-color: #e2ebe5;
   padding: 95px 7px 95px 15px;
@@ -17,7 +20,7 @@
     -webkit-backdrop-filter: blur(7px);
     backdrop-filter: blur(7px);
     padding: 0px 20px;
-    z-index: 10;
+    z-index: 11;
     .user_info {
       display: flex;
       align-items: center;
@@ -60,4 +63,12 @@
 .profile_sidebar {
   width: 350px;
   padding: 15px;
+}
+
+@media only screen and (max-width: 768px) {
+  .chat_wrapper {
+    .chat_header {
+      width: 100%;
+    }
+  }
 }

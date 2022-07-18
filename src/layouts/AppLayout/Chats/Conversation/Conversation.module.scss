@@ -101,3 +101,25 @@
     font-size: 18px;
   }
 }
+
+@media only screen and (max-width: 768px) {
+  .conversation_container {
+    .chat_wrapper {
+      max-width: 100%;
+      cursor: pointer;
+      .chat_card {
+        .msg_time {
+          span {
+            font-size: 12px;
+          }
+          .tick {
+            font-size: 18px;
+          }
+          .clock {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+}

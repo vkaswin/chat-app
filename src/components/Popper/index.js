@@ -4,30 +4,30 @@ import { PopperPlacements } from "utils/constants";
 
 export const Popper = ({
   render,
-  referenceElement,
-  position,
+  referenceRef,
+  placement,
   offset,
   arrow,
-  arrowRect,
+  strategy,
 }) => {
-  const popperElement = useRef();
+  const popperRef = useRef();
 
   const [state, setState] = useState({
     popper: {
-      position: "absolute",
+      position: strategy,
       inset: "0px auto auto 0px",
     },
     arrow: {
       position: "absolute",
     },
-    position,
+    placement,
   });
 
   const gap = 5;
 
   useLayoutEffect(() => {
     handlePopper();
-  }, [referenceElement.current]);
+  }, [referenceRef.current]);
 
   useEffect(() => {
     window.addEventListener("resize", handlePopper);
@@ -35,13 +35,13 @@ export const Popper = ({
   }, []);
 
   const ref = (element) => {
-    popperElement.current = element;
+    popperRef.current = element;
   };
 
   const handlePopper = () => {
-    const reference = referenceElement.current?.getBoundingClientRect();
+    const reference = referenceRef.current?.getBoundingClientRect();
 
-    const popper = popperElement.current?.getBoundingClientRect();
+    const popper = popperRef.current?.getBoundingClientRect();
 
     const { innerWidth, innerHeight } = window;
 
@@ -52,13 +52,9 @@ export const Popper = ({
       innerHeight,
     };
 
-    const popperRect = popperPositions[position]?.(args);
+    const popperRect = popperPositions[placement]?.(args);
 
-    if (popperRect) {
-      setPopperPosition(popperRect);
-    } else {
-      autoPlacement(args);
-    }
+    popperRect ? setPopperPosition(popperRect) : autoPlacement(args);
   };
 
   const popperPositions = {
@@ -107,10 +103,11 @@ export const Popper = ({
         x: left,
         y: top,
       },
+      placement: "left-start",
       ...(arrow && {
         arrow: {
-          x: reference.x,
-          y: reference.y + gap,
+          x: 0,
+          y: 0,
         },
       }),
     };
@@ -129,10 +126,11 @@ export const Popper = ({
         x: left,
         y: top,
       },
+      placement: "left-center",
       ...(arrow && {
         arrow: {
-          x: reference.x,
-          y: reference.y + (reference.height / 2 - arrowRect / 2),
+          x: 0,
+          y: 0,
         },
       }),
     };
@@ -148,10 +146,11 @@ export const Popper = ({
         x: left,
         y: top,
       },
+      placement: "left-end",
       ...(arrow && {
         arrow: {
-          x: reference.x,
-          y: reference.y + reference.height - arrowRect - gap,
+          x: 0,
+          y: 0,
         },
       }),
     };
@@ -171,10 +170,11 @@ export const Popper = ({
         x: left,
         y: top,
       },
+      placement: "right-start",
       ...(arrow && {
         arrow: {
-          x: reference.x + reference.width,
-          y: reference.y + gap,
+          x: 0,
+          y: 0,
         },
       }),
     };
@@ -193,10 +193,11 @@ export const Popper = ({
         x: left,
         y: top,
       },
+      placement: "right-center",
       ...(arrow && {
         arrow: {
-          x: reference.x + reference.width,
-          y: reference.y + (reference.height / 2 - arrowRect / 2),
+          x: 0,
+          y: 0,
         },
       }),
     };
@@ -212,10 +213,11 @@ export const Popper = ({
         x: left,
         y: top,
       },
+      placement: "right-end",
       ...(arrow && {
         arrow: {
-          x: reference.x + reference.width,
-          y: reference.y + reference.height - arrowRect - gap,
+          x: 0,
+          y: 0,
         },
       }),
     };
@@ -235,10 +237,11 @@ export const Popper = ({
         x: left,
         y: top,
       },
+      placement: "top-start",
       ...(arrow && {
         arrow: {
-          x: reference.x + gap,
-          y: reference.y,
+          x: 0,
+          y: 0,
         },
       }),
     };
@@ -258,10 +261,11 @@ export const Popper = ({
         x: left,
         y: top,
       },
+      placement: "top-center",
       ...(arrow && {
         arrow: {
-          x: reference.x + (reference.width / 2 - arrowRect / 2),
-          y: reference.y,
+          x: 0,
+          y: 0,
         },
       }),
     };
@@ -277,10 +281,11 @@ export const Popper = ({
         x: left,
         y: top,
       },
+      placement: "top-end",
       ...(arrow && {
         arrow: {
-          x: reference.x + reference.width - arrowRect - gap,
-          y: reference.y,
+          x: 0,
+          y: 0,
         },
       }),
     };
@@ -304,8 +309,9 @@ export const Popper = ({
         x: left,
         y: top,
       },
+      placement: "bottom-start",
       ...(arrow && {
-        arrow: { x: reference.x + gap, y: reference.y + reference.height },
+        arrow: { x: 0, y: 0 },
       }),
     };
   };
@@ -328,10 +334,11 @@ export const Popper = ({
         x: left,
         y: top,
       },
+      placement: "bottom-center",
       ...(arrow && {
         arrow: {
-          x: reference.x + (reference.width / 2 - arrowRect / 2),
-          y: reference.y + reference.height,
+          x: 0,
+          y: 0,
         },
       }),
     };
@@ -347,18 +354,19 @@ export const Popper = ({
         x: left,
         y: top,
       },
+      placement: "bottom-end",
       ...(arrow && {
         arrow: {
-          x: reference.x + reference.width - arrowRect - gap,
-          y: reference.y + reference.height,
+          x: 0,
+          y: 0,
         },
       }),
     };
   };
 
   const getPosition = (args) => {
-    const [placement] = position.split("-");
-    switch (placement) {
+    const [position] = placement.split("-");
+    switch (position) {
       case "left":
         return canPlaceOnLeft(args) && "left-center";
       case "right":
@@ -373,8 +381,8 @@ export const Popper = ({
   };
 
   const getOppositePosition = (args) => {
-    const [placement] = position.split("-");
-    switch (placement) {
+    const [position] = placement.split("-");
+    switch (position) {
       case "left":
         return canPlaceOnRight(args) && "right";
       case "right":
@@ -389,11 +397,11 @@ export const Popper = ({
   };
 
   const getAdjacentSides = (args) => {
-    const [placement] = position.split("-");
-    if (placement === "left" || placement === "right") {
+    const [position] = placement.split("-");
+    if (position === "left" || position === "right") {
       return [canPlaceOnTop(args) && "top", canPlaceOnBottom(args) && "bottom"];
     }
-    if (placement === "top" || placement === "bottom") {
+    if (position === "top" || position === "bottom") {
       return [canPlaceOnLeft(args) && "left", canPlaceOnRight(args) && "right"];
     }
   };
@@ -420,10 +428,12 @@ export const Popper = ({
     placement,
   }) => {
     const { scrollX, scrollY } = window;
+    let left = strategy === "absolute" ? X + scrollX : X;
+    let top = strategy === "absolute" ? Y + scrollY : Y;
     setState({
       popper: {
         ...state.popper,
-        transform: `translate(${X + scrollX}px,${Y + scrollY}px)`,
+        transform: `translate(${left}px,${top}px)`,
       },
       ...(arrow && {
         arrow: {
@@ -432,7 +442,7 @@ export const Popper = ({
           top: `${y + scrollY}px`,
         },
       }),
-      position: placement ?? position,
+      placement: placement,
     });
   };
 
@@ -441,15 +451,9 @@ export const Popper = ({
 
 Popper.propTypes = {
   render: PropTypes.func.isRequired,
-  referenceElement: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  position: PropTypes.oneOf(PopperPlacements),
+  referenceRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  placement: PropTypes.string,
   offset: PropTypes.number,
   arrow: PropTypes.bool,
-  arrowRect: PropTypes.number,
-};
-
-Popper.defaultProps = {
-  offset: 5,
-  arrow: false,
-  arrowRect: 16,
+  strategy: PropTypes.string,
 };

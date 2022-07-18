@@ -22,11 +22,18 @@ const Profile = () => {
   return (
     <div className={styles.profile_container}>
       <div className={styles.profile_bg}>
-        <img src="https://themesbrand.com/doot/layouts/assets/images/small/img-4.jpg" />
+        <img
+          src="https://themesbrand.com/doot/layouts/assets/images/small/img-4.jpg"
+          className={styles.bg}
+        />
         <div className={styles.title}>
           <b>My Profile</b>
           <i className="bx-dots-vertical-rounded" id="my-profile"></i>
-          <DropDown selector="#my-profile" position="bottom-center">
+          <DropDown
+            strategy="fixed"
+            selector="#my-profile"
+            placement="bottom-center"
+          >
             {dropDown.map(({ label, icon }, index) => {
               return (
                 <DropDown.Item key={index} className={styles.profile_option}>

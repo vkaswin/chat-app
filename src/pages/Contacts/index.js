@@ -73,8 +73,9 @@ const Contacts = () => {
                       ></i>
                     </div>
                     <DropDown
-                      position="bottom-center"
+                      placement="bottom-center"
                       selector={`#${word}-${ind}`}
+                      strategy="fixed"
                     >
                       {dropdown.map(({ icon, label }, i) => {
                         return (

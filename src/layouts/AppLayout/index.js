@@ -26,13 +26,11 @@ const AppLayout = ({ children }) => {
 
   return (
     <Fragment>
+      <SideBar theme={theme} toggleTheme={toggleTheme} />
+      <div className={styles.pages_container}>{children}</div>
       <div className={styles.app_layout}>
-        <div>
-          <div className={styles.pages_container}>{children}</div>
-        </div>
         <Chats />
       </div>
-      <SideBar theme={theme} toggleTheme={toggleTheme} />
     </Fragment>
   );
 };
