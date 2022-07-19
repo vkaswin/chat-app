@@ -98,6 +98,7 @@ export const clickOutside = ({ ref, onClose, doNotClose = () => false }) => {
   if (!ref) return;
 
   const handleClickOutside = ({ target }) => {
+    console.log(doNotClose(target));
     if (ref.contains(target) || doNotClose(target)) return;
     onClose();
     document.removeEventListener("click", handleClickOutside);

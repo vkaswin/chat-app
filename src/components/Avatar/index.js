@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 
 import styles from "./Avatar.module.scss";
@@ -22,10 +22,10 @@ export const Avatar = ({
     "#029ACD",
   ];
 
-  const getRandomColor = () => {
+  const getRandomColor = useMemo(() => {
     let index = Math.floor(Math.random() * colors.length);
     return colors[index];
-  };
+  }, []);
 
   return (
     <div
@@ -42,7 +42,7 @@ export const Avatar = ({
       ) : (
         <div
           className={styles.random_avatar}
-          style={{ "--avatar-bg": getRandomColor() }}
+          style={{ "--avatar-bg": getRandomColor }}
         >
           <span>
             {userName.charAt(0)}

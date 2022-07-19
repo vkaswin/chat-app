@@ -23,6 +23,8 @@ export const DropDown = ({
   trigger,
   className,
   strategy,
+  container,
+  zIndex,
 }) => {
   const targetRef = useRef();
 
@@ -64,7 +66,7 @@ export const DropDown = ({
   };
 
   return (
-    <Portal>
+    <Portal container={container}>
       <CSSTransition
         in={isOpen}
         timeout={200}
@@ -80,13 +82,14 @@ export const DropDown = ({
           placement={placement}
           offset={offset}
           strategy={strategy}
+          container={container}
           render={({ popper, position, ref }) => {
             return (
               <DropDownContext.Provider value={{ hide }}>
                 <div
                   ref={ref}
                   className={styles.dropdown}
-                  style={popper}
+                  style={{ ...popper, ...(zIndex && { "--zIndex": zIndex }) }}
                   data-position={position}
                 >
                   <div className={styles.menu}>{children}</div>
@@ -102,16 +105,19 @@ export const DropDown = ({
 
 DropDown.propTypes = {
   children: PropTypes.node.isRequired,
+  container: PropTypes.string,
   placement: PropTypes.oneOf(PopperPlacements),
   offset: PropTypes.number,
   trigger: PropTypes.oneOf(["click", "hover"]),
   className: PropTypes.string,
   selector: PropTypes.string.isRequired,
   strategy: PropTypes.oneOf(["absolute", "fixed"]),
+  zIndex: PropTypes.number,
 };
 
 DropDown.defaultProps = {
   placement: "bottom-start",
+  container: null,
   offset: 10,
   trigger: "click",
   className: null,

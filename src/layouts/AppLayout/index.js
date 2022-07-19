@@ -1,20 +1,27 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { SideBar } from "./SideBar";
-import { Chats } from "./Chats";
+import { Chats } from "components";
 import { useLocalStorage } from "hooks";
+import { Outlet } from "react-router-dom";
 
 import styles from "./AppLayout.module.scss";
 
 const AppLayout = ({ children }) => {
   const { getItem, setItem } = useLocalStorage();
 
+  const [width, setWidth] = useState(window.innerWidth);
+
   const [theme, setTheme] = useState();
 
   useEffect(() => {
+    window.addEventListener("resize", handleResize);
     let val = getItem("theme") ?? "light";
     let root = document.querySelector(":root");
     root.setAttribute("data-theme", val);
     setTheme(val);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const toggleTheme = (val) => () => {
@@ -24,12 +31,18 @@ const AppLayout = ({ children }) => {
     setTheme(val);
   };
 
+  const handleResize = () => {
+    setWidth(window.innerWidth);
+  };
+
   return (
     <Fragment>
       <SideBar theme={theme} toggleTheme={toggleTheme} />
-      <div className={styles.pages_container}>{children}</div>
       <div className={styles.app_layout}>
-        <Chats />
+        <div className={styles.pages_container}>
+          <Outlet />
+        </div>
+        {width > 768 && <Chats />}
       </div>
     </Fragment>
   );

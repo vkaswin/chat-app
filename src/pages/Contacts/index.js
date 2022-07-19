@@ -46,7 +46,7 @@ const Contacts = () => {
   };
 
   return (
-    <div className={styles.contacts_list}>
+    <div id="contacts-container" className={styles.contacts_list}>
       {contacts?.map(({ word, users }, index) => {
         return (
           users.length > 0 && (
@@ -75,7 +75,7 @@ const Contacts = () => {
                     <DropDown
                       placement="bottom-center"
                       selector={`#${word}-${ind}`}
-                      strategy="fixed"
+                      container="#contacts-container"
                     >
                       {dropdown.map(({ icon, label }, i) => {
                         return (

@@ -1,8 +1,8 @@
 .chat_input {
   position: fixed;
-  right: 0px;
+  right: 15px;
   bottom: 0px;
-  width: calc(100% - 375px);
+  width: calc(100% - 390px);
   height: 80px;
   background-color: rgba(255, 255, 255, 0.05);
   -webkit-backdrop-filter: blur(7px);
@@ -12,7 +12,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 15px;
-  z-index: 10;
+  z-index: 1025;
   textarea {
     width: 100%;
     max-width: 80%;
@@ -58,5 +58,8 @@
 @media only screen and (max-width: 768px) {
   .chat_input {
     width: 100%;
+    right: 0px;
+    padding: 0px 10px;
+    gap: 10px;
   }
 }

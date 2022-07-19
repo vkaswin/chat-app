@@ -14,3 +14,4 @@ export { Popper } from "./Popper";
 export { Popover } from "./Popover";
 export { ToastContainer, Toast } from "./Toast";
 export { Avatar } from "./Avatar";
+export { Chats } from "./Chats";

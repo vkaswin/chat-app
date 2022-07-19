@@ -2,12 +2,12 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { getCookie, clearCookie } from "utils";
 import jwt_decode from "jwt-decode";
 
-const AuthContext = createContext();
+const StoreContext = createContext();
 
 export const ProvideAuth = ({ children }) => {
-  let [user, setUser] = useState(false);
+  const [user, setUser] = useState(false);
 
-  let [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let token = getCookie("authToken");
@@ -23,12 +23,12 @@ export const ProvideAuth = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={(user, isLoading, setUser, onLogout)}>
+    <StoreContext.Provider value={{ user, isLoading, setUser, onLogout }}>
       {children}
-    </AuthContext.Provider>
+    </StoreContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+  return useContext(StoreContext);
 };

@@ -63,6 +63,7 @@ export const Conversation = ({ chats }) => {
               <DropDown
                 selector={`#chat-option-${index}`}
                 placement="bottom-center"
+                container="#chat-container"
               >
                 {dropDown.map(({ label, icon }, index) => {
                   return (

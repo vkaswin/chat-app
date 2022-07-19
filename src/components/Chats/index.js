@@ -22,13 +22,19 @@ export const Chats = () => {
     },
   ];
 
+  const chatContainerRef = useRef();
+
   const [chats, setChats] = useState(chatData.chats);
 
   const [showInfo, setShowInfo] = useState(false);
 
   useLayoutEffect(() => {
-    const { scrollHeight } = document.body;
-    window.scrollTo(0, scrollHeight);
+    const container = document.querySelector("#chat-container");
+
+    container.scrollTo({
+      top: container.scrollHeight,
+      behavior: "smooth",
+    });
   }, []);
 
   const toggleInfo = () => {
@@ -40,8 +46,8 @@ export const Chats = () => {
   };
 
   return (
-    <div className={styles.chat_wrapper}>
-      <Conversation chats={chats} />
+    <div id="chat-container" className={styles.chat_wrapper}>
+      <Conversation chats={chats} container={chatContainerRef} />
       <div className={styles.chat_header}>
         <div className={styles.user_info}>
           <Avatar
@@ -64,6 +70,7 @@ export const Chats = () => {
             strategy="fixed"
             selector="#more-option"
             placement="bottom-end"
+            zIndex={1026}
           >
             {moreDropDown.map(({ label, icon }, index) => {
               return (

@@ -11,7 +11,7 @@
 }
 
 .dropdown {
-  z-index: 1050;
+  z-index: var(--zIndex, 1000);
   .menu {
     display: flex;
     flex-direction: column;

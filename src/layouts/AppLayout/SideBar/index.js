@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useMemo, useRef } from "react";
 import { useRouter } from "hooks";
 import { NavLink } from "react-router-dom";
 import { classNames } from "utils";
@@ -81,6 +81,11 @@ export const SideBar = ({ theme, toggleTheme }) => {
     }
   }, [pathName]);
 
+  const tooltipPlacement = useMemo(() => {
+    const { matches } = window.matchMedia(`(max-width: 768px)`);
+    return matches ? "top-center" : "right-center";
+  }, []);
+
   return (
     <div className={styles.sidebar}>
       <div className={styles.logo}>
@@ -104,7 +109,7 @@ export const SideBar = ({ theme, toggleTheme }) => {
               ></i>
               <Tooltip
                 offset={20}
-                placement="right-center"
+                placement={tooltipPlacement}
                 selector={`#nav-${index}`}
               >
                 <span>{label}</span>
@@ -114,11 +119,14 @@ export const SideBar = ({ theme, toggleTheme }) => {
         })}
         <div className={classNames(styles.nav_item, styles.theme)}>
           <div className={styles.nav_icon}>
-            {theme === "light" ? (
-              <i className="bx-moon" onClick={toggleTheme("dark")}></i>
-            ) : (
-              <i className="bx-sun" onClick={toggleTheme("light")}></i>
-            )}
+            <i
+              id="theme"
+              className={theme === "light" ? "bx-moon" : "bx-sun"}
+              onClick={toggleTheme(theme === "light" ? "dark" : "light")}
+            ></i>
+            <Tooltip placement={tooltipPlacement} selector="#theme" offset={20}>
+              {theme === "light" ? "Dark Mode" : "Light Mode"}
+            </Tooltip>
           </div>
         </div>
         <div

@@ -1,12 +1,26 @@
 import React from "react";
+import { Avatar } from "components";
+import { classNames } from "utils";
+import { useRouter } from "hooks";
 import chatList from "data/user.json";
 
 import styles from "./Chats.module.scss";
-import { Avatar } from "components";
-import { classNames } from "utils";
 
 const Chats = () => {
+  const router = useRouter();
+
   const { favourites, users, channels } = chatList;
+
+  const handleChat =
+    (userId = "4254") =>
+    () => {
+      const { matches } = window.matchMedia(`(max-width: 768px)`);
+      if (matches) {
+        router.push(`/chat/${userId}`);
+      } else {
+        router.push({ search: `?userId=${userId}` });
+      }
+    };
 
   return (
     <div className={styles.chat_list_container}>
@@ -20,6 +34,7 @@ const Chats = () => {
             className={classNames(styles.user_card, {
               [styles.active]: index === 0,
             })}
+            onClick={handleChat()}
           >
             <div className={styles.user}>
               <Avatar src={profile} userName={name} status={status} size={35} />
@@ -39,6 +54,7 @@ const Chats = () => {
             className={classNames(styles.user_card, {
               [styles.active]: false,
             })}
+            onClick={handleChat}
           >
             <div className={styles.user}>
               <Avatar src={profile} userName={name} status={status} size={35} />
@@ -61,6 +77,7 @@ const Chats = () => {
             className={classNames(styles.user_card, {
               [styles.active]: false,
             })}
+            onClick={handleChat}
           >
             <div className={styles.user}>
               <span>#</span>

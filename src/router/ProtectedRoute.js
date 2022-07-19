@@ -7,9 +7,9 @@ export const ProtectedRoute = ({ component, auth = true }) => {
 
   //   if (auth && token) return component;
 
-  //   if (auth && !token) return <Navigate replace to="/login" />;
+  //   if (auth && !token) return <Navigate replace to="/auth/login" />;
 
-  //   if (auth === false && token) return <Navigate replace to="/profile" />;
+  //   if (auth === false && token) return <Navigate replace to="/chats" />;
 
   return component;
 };

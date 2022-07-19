@@ -1,4 +1,5 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 
 import authImg from "assets/images/auth-img.png";
 
@@ -14,7 +15,7 @@ const AuthLayout = ({ children }) => {
         </div>
         <img src={authImg} className={styles.auth_img} />
       </div>
-      <div className={styles.auth_right}>{children}</div>
+      <div className={styles.auth_right}>{<Outlet />}</div>
     </div>
   );
 };

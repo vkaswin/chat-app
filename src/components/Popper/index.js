@@ -9,6 +9,7 @@ export const Popper = ({
   offset,
   arrow,
   strategy,
+  container,
 }) => {
   const popperRef = useRef();
 
@@ -422,14 +423,26 @@ export const Popper = ({
     }
   };
 
-  const setPopperPosition = ({
-    popper: { x: X, y: Y } = {},
-    arrow: { x, y } = {},
-    placement,
-  }) => {
-    const { scrollX, scrollY } = window;
-    let left = strategy === "absolute" ? X + scrollX : X;
-    let top = strategy === "absolute" ? Y + scrollY : Y;
+  const setPopperPosition = ({ popper, arrow, placement }) => {
+    let left, top, scrollLeft, scrollTop;
+
+    if (container) {
+      const element = document.querySelector(container);
+      const { scrollLeft: x, scrollTop: y, offsetLeft, offsetTop } = element;
+      scrollLeft = x;
+      scrollTop = y;
+
+      popper.x -= offsetLeft;
+      popper.y -= offsetTop;
+    } else {
+      const { scrollX, scrollY } = window;
+      scrollLeft = scrollX;
+      scrollTop = scrollY;
+    }
+
+    left = strategy === "absolute" ? popper.x + scrollLeft : popper.x;
+    top = strategy === "absolute" ? popper.y + scrollTop : popper.y;
+
     setState({
       popper: {
         ...state.popper,
@@ -437,9 +450,8 @@ export const Popper = ({
       },
       ...(arrow && {
         arrow: {
-          ...state.arrow,
-          left: `${x + scrollX}px`,
-          top: `${y + scrollY}px`,
+          x: 0,
+          y: 0,
         },
       }),
       placement: placement,
