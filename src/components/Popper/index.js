@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { PopperPlacements } from "utils/constants";
+import { debounce } from "utils";
 
 export const Popper = ({
   render,
@@ -31,11 +32,23 @@ export const Popper = ({
   }, [referenceRef.current]);
 
   useEffect(() => {
+    window.addEventListener("wheel", handleWheel);
     window.addEventListener("resize", handlePopper);
-    return () => window.removeEventListener("resize", handlePopper);
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("resize", handlePopper);
+    };
   }, []);
 
+  const handleWheel = ({ deltaX, deltaY }) => {
+    const { m41, m42 } = new DOMMatrix(popperRef.current.style.transform);
+    popperRef.current.style.transform = `translate(${m41 - deltaX}px,${
+      m42 - deltaY
+    }px)`;
+  };
+
   const ref = (element) => {
+    if (!element) return;
     popperRef.current = element;
   };
 
@@ -424,29 +437,10 @@ export const Popper = ({
   };
 
   const setPopperPosition = ({ popper, arrow, placement }) => {
-    let left, top, scrollLeft, scrollTop;
-
-    if (container) {
-      const element = document.querySelector(container);
-      const { scrollLeft: x, scrollTop: y, offsetLeft, offsetTop } = element;
-      scrollLeft = x;
-      scrollTop = y;
-
-      popper.x -= offsetLeft;
-      popper.y -= offsetTop;
-    } else {
-      const { scrollX, scrollY } = window;
-      scrollLeft = scrollX;
-      scrollTop = scrollY;
-    }
-
-    left = strategy === "absolute" ? popper.x + scrollLeft : popper.x;
-    top = strategy === "absolute" ? popper.y + scrollTop : popper.y;
-
     setState({
       popper: {
         ...state.popper,
-        transform: `translate(${left}px,${top}px)`,
+        transform: `translate(${popper.x}px,${popper.y}px)`,
       },
       ...(arrow && {
         arrow: {
