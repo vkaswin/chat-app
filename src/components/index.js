@@ -10,7 +10,6 @@ export { DatePicker } from "./DatePicker";
 export { OffCanvas } from "./OffCanvas";
 export { Portal } from "./Portal";
 export { Overlay } from "./Overlay";
-export { Popper } from "./Popper";
 export { Popover } from "./Popover";
 export { ToastContainer, Toast } from "./Toast";
 export { Avatar } from "./Avatar";

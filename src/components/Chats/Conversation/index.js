@@ -60,11 +60,7 @@ export const Conversation = ({ chats }) => {
                 className="bx-dots-vertical-rounded"
                 id={`chat-option-${index}`}
               ></i>
-              <DropDown
-                selector={`#chat-option-${index}`}
-                placement="bottom-center"
-                container="#chat-container"
-              >
+              <DropDown selector={`#chat-option-${index}`} placement="bottom">
                 {dropDown.map(({ label, icon }, index) => {
                   return (
                     <DropDown.Item key={index} className={styles.chat_option}>

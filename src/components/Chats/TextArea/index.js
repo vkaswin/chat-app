@@ -8,16 +8,16 @@ export const TextArea = ({ onSend }) => {
 
   const [text, setText] = useState("");
 
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  const recognition = new SpeechRecognition();
+  const [rec, setRec] = useState();
 
   useEffect(() => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const recognition = new SpeechRecognition();
+
     recognition.interimResults = true;
     recognition.continuous = true;
-
-    // console.log(recognition);
 
     recognition.onstart = (e) => {
       console.log(e);
@@ -27,17 +27,20 @@ export const TextArea = ({ onSend }) => {
       console.log(e);
     };
 
-    recognition.onnomatch = (e) => {
-      console.log(e);
-    };
+    recognition.onresult = ({ results }) => {
+      let transcript = Array.from(results)
+        .map((result) => result[0])
+        .map((result) => result.transcript)
+        .join("");
 
-    recognition.onresult = (e) => {
-      console.log(e);
+      setText(text.concat(transcript));
     };
 
     recognition.onerror = (e) => {
       console.log(e);
     };
+
+    setRec(recognition);
   }, []);
 
   const handleChange = ({ target: { value } }) => {
@@ -58,11 +61,11 @@ export const TextArea = ({ onSend }) => {
   };
 
   const onPointerDown = () => {
-    recognition.start();
+    rec?.start();
   };
 
   const onPointerUp = () => {
-    recognition.stop();
+    rec?.stop();
   };
 
   return (

@@ -26,13 +26,13 @@ export const DropDown = ({
 }) => {
   const targetRef = useRef();
 
-  const [popper, setPopper] = useState();
+  const [popperRef, setPopperRef] = useState();
 
   const {
-    styles: { popper: popperStyle },
+    styles: { popper },
     attributes,
-  } = usePopper(targetRef.current, popper, {
-    placement: "bottom",
+  } = usePopper(targetRef.current, popperRef, {
+    placement,
   });
 
   const [isOpen, setIsOpen] = useState(false);
@@ -85,8 +85,8 @@ export const DropDown = ({
         onEntered={onEntered}
       >
         <div
-          ref={setPopper}
-          style={{ ...popperStyle, ...(zIndex && { zIndex: zIndex }) }}
+          ref={setPopperRef}
+          style={{ ...popper, ...(zIndex && { zIndex: zIndex }) }}
           className={styles.dropdown}
           {...attributes.popper}
         >
@@ -105,7 +105,7 @@ DropDown.propTypes = {
   children: PropTypes.node.isRequired,
   container: PropTypes.string,
   placement: PropTypes.oneOf(PopperPlacements),
-  offset: PropTypes.number,
+  offset: PropTypes.arrayOf(PropTypes.number),
   trigger: PropTypes.oneOf(["click", "hover"]),
   className: PropTypes.string,
   selector: PropTypes.string.isRequired,
@@ -116,7 +116,7 @@ DropDown.propTypes = {
 DropDown.defaultProps = {
   placement: "bottom-start",
   container: null,
-  offset: 10,
+  offset: [0, 10],
   trigger: "click",
   className: null,
   strategy: "absolute",

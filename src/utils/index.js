@@ -98,7 +98,6 @@ export const clickOutside = ({ ref, onClose, doNotClose = () => false }) => {
   if (!ref) return;
 
   const handleClickOutside = ({ target }) => {
-    console.log(doNotClose(target));
     if (ref.contains(target) || doNotClose(target)) return;
     onClose();
     document.removeEventListener("click", handleClickOutside);
@@ -106,32 +105,3 @@ export const clickOutside = ({ ref, onClose, doNotClose = () => false }) => {
 
   document.addEventListener("click", handleClickOutside);
 };
-
-//? Select a random element in an array
-// const getRandomElement = (array) => {
-//   if (!Array.isArray(array)) return;
-
-//   return Math.floor(Math.random() * array.length);
-// };
-
-//? Sort by name
-// const sortData = dataSet.sort((curr, prev) => {
-//   return curr.label.localeCompare(prev.label);
-// });
-
-//? Generate unique id
-// const uuidv4 = () => {
-//   return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-//     (
-//       c ^
-//       (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-//     ).toString(16)
-//   );
-// };
-
-//? Get day by date
-// const getDayByDate = ({ year, month, day }) => {
-//   return new Date(year, month, day).toLocaleDateString("en-us", {
-//     weekday: "long",
-//   });
-// };

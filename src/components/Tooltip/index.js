@@ -1,23 +1,32 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Popper, Portal } from "components";
+import { Portal } from "components";
 import PropTypes from "prop-types";
 import { PopperPlacements } from "utils/constants";
 import { CSSTransition } from "react-transition-group";
+import { usePopper } from "react-popper";
 
 import styles from "./Tooltip.module.scss";
 
 export const Tooltip = ({
   children,
   placement,
-  arrow,
   offset,
   className,
-  strategy,
   selector,
 }) => {
   const targetRef = useRef();
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const [popperRef, setPopperRef] = useState();
+
+  const {
+    styles: { popper },
+    attributes,
+  } = usePopper(targetRef.current, popperRef, {
+    modifiers: [{ name: "offset", options: { offset } }],
+    placement,
+  });
 
   const show = () => {
     setIsOpen(true);
@@ -50,25 +59,14 @@ export const Tooltip = ({
         }}
         unmountOnExit
       >
-        <Popper
-          referenceRef={targetRef}
-          placement={placement}
-          offset={offset}
-          strategy={strategy}
-          arrow={arrow}
-          render={({ popper, placement, ref }) => {
-            return (
-              <div
-                ref={ref}
-                className={styles.tooltip}
-                data-placement={placement}
-                style={popper}
-              >
-                <div className={styles.menu}>{children}</div>
-              </div>
-            );
-          }}
-        />
+        <div
+          ref={setPopperRef}
+          className={styles.tooltip}
+          style={popper}
+          {...attributes.popper}
+        >
+          <div className={styles.menu}>{children}</div>
+        </div>
       </CSSTransition>
     </Portal>
   );
@@ -77,17 +75,15 @@ export const Tooltip = ({
 Tooltip.propTypes = {
   children: PropTypes.node.isRequired,
   placement: PropTypes.oneOf(PopperPlacements),
-  offset: PropTypes.number,
+  offset: PropTypes.arrayOf(PropTypes.number),
   arrow: PropTypes.bool,
   className: PropTypes.string,
   selector: PropTypes.string.isRequired,
-  strategy: PropTypes.oneOf(["absolute", "fixed"]),
 };
 
 Tooltip.defaultProps = {
-  placement: "top-center",
+  placement: "top",
   arrow: true,
-  offset: 10,
-  strategy: "absolute",
+  offset: [0, 10],
   className: null,
 };

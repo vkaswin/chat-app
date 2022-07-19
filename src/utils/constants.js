@@ -1,14 +1,14 @@
 export const PopperPlacements = [
-  "left-center",
+  "left",
   "left-start",
   "left-end",
-  "right-center",
+  "right",
   "right-start",
   "right-end",
-  "top-center",
+  "top",
   "top-start",
   "top-end",
-  "bottom-center",
+  "bottom",
   "bottom-start",
   "bottom-end",
 ];

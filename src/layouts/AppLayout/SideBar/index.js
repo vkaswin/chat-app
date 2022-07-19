@@ -83,7 +83,7 @@ export const SideBar = ({ theme, toggleTheme }) => {
 
   const tooltipPlacement = useMemo(() => {
     const { matches } = window.matchMedia(`(max-width: 768px)`);
-    return matches ? "top-center" : "right-center";
+    return matches ? "top" : "right";
   }, []);
 
   return (
@@ -108,7 +108,7 @@ export const SideBar = ({ theme, toggleTheme }) => {
                 id={`nav-${index}`}
               ></i>
               <Tooltip
-                offset={20}
+                offset={[0, 20]}
                 placement={tooltipPlacement}
                 selector={`#nav-${index}`}
               >
@@ -124,7 +124,11 @@ export const SideBar = ({ theme, toggleTheme }) => {
               className={theme === "light" ? "bx-moon" : "bx-sun"}
               onClick={toggleTheme(theme === "light" ? "dark" : "light")}
             ></i>
-            <Tooltip placement={tooltipPlacement} selector="#theme" offset={20}>
+            <Tooltip
+              placement={tooltipPlacement}
+              selector="#theme"
+              offset={[0, 20]}
+            >
               {theme === "light" ? "Dark Mode" : "Light Mode"}
             </Tooltip>
           </div>
@@ -139,7 +143,7 @@ export const SideBar = ({ theme, toggleTheme }) => {
             outline
           />
         </div>
-        <DropDown strategy="fixed" selector="#avatar" placement="top-center">
+        <DropDown selector="#avatar" placement="top">
           {dropdown.map(({ label, icon, to }, index) => {
             return (
               <NavLink key={index} to={to}>

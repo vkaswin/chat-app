@@ -29,10 +29,10 @@ export const Chats = () => {
   const [showInfo, setShowInfo] = useState(false);
 
   useLayoutEffect(() => {
-    const container = document.querySelector("#chat-container");
+    const { scrollHeight } = chatContainerRef.current;
 
-    container.scrollTo({
-      top: container.scrollHeight,
+    chatContainerRef.current.scrollTo({
+      top: scrollHeight,
       behavior: "smooth",
     });
   }, []);
@@ -46,7 +46,7 @@ export const Chats = () => {
   };
 
   return (
-    <div id="chat-container" className={styles.chat_wrapper}>
+    <div ref={chatContainerRef} className={styles.chat_wrapper}>
       <Conversation chats={chats} container={chatContainerRef} />
       <div className={styles.chat_header}>
         <div className={styles.user_info}>
@@ -67,7 +67,6 @@ export const Chats = () => {
           <i className="bxs-info-circle" onClick={toggleInfo}></i>
           <i className="bx-dots-vertical-rounded" id="more-option"></i>
           <DropDown
-            strategy="fixed"
             selector="#more-option"
             placement="bottom-end"
             zIndex={1026}

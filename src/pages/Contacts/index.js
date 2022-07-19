@@ -72,11 +72,7 @@ const Contacts = () => {
                         id={`${word}-${ind}`}
                       ></i>
                     </div>
-                    <DropDown
-                      placement="bottom-center"
-                      selector={`#${word}-${ind}`}
-                      container="#contacts-container"
-                    >
+                    <DropDown placement="bottom" selector={`#${word}-${ind}`}>
                       {dropdown.map(({ icon, label }, i) => {
                         return (
                           <DropDown.Item
