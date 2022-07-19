@@ -68,12 +68,21 @@ export const TextArea = ({ onSend }) => {
     rec?.stop();
   };
 
+  const handleFile = (e) => {
+    console.log(e);
+  };
+
   return (
     <Fragment>
       <div className={styles.chat_input}>
-        <i className="bx-paperclip" id="attach"></i>
         <i className="bx-smile" id="emoji"></i>
-        <textarea name="chat-input" value={text} onChange={handleChange} />
+        <div className={styles.input_field}>
+          <textarea name="chat-input" value={text} onChange={handleChange} />
+          <label htmlFor="chat-file">
+            <i className="bx-paperclip" id="attach"></i>
+          </label>
+          <input id="chat-file" type="file" onChange={handleFile} hidden />
+        </div>
         <button onClick={handleSend}>
           <i className="bxs-send"></i>
         </button>

@@ -55,12 +55,12 @@ export const SideBar = ({ theme, toggleTheme }) => {
     {
       label: "Change Password",
       icon: "bx-lock-open",
-      to: "change-password",
+      to: "/auth/change-password",
     },
     {
       label: "Logout",
       icon: "bx-log-out-circle",
-      to: "login",
+      to: "/auth/logout",
     },
   ];
 

@@ -4,6 +4,10 @@ import { Avatar } from "components";
 import styles from "./Settings.module.scss";
 
 const Settings = () => {
+  const handleFile = (e) => {
+    console.log(e);
+  };
+
   return (
     <div className={styles.settings_container}>
       <div className={styles.settings_bg}>
@@ -13,9 +17,15 @@ const Settings = () => {
         />
         <div className={styles.title}>
           <b>My Settings</b>
-          <div className={styles.edit_bg}>
+          <label htmlFor="settings-file" className={styles.edit_bg}>
             <i className="bxs-pencil"></i>
-          </div>
+            <input
+              id="settings-file"
+              type="file"
+              onChange={handleFile}
+              hidden
+            />
+          </label>
         </div>
         <div className={styles.avatar}>
           <Avatar

@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import { Routes, Route, Navigate, HashRouter } from "react-router-dom";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useAuth } from "hooks";
 import { routes } from "router/Routes";
 import { ProtectedRoute } from "./ProtectedRoute";
@@ -29,7 +30,21 @@ export const Router = () => {
                   key={path}
                   path={path}
                   element={
-                    <ProtectedRoute auth={auth} component={<PageComponent />} />
+                    <SwitchTransition mode="out-in">
+                      <CSSTransition
+                        key={path}
+                        timeout={300}
+                        classNames={{
+                          enterActive: "router-enter",
+                          exitActive: "router-exit",
+                        }}
+                      >
+                        <ProtectedRoute
+                          auth={auth}
+                          component={<PageComponent />}
+                        />
+                      </CSSTransition>
+                    </SwitchTransition>
                   }
                 />
               );
@@ -51,10 +66,21 @@ export const Router = () => {
                           key={childPath}
                           path={childPath}
                           element={
-                            <ProtectedRoute
-                              auth={childAuth}
-                              component={<ChildComponent />}
-                            />
+                            <SwitchTransition mode="out-in">
+                              <CSSTransition
+                                key={childPath}
+                                timeout={300}
+                                classNames={{
+                                  enterActive: "router-enter",
+                                  exitActive: "router-exit",
+                                }}
+                              >
+                                <ProtectedRoute
+                                  auth={childAuth}
+                                  component={<ChildComponent />}
+                                />
+                              </CSSTransition>
+                            </SwitchTransition>
                           }
                         />
                       );

@@ -32,20 +32,22 @@
       align-items: center;
       width: 100%;
       height: 65px;
+      &:is(.active) {
+        i {
+          color: #4eac6e;
+        }
+      }
       &:is(.theme) {
         height: 100%;
         align-items: flex-end;
         .nav_icon {
-          font-size: 32px;
+          font-size: 30px;
         }
       }
       .nav_icon {
         color: #868a92;
         font-size: 28px;
         cursor: pointer;
-        &:is(.active) {
-          color: #4eac6e;
-        }
       }
     }
     .tab_indicator {

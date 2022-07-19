@@ -1,10 +1,11 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { Avatar, DropDown } from "components";
+import { classNames } from "utils";
+import { useRouter } from "hooks";
 import alphabets from "data/alphabets.json";
 import contactsList from "data/contacts.json";
 
 import styles from "./Contacts.module.scss";
-import { Avatar, DropDown } from "components";
-import { classNames } from "utils";
 
 const Contacts = () => {
   const dropdown = [
@@ -21,6 +22,8 @@ const Contacts = () => {
       icon: "bx-trash",
     },
   ];
+
+  const router = useRouter();
 
   const [contacts, setContacts] = useState([]);
 
@@ -45,6 +48,14 @@ const Contacts = () => {
     setContacts([...contacts, ...contactByAlphabets]);
   };
 
+  const handleChat =
+    (userId = "4684") =>
+    () => {
+      const { matches } = window.matchMedia(`(max-width: 786px)`);
+      if (!matches) return;
+      router.push(`/chat/${userId}`);
+    };
+
   return (
     <div id="contacts-container" className={styles.contacts_list}>
       {contacts?.map(({ word, users }, index) => {
@@ -58,7 +69,7 @@ const Contacts = () => {
                 return (
                   <Fragment key={ind}>
                     <div className={classNames(styles.contact_card)}>
-                      <div className={styles.user}>
+                      <div className={styles.user} onClick={handleChat()}>
                         <Avatar
                           src={profile}
                           userName={name}

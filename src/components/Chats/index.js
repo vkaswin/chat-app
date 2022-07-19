@@ -7,21 +7,6 @@ import chatData from "data/chats.json";
 import styles from "./Chats.module.scss";
 
 export const Chats = () => {
-  const moreDropDown = [
-    {
-      label: "Archive",
-      icon: "bx-archive",
-    },
-    {
-      label: "Muted",
-      icon: "bx-microphone-off",
-    },
-    {
-      label: "Delete",
-      icon: "bx-trash",
-    },
-  ];
-
   const chatContainerRef = useRef();
 
   const [chats, setChats] = useState(chatData.chats);
@@ -44,6 +29,39 @@ export const Chats = () => {
   const sendMessage = (msg) => {
     console.log(msg);
   };
+
+  const { matches } = window.matchMedia(`(max-width: 768px)`);
+
+  const moreDropDown = [
+    {
+      label: "View Profile",
+      icon: "bx bx-user",
+      onClick: () => toggleInfo(),
+      show: matches,
+    },
+    {
+      label: "Audio",
+      icon: "bx bxs-phone-call",
+      show: matches,
+    },
+    {
+      label: "Video",
+      icon: "bx bx-video",
+      show: matches,
+    },
+    {
+      label: "Archive",
+      icon: "bx-archive",
+    },
+    {
+      label: "Muted",
+      icon: "bx-microphone-off",
+    },
+    {
+      label: "Delete",
+      icon: "bx-trash",
+    },
+  ];
 
   return (
     <div ref={chatContainerRef} className={styles.chat_wrapper}>
@@ -71,14 +89,20 @@ export const Chats = () => {
             placement="bottom-end"
             zIndex={1026}
           >
-            {moreDropDown.map(({ label, icon }, index) => {
-              return (
-                <DropDown.Item key={index} className={styles.more_option}>
-                  <span>{label}</span>
-                  <i className={icon}></i>
-                </DropDown.Item>
-              );
-            })}
+            {moreDropDown.map(
+              ({ label, icon, onClick = false, show = true }, index) => {
+                return show ? (
+                  <DropDown.Item
+                    key={index}
+                    className={styles.more_option}
+                    {...(typeof onClick === "function" && { onClick })}
+                  >
+                    <span>{label}</span>
+                    <i className={icon}></i>
+                  </DropDown.Item>
+                ) : null;
+              }
+            )}
           </DropDown>
         </div>
       </div>
@@ -88,7 +112,6 @@ export const Chats = () => {
         position="right"
         className={styles.profile_sidebar}
         toggle={toggleInfo}
-        overlay={false}
       >
         <div>helo</div>
       </OffCanvas>
