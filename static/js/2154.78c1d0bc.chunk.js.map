@@ -1,1 +1,0 @@
-{"version":3,"file":"static/js/2154.78c1d0bc.chunk.js","mappings":"kJAUA,UARe,WACb,OACE,0BACE,oCAGL,C","sources":["pages/Logout/index.js"],"sourcesContent":["import React from \"react\";\n\nconst Logout = () => {\n  return (\n    <div>\n      <h1>Logout</h1>\n    </div>\n  );\n};\n\nexport default Logout;\n"],"names":[],"sourceRoot":""}

@@ -1,0 +1,1 @@
+{"version":3,"file":"static/js/817.76a48b59.chunk.js","mappings":"2JAOA,UAJiB,WACf,OAAO,SAAC,EAAAA,MAAD,GACR,C","sources":["pages/UserChat/index.js"],"sourcesContent":["import React from \"react\";\nimport { Chats } from \"components\";\n\nconst UserChat = () => {\n  return <Chats />;\n};\n\nexport default UserChat;\n"],"names":["Chats"],"sourceRoot":""}
