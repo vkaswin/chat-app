@@ -1,11 +1,11 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { ProvideAuth } from "hooks/useAuth";
 import { Router } from "./router";
+import { ToastContainer } from "components";
 import reportWebVitals from "./reportWebVitals";
 
 import "assets/scss/abstracts.scss";
-import { ToastContainer } from "components";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

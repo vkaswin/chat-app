@@ -60,6 +60,7 @@ const Login = () => {
         />
         <PasswordInput
           label="Password"
+          placeholder="Enter Password"
           register={register("password", { required: true })}
           error={errors.password}
           message={{ required: "Please enter password" }}

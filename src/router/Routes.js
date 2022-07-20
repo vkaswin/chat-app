@@ -21,7 +21,7 @@ export const routes = [
       {
         path: "change-password",
         auth: true,
-        component: "pages/Register",
+        component: "pages/ChangePassword",
       },
     ],
   },
