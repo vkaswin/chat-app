@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[8301],{8301:function(e,t,a){e.exports=a.p+"static/media/Poppins-Medium.673ed42382ab264e0bf5.ttf"}}]);
