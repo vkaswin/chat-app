@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[3585],{3585:function(t,e,r){r.r(e),r.d(e,{PopperPlacements:function(){return a}});var a=["left","left-start","left-end","right","right-start","right-end","top","top-start","top-end","bottom","bottom-start","bottom-end"]}}]);
+//# sourceMappingURL=3585.92089497.chunk.js.map

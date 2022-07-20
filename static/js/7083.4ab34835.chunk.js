@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[7083],{7083:function(a,c,e){a.exports=e.p+"static/media/boxicons.468e2c817b23619a961a.svg"}}]);

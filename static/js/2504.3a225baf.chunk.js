@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[2504],{2504:function(e,a,c){c.r(a);c(2791);var t=c(184);a.default=function(){return(0,t.jsx)("div",{children:(0,t.jsx)("h1",{children:"ResetPassword"})})}}}]);
+//# sourceMappingURL=2504.3a225baf.chunk.js.map

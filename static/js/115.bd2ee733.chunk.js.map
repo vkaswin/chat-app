@@ -1,1 +1,0 @@
-{"version":3,"file":"static/js/115.bd2ee733.chunk.js","mappings":"iJAUA,UARuB,WACrB,OACE,0BACE,4CAGL,C","sources":["pages/ChangePassword/index.js"],"sourcesContent":["import React from \"react\";\n\nconst ChangePassword = () => {\n  return (\n    <div>\n      <h1>ChangePassword</h1>\n    </div>\n  );\n};\n\nexport default ChangePassword;\n"],"names":[],"sourceRoot":""}
