@@ -53,7 +53,7 @@ const Contacts = () => {
     () => {
       const { matches } = window.matchMedia(`(max-width: 786px)`);
       if (!matches) return;
-      router.push(`/chat/${userId}`);
+      router.push(`/conversation?userId=${userId}`);
     };
 
   return (

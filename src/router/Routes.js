@@ -54,11 +54,11 @@ export const routes = [
         auth: true,
         component: "pages/Settings",
       },
+      {
+        path: "conversation",
+        auth: true,
+        component: "pages/Chats",
+      },
     ],
-  },
-  {
-    path: "/chat/:id",
-    auth: true,
-    component: "pages/UserChat",
   },
 ];

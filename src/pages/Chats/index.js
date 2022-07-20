@@ -16,7 +16,7 @@ const Chats = () => {
     () => {
       const { matches } = window.matchMedia(`(max-width: 768px)`);
       if (matches) {
-        router.push(`/chat/${userId}`);
+        router.push(`/conversation?userId${userId}`);
       } else {
         router.push({ search: `?userId=${userId}` });
       }
