@@ -7,7 +7,6 @@
     display: flex;
     max-width: 75%;
     gap: 5px;
-    cursor: pointer;
     &:is(.end) {
       flex-direction: row-reverse;
       margin-left: auto;
@@ -24,11 +23,6 @@
             color: #495057;
           }
         }
-      }
-    }
-    &:hover {
-      .options {
-        opacity: 1;
       }
     }
     .chat_card {
@@ -85,8 +79,6 @@
     .options {
       color: #495057;
       font-size: 18px;
-      opacity: 0;
-      transition: opacity 0.2s ease-in-out;
       cursor: pointer;
     }
   }

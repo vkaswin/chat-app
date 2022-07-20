@@ -1,0 +1,37 @@
+.login_title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+  b {
+    color: #495057;
+    font-size: 24px;
+  }
+  span {
+    color: #797c8c;
+    font-size: 16px;
+  }
+}
+.login_field {
+  button {
+    margin-top: 20px;
+  }
+  .register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0px;
+    span {
+      &:first-child {
+        color: #797c8c;
+        font-size: 14px;
+      }
+      &:last-child {
+        color: #4eac6e;
+        text-decoration: underline;
+        margin-left: 10px;
+        font-size: 15px;
+      }
+    }
+  }
+}

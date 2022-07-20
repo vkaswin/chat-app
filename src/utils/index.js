@@ -24,13 +24,13 @@ export const setCookie = ({ name, value, days }) => {
   let expireDate = new Date();
   expireDate.setTime(expireDate.getTime() + days * 24 * 60 * 60 * 1000);
   let expires = "; expires=" + expireDate.toUTCString();
-  document.cookie = name + "=" + value + expires + "; path=/";
+  document.cookie = name + "=" + JSON.stringify(value) + expires + "; path=/";
 };
 
 export const getCookie = (name) => {
   let match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
 
-  return match ? match[2] : null;
+  return match ? JSON.parse(match[2]) : null;
 };
 
 export const clearCookie = (name) => {

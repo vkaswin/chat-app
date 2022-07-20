@@ -9,12 +9,10 @@ export const CheckBox = ({
   onChange,
   checked,
   disabled = false,
-  color = "#7367f0",
-  labelColor = "#5e5873",
 }) => {
   return (
     <div className="custom-checkbox-wrapper">
-      <div style={{ "--checkbox-color": color }}>
+      <div>
         <input
           type="checkbox"
           id={label}
@@ -26,9 +24,7 @@ export const CheckBox = ({
           disabled={disabled}
         />
       </div>
-      <label htmlFor={label} style={{ color: labelColor }}>
-        {label}
-      </label>
+      <label htmlFor={label}>{label}</label>
     </div>
   );
 };

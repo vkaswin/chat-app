@@ -38,9 +38,19 @@ const Chats = () => {
           >
             <div className={styles.user}>
               <Avatar src={profile} userName={name} status={status} size={35} />
-              <span className="truncate-1">{name}</span>
+              <div className={styles.msg}>
+                <span className="truncate-1">{name}</span>
+                <span>Loreum Ipsum</span>
+              </div>
             </div>
-            {messagecount && <label>{messagecount}</label>}
+            <div
+              className={classNames(styles.time, {
+                [styles.top]: !messagecount,
+              })}
+            >
+              <span>12:30 pm</span>
+              {messagecount && <label>{10}</label>}
+            </div>
           </div>
         );
       })}
@@ -58,9 +68,19 @@ const Chats = () => {
           >
             <div className={styles.user}>
               <Avatar src={profile} userName={name} status={status} size={35} />
-              <span className="truncate-1">{name}</span>
+              <div className={styles.msg}>
+                <span className="truncate-1">{name}</span>
+                <span>Loreum Ipsum</span>
+              </div>
             </div>
-            {messagecount && <label>{messagecount}</label>}
+            <div
+              className={classNames(styles.time, {
+                [styles.top]: !messagecount,
+              })}
+            >
+              <span>12:30 pm</span>
+              {messagecount && <label>{messagecount}</label>}
+            </div>
           </div>
         );
       })}
@@ -80,10 +100,20 @@ const Chats = () => {
             onClick={handleChat}
           >
             <div className={styles.user}>
-              <span>#</span>
-              <span className="truncate-1">{name}</span>
+              <Avatar userName={name} size={35} />
+              <div className={styles.msg}>
+                <span className="truncate-1">{name}</span>
+                <span>Loreum Ipsum</span>
+              </div>
             </div>
-            {messagecount && <label>{messagecount}</label>}
+            <div
+              className={classNames(styles.time, {
+                [styles.top]: !messagecount,
+              })}
+            >
+              <span>12:30 pm</span>
+              {messagecount && <label>{messagecount}</label>}
+            </div>
           </div>
         );
       })}

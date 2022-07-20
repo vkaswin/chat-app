@@ -45,8 +45,8 @@ export const Avatar = ({
           style={{ "--avatar-bg": getRandomColor }}
         >
           <span>
-            {userName.charAt(0)}
-            {userName.split(" ")?.[1].charAt(0) ?? ""}
+            {userName?.charAt(0)}
+            {userName?.split(" ")?.[1]?.charAt(0) ?? ""}
           </span>
         </div>
       )}
@@ -61,7 +61,7 @@ export const Avatar = ({
 };
 
 Avatar.propTypes = {
-  src: PropTypes.string.isRequired,
+  src: PropTypes.string,
   size: PropTypes.number,
   outline: PropTypes.bool,
   status: PropTypes.bool,

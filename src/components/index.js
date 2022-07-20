@@ -14,3 +14,5 @@ export { Popover } from "./Popover";
 export { ToastContainer, Toast } from "./Toast";
 export { Avatar } from "./Avatar";
 export { Chats } from "./Chats";
+export { Input } from "./Input";
+export { PasswordInput } from "./PasswordInput";

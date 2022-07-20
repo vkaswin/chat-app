@@ -1,15 +1,15 @@
 .custom-checkbox-wrapper {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
   .custom-checkbox {
     position: relative;
     appearance: none;
     background-color: #ffffff;
-    border: 2px solid #bdbdbd;
+    border: 1px solid #cfd4d8;
     border-radius: 2px;
-    width: 18px;
-    height: 18px;
+    width: 15px;
+    height: 15px;
     outline: none;
     cursor: pointer;
     margin-top: 5px;
@@ -19,7 +19,7 @@
       position: absolute;
       left: 50%;
       top: 50%;
-      background-color: var(--checkbox-color);
+      background-color: #4eac6e;
       transform: translate(-50%, -50%);
       border-radius: 50%;
     }
@@ -27,9 +27,9 @@
       content: "";
       position: absolute;
       top: 2px;
-      left: 6px;
-      width: 6px;
-      height: 12px;
+      left: 5px;
+      width: 5px;
+      height: 10px;
       border-color: white;
       border-width: 0px 2px 2px 0px;
       border-style: solid;
@@ -37,7 +37,7 @@
       opacity: 0;
     }
     &:checked {
-      background-color: var(--checkbox-color);
+      background-color: #4eac6e;
       border: none;
       &::after {
         opacity: 1;
@@ -46,8 +46,10 @@
     }
   }
   label {
+    color: #495057;
     user-select: none;
     margin: 0px;
+    font-size: 14px;
   }
 }
 

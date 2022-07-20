@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 
 import styles from "./AppLayout.module.scss";
 
-const AppLayout = ({ children }) => {
+const AppLayout = () => {
   const { getItem, setItem } = useLocalStorage();
 
   const [width, setWidth] = useState(window.innerWidth);

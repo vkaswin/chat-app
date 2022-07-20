@@ -1,0 +1,35 @@
+.form-input {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 20px;
+  position: relative;
+  label {
+    color: #495057;
+  }
+  input {
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 10px 15px;
+    outline: none;
+    width: 100%;
+    transition: all 0.2s;
+    font-size: 16px;
+    border: 1px solid;
+    font-family: "Poppins", sans-serif;
+    &::placeholder {
+      color: #797c8c;
+      font-size: 14px;
+    }
+  }
+  input[aria-invalid="true"] {
+    border-color: #f90500;
+  }
+  input[aria-invalid="false"] {
+    border-color: #cfd4d8;
+  }
+  span {
+    color: #f90500;
+    font-size: 14px;
+  }
+}
