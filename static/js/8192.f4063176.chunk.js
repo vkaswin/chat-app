@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[8192],{58192:function(a,c,t){a.exports=t.p+"static/media/Poppins-Bold.cdb29a5d7ccf57ff05a3.ttf"}}]);

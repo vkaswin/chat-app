@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[7181],{7181:function(_,e,i){i.r(e),e.default={login_title:"Login_login_title__DtVsO",login_field:"Login_login_field__Uyc8w",register:"Login_register__2QbhW"}}}]);
-//# sourceMappingURL=7181.1e7d2e24.chunk.js.map
