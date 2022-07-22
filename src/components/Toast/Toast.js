@@ -18,14 +18,15 @@ export const EventEmitter = {
 };
 
 export const Toast = ({
-  type,
-  message,
-  delay,
+  type = null,
+  message = null,
+  delay = 3000,
   position = "top-right",
-  pauseOnHover,
-  closeIcon,
-  theme,
+  pauseOnHover = true,
+  closeIcon = true,
+  theme = "light",
 }) => {
+  if (!type || !message) return;
   EventEmitter.emit("toast", {
     id: crypto.randomUUID(),
     type,

@@ -1,15 +1,3 @@
-import { Toast } from "components";
-
-export const toast = ({ type, message, delay, position, closeIcon }) => {
-  Toast({
-    type,
-    message,
-    delay,
-    position,
-    closeIcon,
-  });
-};
-
 export const debounce = (fn, delay) => {
   let timeoutID;
   return (...args) => {

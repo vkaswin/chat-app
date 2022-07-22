@@ -20,13 +20,13 @@ export const ToastCard = ({
   const toastIcon = useMemo(() => {
     switch (type) {
       case "success":
-        return "fas fa-check-circle";
+        return "bxs-check-circle";
       case "error":
-        return "fas fa-times-circle";
+        return "bxs-x-circle";
       case "warning":
-        return "fas fa-exclamation-circle";
+        return "bxs-error-circle";
       case "info":
-        return "fas fa-info-circle";
+        return "bxs-info-circle";
       default:
         return;
     }
@@ -56,7 +56,7 @@ export const ToastCard = ({
   return (
     <div
       ref={toastRef}
-      className="rc-toast"
+      className="toast"
       onMouseEnter={pauseOnHover && handleMouseEnter}
       onMouseLeave={pauseOnHover && handleMouseLeave}
       data-theme={theme}
@@ -70,7 +70,7 @@ export const ToastCard = ({
       </div>
       {closeIcon && (
         <button onClick={hideToast}>
-          <i className="fas fa-times"></i>
+          <i className="bx-x"></i>
         </button>
       )}
       <div

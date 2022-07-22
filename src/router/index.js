@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { Routes, Route, Navigate, HashRouter } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useAuth } from "hooks";
@@ -8,6 +8,15 @@ const PageNotFound = lazy(() => import("../pages/404"));
 
 export const Router = () => {
   const { user, isLoading } = useAuth();
+
+  useEffect(() => {
+    document.addEventListener("logout", handleLogOut);
+    return () => document.removeEventListener("logout", handleLogOut);
+  }, []);
+
+  const handleLogOut = (e) => {
+    console.log(e);
+  };
 
   if (isLoading) return null;
 

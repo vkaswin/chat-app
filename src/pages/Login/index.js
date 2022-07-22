@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form";
 import { CheckBox, Input, PasswordInput } from "components";
 import { getCookie, setCookie } from "utils";
 import { useRouter } from "hooks";
+import { NavLink } from "react-router-dom";
+import { Toast } from "components";
+import { login } from "services/Auth";
 
 import styles from "./Login.module.scss";
-import { NavLink } from "react-router-dom";
 
 const Login = () => {
   const {
@@ -26,11 +28,22 @@ const Login = () => {
     setRememberMe(true);
   }, []);
 
-  const onSubmit = ({ email, password }) => {
-    if (rememberMe) {
-      setCookie({ name: "login-cache", value: { email, password }, days: 14 });
+  const onSubmit = async (data) => {
+    const { email, password } = data;
+    try {
+      let res = await login(data);
+      console.log(res);
+      //   if (rememberMe) {
+      //     setCookie({
+      //       name: "login-cache",
+      //       value: { email, password },
+      //       days: 14,
+      //     });
+      //   }
+      //   router.push("/chats");
+    } catch (error) {
+      Toast({ type: "error", message: error?.message });
     }
-    router.push("/chats");
   };
 
   const handleCheckBox = ({ target: { checked } }) => {

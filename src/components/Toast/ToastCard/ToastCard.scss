@@ -1,16 +1,16 @@
-.rc-toast-container[data-position^="top"] {
-  .rc-toast {
+.toast-container[data-position^="top"] {
+  .toast {
     margin-bottom: 1rem;
   }
 }
 
-.rc-toast-container[data-position^="bottom"] {
-  .rc-toast {
+.toast-container[data-position^="bottom"] {
+  .toast {
     margin-top: 1rem;
   }
 }
 
-.rc-toast {
+.toast {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -26,14 +26,14 @@
     animation: var(--animation-hide) 0.3s linear forwards;
   }
   .icon {
+    display: flex;
+    align-items: center;
     i {
-      font-size: 24px;
+      font-size: 28px;
     }
   }
   span {
-    font-size: 15px;
-    font-weight: bold;
-    line-height: 1.2rem;
+    font-size: 16px;
   }
   button {
     position: absolute;
@@ -44,7 +44,7 @@
     cursor: pointer;
     i {
       font-weight: normal;
-      font-size: 16px;
+      font-size: 20px;
     }
     &:is(.hide) {
       display: none;
@@ -61,33 +61,33 @@
   }
 }
 
-.rc-toast[data-theme="coloured"][data-type="success"] {
+.toast[data-theme="coloured"][data-type="success"] {
   background-color: var(--toast-success);
 }
 
-.rc-toast[data-theme="coloured"][data-type="error"] {
+.toast[data-theme="coloured"][data-type="error"] {
   background-color: var(--toast-error);
 }
 
-.rc-toast[data-theme="coloured"][data-type="warning"] {
+.toast[data-theme="coloured"][data-type="warning"] {
   background-color: var(--toast-warning);
 }
 
-.rc-toast[data-theme="coloured"][data-type="info"] {
+.toast[data-theme="coloured"][data-type="info"] {
   background-color: var(--toast-info);
 }
 
-.rc-toast[data-theme="light"] {
+.toast[data-theme="light"] {
   background-color: var(--toast-theme-light);
   span {
-    color: var(--toast-text-gray);
+    color: var(--toast-text-black);
   }
   button {
-    color: var(--toast-text-gray);
+    color: var(--toast-text-black);
   }
 }
 
-.rc-toast[data-theme="dark"] {
+.toast[data-theme="dark"] {
   background-color: var(--toast-theme-dark);
   span {
     color: var(--toast-text-white);
@@ -97,7 +97,7 @@
   }
 }
 
-.rc-toast[data-theme="coloured"] {
+.toast[data-theme="coloured"] {
   span {
     color: var(--toast-text-white);
   }
@@ -106,7 +106,7 @@
   }
 }
 
-.rc-toast[data-theme="coloured"][data-type] {
+.toast[data-theme="coloured"][data-type] {
   .icon {
     i {
       color: var(--toast-text-white);
@@ -114,7 +114,7 @@
   }
 }
 
-.rc-toast[data-type="success"] {
+.toast[data-type="success"] {
   .icon {
     i {
       color: var(--toast-success);
@@ -125,7 +125,7 @@
   }
 }
 
-.rc-toast[data-type="error"] {
+.toast[data-type="error"] {
   .icon {
     i {
       color: var(--toast-error);
@@ -136,7 +136,7 @@
   }
 }
 
-.rc-toast[data-type="warning"] {
+.toast[data-type="warning"] {
   .icon {
     i {
       color: var(--toast-warning);
@@ -147,7 +147,7 @@
   }
 }
 
-.rc-toast[data-type="info"] {
+.toast[data-type="info"] {
   .icon {
     i {
       color: var(--toast-info);
@@ -159,7 +159,88 @@
 }
 
 @media only screen and (max-width: 450px) {
-  .rc-toast {
+  .toast {
+    width: 100%;
+  }
+}
+
+@keyframes rc_slideInTop {
+  from {
+    transform: translateY(-100vh);
+  }
+  to {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes rc_slideOutTop {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100vh);
+  }
+}
+
+@keyframes rc_slideInBottom {
+  from {
+    transform: translateY(100vh);
+  }
+  to {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes rc_slideOutBottom {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes rc_slideInLeft {
+  from {
+    transform: translateX(-100vh);
+  }
+  to {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes rc_slideOutLeft {
+  from {
+    transform: translateX(0px);
+  }
+  to {
+    transform: translateX(-100vh);
+  }
+}
+
+@keyframes rc_slideInRight {
+  from {
+    transform: translateX(100vh);
+  }
+  to {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes rc_slideOutRight {
+  from {
+    transform: translateX(0px);
+  }
+  to {
+    transform: translateX(100vh);
+  }
+}
+
+@keyframes rc_trackProgress {
+  from {
+    width: 0%;
+  }
+  to {
     width: 100%;
   }
 }

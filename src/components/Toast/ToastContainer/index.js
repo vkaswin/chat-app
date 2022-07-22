@@ -24,6 +24,7 @@ export const ToastContainer = () => {
 
   const handleEventEmitter = (event) => {
     let { position } = event;
+    console.log(event);
     if (!defaultPositions.includes(position)) return;
     setToast((prev) => [...prev, event]);
   };
@@ -45,7 +46,7 @@ export const ToastContainer = () => {
         return (
           <div
             key={index}
-            className="rc-toast-container"
+            className="toast-container"
             data-position={defaultPositions[index]}
           >
             {item.map((list) => {

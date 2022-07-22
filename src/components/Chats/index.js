@@ -1,7 +1,8 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { DropDown, Avatar, OffCanvas } from "components";
 import { TextArea } from "./TextArea";
 import { Conversation } from "./Conversation";
+import { io } from "socket.io-client";
 import chatData from "data/chats.json";
 
 import styles from "./Chats.module.scss";
@@ -13,6 +14,8 @@ export const Chats = () => {
 
   const [showInfo, setShowInfo] = useState(false);
 
+  const socket = io("http://localhost:8000/");
+
   useLayoutEffect(() => {
     const { scrollHeight } = chatContainerRef.current;
 
@@ -20,6 +23,16 @@ export const Chats = () => {
       top: scrollHeight,
       behavior: "smooth",
     });
+  }, []);
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log(socket);
+    });
+
+    setTimeout(() => {
+      socket.emit("hello", { message: "Success" });
+    }, 5000);
   }, []);
 
   const toggleInfo = () => {
