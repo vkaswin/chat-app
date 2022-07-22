@@ -1,6 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Input, PasswordInput } from "components";
+import { Input, PasswordInput, Toast } from "components";
+import { registerUser } from "services/Auth";
+import { useRouter } from "hooks";
 
 import styles from "./Register.module.scss";
 
@@ -8,12 +10,21 @@ const Register = () => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const router = useRouter();
+
+  const onSubmit = async (data) => {
+    try {
+      let {
+        data: { message },
+      } = await registerUser(data);
+      Toast({ type: "success", message });
+      router.push("/auth/login");
+    } catch (error) {
+      Toast({ type: "error", message: error?.message });
+    }
   };
 
   return (

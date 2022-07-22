@@ -5,7 +5,7 @@ import { getCookie, setCookie } from "utils";
 import { useRouter } from "hooks";
 import { NavLink } from "react-router-dom";
 import { Toast } from "components";
-import { login } from "services/Auth";
+import { loginUser } from "services/Auth";
 
 import styles from "./Login.module.scss";
 
@@ -13,7 +13,6 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
 
@@ -22,26 +21,30 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
-    const { email = null, password = null } = getCookie("login-cache") ?? {};
+    const { email = null, password = null } = getCookie("login_session") ?? {};
     if (!email || !password) return;
-    reset({ email, password });
     setRememberMe(true);
   }, []);
 
   const onSubmit = async (data) => {
     const { email, password } = data;
     try {
-      let res = await login(data);
-      console.log(res);
-      //   if (rememberMe) {
-      //     setCookie({
-      //       name: "login-cache",
-      //       value: { email, password },
-      //       days: 14,
-      //     });
-      //   }
-      //   router.push("/chats");
+      let {
+        data: { token },
+      } = await loginUser(data);
+      if (rememberMe) {
+        setCookie({
+          name: "login_session",
+          value: { email, password },
+          days: 14,
+        });
+        setCookie({ name: "authToken", value: token, days: 7 });
+      }
+      router.push("/chats");
     } catch (error) {
+      if (error?.message === "User not exist") {
+        router.push("/auth/register");
+      }
       Toast({ type: "error", message: error?.message });
     }
   };

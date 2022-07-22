@@ -24,7 +24,6 @@ export const ToastContainer = () => {
 
   const handleEventEmitter = (event) => {
     let { position } = event;
-    console.log(event);
     if (!defaultPositions.includes(position)) return;
     setToast((prev) => [...prev, event]);
   };

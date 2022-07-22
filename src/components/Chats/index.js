@@ -3,6 +3,7 @@ import { DropDown, Avatar, OffCanvas } from "components";
 import { TextArea } from "./TextArea";
 import { Conversation } from "./Conversation";
 import { io } from "socket.io-client";
+import { baseURL } from "config";
 import chatData from "data/chats.json";
 
 import styles from "./Chats.module.scss";
@@ -10,11 +11,11 @@ import styles from "./Chats.module.scss";
 export const Chats = () => {
   const chatContainerRef = useRef();
 
+  const [socket, setSocket] = useState();
+
   const [chats, setChats] = useState(chatData.chats);
 
   const [showInfo, setShowInfo] = useState(false);
-
-  const socket = io("http://localhost:8000/");
 
   useLayoutEffect(() => {
     const { scrollHeight } = chatContainerRef.current;
@@ -26,16 +27,15 @@ export const Chats = () => {
   }, []);
 
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log(socket);
-    });
+    const webSocket = io(baseURL);
 
-    setTimeout(() => {
-      socket.emit("hello", { message: "Success" });
-    }, 5000);
+    webSocket.on("connect", () => {
+      setSocket(webSocket);
+    });
   }, []);
 
   const toggleInfo = () => {
+    console.log(socket);
     setShowInfo(!showInfo);
   };
 

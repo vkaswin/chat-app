@@ -27,7 +27,6 @@ axios.interceptors.response.use(
       const event = new CustomEvent("logout");
       document.dispatchEvent(event);
     }
-    console.log(error.response, "res");
-    return Promise.reject(error.response.data);
+    return Promise.reject(error?.response?.data);
   }
 );
