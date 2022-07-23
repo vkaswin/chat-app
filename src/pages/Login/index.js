@@ -38,8 +38,8 @@ const Login = () => {
           value: { email, password },
           days: 14,
         });
-        setCookie({ name: "authToken", value: token, days: 7 });
       }
+      setCookie({ name: "authToken", value: token, days: 7 });
       router.push("/chats");
     } catch (error) {
       if (error?.message === "User not exist") {

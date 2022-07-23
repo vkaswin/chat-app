@@ -17,13 +17,13 @@ export const ProvideAuth = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const onLogout = () => {
+  const logout = () => {
     clearCookie("authToken");
     window.location.href = "/auth/login";
   };
 
   return (
-    <StoreContext.Provider value={{ user, isLoading, setUser, onLogout }}>
+    <StoreContext.Provider value={{ user, isLoading, setUser, logout }}>
       {children}
     </StoreContext.Provider>
   );

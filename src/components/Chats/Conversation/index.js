@@ -1,10 +1,10 @@
 import React from "react";
-import { classNames } from "utils";
 import { DropDown } from "components";
+import { classNames } from "utils";
 
 import styles from "./Conversation.module.scss";
 
-export const Conversation = ({ chats }) => {
+export const Conversation = ({ chats, deleteMsg }) => {
   const dropDown = [
     {
       icon: "bx-share ms-2",
@@ -61,9 +61,13 @@ export const Conversation = ({ chats }) => {
                 id={`chat-option-${index}`}
               ></i>
               <DropDown selector={`#chat-option-${index}`} placement="bottom">
-                {dropDown.map(({ label, icon }, index) => {
+                {dropDown.map(({ label, icon }, ind) => {
                   return (
-                    <DropDown.Item key={index} className={styles.chat_option}>
+                    <DropDown.Item
+                      key={ind}
+                      className={styles.chat_option}
+                      onClick={() => deleteMsg(index)}
+                    >
                       <span>{label}</span>
                       <i className={icon}></i>
                     </DropDown.Item>

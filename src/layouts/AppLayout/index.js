@@ -16,12 +16,14 @@ const AppLayout = () => {
   const [theme, setTheme] = useState();
 
   useEffect(() => {
+    document.body.classList.add("hide-scroll");
     window.addEventListener("resize", handleResize);
     let val = getItem("theme") ?? "light";
     let root = document.querySelector(":root");
     root.setAttribute("data-theme", val);
     setTheme(val);
     return () => {
+      document.body.classList.remove("hide-scroll");
       window.removeEventListener("resize", handleResize);
     };
   }, []);

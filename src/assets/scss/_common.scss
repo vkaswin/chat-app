@@ -9,8 +9,8 @@ body,
   font-family: "Poppins", sans-serif;
 }
 
-body {
-  overflow-x: hidden;
+.hide-scroll {
+  overflow: hidden;
 }
 
 *,

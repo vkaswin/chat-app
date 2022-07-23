@@ -1,48 +1,16 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { DropDown, Avatar, OffCanvas } from "components";
+import { DropDown, Avatar, OffCanvas, Toast } from "components";
 import { TextArea } from "./TextArea";
 import { Conversation } from "./Conversation";
 import { io } from "socket.io-client";
 import { baseURL } from "config";
+import { useRouter } from "hooks";
+import { sendMessage } from "services/Chat";
 import chatData from "data/chats.json";
 
 import styles from "./Chats.module.scss";
 
 export const Chats = () => {
-  const chatContainerRef = useRef();
-
-  const [socket, setSocket] = useState();
-
-  const [chats, setChats] = useState(chatData.chats);
-
-  const [showInfo, setShowInfo] = useState(false);
-
-  useLayoutEffect(() => {
-    const { scrollHeight } = chatContainerRef.current;
-
-    chatContainerRef.current.scrollTo({
-      top: scrollHeight,
-      behavior: "smooth",
-    });
-  }, []);
-
-  useEffect(() => {
-    const webSocket = io(baseURL);
-
-    webSocket.on("connect", () => {
-      setSocket(webSocket);
-    });
-  }, []);
-
-  const toggleInfo = () => {
-    console.log(socket);
-    setShowInfo(!showInfo);
-  };
-
-  const sendMessage = (msg) => {
-    console.log(msg);
-  };
-
   const { matches } = window.matchMedia(`(max-width: 768px)`);
 
   const moreDropDown = [
@@ -76,9 +44,70 @@ export const Chats = () => {
     },
   ];
 
+  const chatContainerRef = useRef();
+
+  const [socket, setSocket] = useState();
+
+  const [chats, setChats] = useState(chatData.chats);
+
+  const [showInfo, setShowInfo] = useState(false);
+
+  const {
+    query: { userId },
+  } = useRouter();
+
+  useLayoutEffect(() => {
+    scrollToBottom();
+  }, [chats]);
+
+  useEffect(() => {
+    const webSocket = io(baseURL);
+
+    webSocket.on("connect", () => {
+      setSocket(webSocket);
+    });
+  }, []);
+
+  const scrollToBottom = () => {
+    const { scrollHeight } = chatContainerRef.current;
+
+    chatContainerRef.current.scrollTo({
+      top: scrollHeight,
+      behavior: "smooth",
+    });
+  };
+
+  const toggleInfo = () => {
+    setShowInfo(!showInfo);
+  };
+
+  const onSend = async (msg) => {
+    try {
+      let data = {
+        // from_id: user?.userId,
+        to_id: userId,
+        msg: msg,
+        datetime: new Date().toISOString(),
+      };
+      let res = await sendMessage(data);
+      console.log(res);
+      setChats([...chats, data]);
+    } catch (error) {
+      Toast({ type: "error", message: error?.message });
+    }
+  };
+
+  const deleteMsg = (id) => {
+    setChats(chats.filter((_, index) => id !== index));
+  };
+
   return (
     <div ref={chatContainerRef} className={styles.chat_wrapper}>
-      <Conversation chats={chats} container={chatContainerRef} />
+      <Conversation
+        chats={chats}
+        container={chatContainerRef}
+        deleteMsg={deleteMsg}
+      />
       <div className={styles.chat_header}>
         <div className={styles.user_info}>
           <Avatar
@@ -119,7 +148,7 @@ export const Chats = () => {
           </DropDown>
         </div>
       </div>
-      <TextArea onSend={sendMessage} />
+      <TextArea onSend={onSend} />
       <OffCanvas
         isOpen={showInfo}
         position="right"

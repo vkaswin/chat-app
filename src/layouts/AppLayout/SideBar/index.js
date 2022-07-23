@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useMemo, useRef } from "react";
-import { useRouter } from "hooks";
+import { useAuth, useRouter } from "hooks";
 import { NavLink } from "react-router-dom";
 import { classNames } from "utils";
 import { Avatar, DropDown, Tooltip } from "components";
@@ -12,6 +12,8 @@ export const SideBar = ({ theme, toggleTheme }) => {
   let indicatorRef = useRef();
 
   const { pathName } = useRouter();
+
+  const { logout } = useAuth();
 
   const tabs = [
     {
@@ -56,11 +58,6 @@ export const SideBar = ({ theme, toggleTheme }) => {
       label: "Change Password",
       icon: "bx-lock-open",
       to: "/auth/change-password",
-    },
-    {
-      label: "Logout",
-      icon: "bx-log-out-circle",
-      to: "/auth/logout",
     },
   ];
 
@@ -154,6 +151,10 @@ export const SideBar = ({ theme, toggleTheme }) => {
               </NavLink>
             );
           })}
+          <DropDown.Item onClick={logout} className={styles.avatar_option}>
+            <span>Logout</span>
+            <i className="bx-log-out-circle"></i>
+          </DropDown.Item>
         </DropDown>
         <div ref={indicatorRef} className={styles.tab_indicator}></div>
       </div>
