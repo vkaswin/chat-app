@@ -1,7 +1,7 @@
 export const baseURL =
   process.env.NODE_ENV === "development"
     ? "http://localhost:8000"
-    : "https://chat-api-mern.herokuapp.com/";
+    : "https://chat-api-mern.herokuapp.com";
 const userURL = "/api/users";
 const chatUrl = "/api/chats";
 const messageUrl = "/api/messages";
