@@ -14,6 +14,7 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const router = useRouter();
@@ -21,8 +22,10 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
-    const { email = null, password = null } = getCookie("login_session") ?? {};
-    if (!email || !password) return;
+    let session = getCookie("login_session") ?? null;
+    if (!session) return;
+    const { email, password } = JSON.parse(session);
+    reset({ email, password });
     setRememberMe(true);
   }, []);
 

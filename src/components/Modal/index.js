@@ -1,45 +1,54 @@
-import React, { useEffect, useState } from "react";
-import { Portal, Overlay } from "components";
-import { classNames } from "utils";
-import PropTypes from "prop-types";
+import React from "react";
+import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
+import { classNames } from "utils";
 
-import "./Modal.scss";
+import styles from "./Modal.module.scss";
 
-export const Modal = ({ isOpen, toggle, children }) => {
+export const Modal = ({
+  isOpen,
+  toggle,
+  children,
+  width = 550,
+  closeClickOnOutside = false,
+}) => {
+  const Portal = ({ children }) => {
+    return createPortal(children, document.body);
+  };
+
   return (
-    <CSSTransition in={isOpen} unmountOnExit timeout={300} classNames="modal">
+    <CSSTransition
+      in={isOpen}
+      unmountOnExit
+      timeout={300}
+      classNames={{
+        enterActive: styles.modal_enter,
+        exitActive: styles.modal_exit,
+      }}
+    >
       <Portal>
         <div>
           <div
-            className="rc-modal"
+            className={styles.modal}
             onClick={() => {
-              isOpen && toggle();
+              isOpen && closeClickOnOutside && toggle();
             }}
           >
-            <div className="rc-modal-dialog">
+            <div
+              className={styles.modal_dialog}
+              style={{ "--modal-width": `${width}px` }}
+            >
               <div
-                className="rc-modal-content"
+                className={styles.modal_content}
                 onClick={(e) => e.stopPropagation()}
               >
                 {children}
               </div>
             </div>
           </div>
-          <Overlay isOpen={isOpen} toggle={toggle} zIndex={1049} />
+          <div className={styles.modal_overlay}></div>
         </div>
       </Portal>
     </CSSTransition>
   );
-};
-
-Modal.propTypes = {
-  isOpen: PropTypes.bool,
-  toggle: PropTypes.func,
-  children: PropTypes.node,
-};
-
-Modal.defaultProps = {
-  isOpen: false,
-  toggle: () => {},
 };

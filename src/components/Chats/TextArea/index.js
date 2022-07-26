@@ -55,8 +55,8 @@ export const TextArea = ({ onSend }) => {
     setShowEmoji(!showEmoji);
   };
 
-  const handleSend = () => {
-    onSend(text);
+  const handleSend = async () => {
+    await onSend(text);
     setText("");
   };
 

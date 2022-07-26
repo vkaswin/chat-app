@@ -18,7 +18,7 @@ export const setCookie = ({ name, value, days }) => {
 export const getCookie = (name) => {
   let match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
 
-  return match ? JSON.parse(match[2]) : null;
+  return match ? match[2] : null;
 };
 
 export const clearCookie = (name) => {
