@@ -97,7 +97,11 @@ export const Chats = () => {
 
     try {
       let localStream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
         video: true,
       });
       let localVideo = document.querySelector("#local-stream");
@@ -138,8 +142,12 @@ export const Chats = () => {
 
     try {
       let localStream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
         video: true,
-        audio: true,
       });
       let localVideo = document.querySelector("#local-stream");
       localVideo.srcObject = localStream;
