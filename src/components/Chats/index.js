@@ -26,7 +26,7 @@ export const Chats = () => {
 
   const [showInfo, setShowInfo] = useState(false);
 
-  const [showVideo, setShowVide] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
 
   let iceCandidate;
 
@@ -42,8 +42,6 @@ export const Chats = () => {
     const webSocket = io(sockets.chat);
 
     webSocket.on("connect", () => {
-      const pc = new RTCPeerConnection();
-
       webSocket.emit("join-chat-room", chatId);
 
       webSocket.on("receive-message", handleReceiveMessage);
@@ -52,11 +50,6 @@ export const Chats = () => {
 
       webSocket.on("receive-answer", handleReceiveAnswer);
 
-      pc.onicecandidate = handleIceCandidate;
-
-      pc.ontrack = handleTrack;
-
-      peerConnection.current = pc;
       socket.current = webSocket;
     });
   }, []);
@@ -94,7 +87,14 @@ export const Chats = () => {
   };
 
   const handleReceiveOffer = async ({ iceCandidate, offer }) => {
-    setShowVide(true);
+    setShowVideo(true);
+
+    const pc = new RTCPeerConnection();
+    peerConnection.current = pc;
+
+    peerConnection.current.onicecandidate = handleIceCandidate;
+    peerConnection.current.ontrack = handleTrack;
+
     try {
       let localStream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -128,7 +128,14 @@ export const Chats = () => {
   };
 
   const handleVideoCall = async () => {
-    setShowVide(true);
+    setShowVideo(true);
+
+    const pc = new RTCPeerConnection();
+    peerConnection.current = pc;
+
+    peerConnection.current.onicecandidate = handleIceCandidate;
+    peerConnection.current.ontrack = handleTrack;
+
     try {
       let localStream = await navigator.mediaDevices.getUserMedia({
         video: true,

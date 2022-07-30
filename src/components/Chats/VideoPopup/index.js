@@ -12,6 +12,7 @@ export const VideoPopup = ({ isOpen }) => {
           className={styles.local}
           poster="https://vue.pixelstrap.com/chitchat/_nuxt/img/videocall.336a27d.jpg"
           autoPlay
+          muted={true}
         ></video>
         <video
           id="remote-stream"
