@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { ProvideAuth } from "hooks/useAuth";
 import { Router } from "./router";

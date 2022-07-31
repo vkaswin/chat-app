@@ -16,7 +16,11 @@ export const Chats = () => {
 
   const chatContainerRef = useRef();
 
+  const replyContainerRef = useRef();
+
   const { user } = useAuth();
+
+  const router = useRouter();
 
   const socket = useRef();
 
@@ -28,6 +32,8 @@ export const Chats = () => {
 
   const [showVideo, setShowVideo] = useState(false);
 
+  const [replyMsg, setReplyMsg] = useState(null);
+
   let iceCandidate;
 
   const {
@@ -37,6 +43,16 @@ export const Chats = () => {
   useLayoutEffect(() => {
     scrollToBottom();
   }, [chats]);
+
+  useEffect(() => {
+    if (!replyMsg) return;
+    const { clientHeight } = replyContainerRef.current;
+    chatContainerRef.current.setAttribute(
+      "style",
+      `--chat-padding-bottom :${clientHeight}px`
+    );
+    scrollToBottom();
+  }, [replyMsg]);
 
   useEffect(() => {
     const webSocket = io(sockets.chat);
@@ -195,8 +211,20 @@ export const Chats = () => {
     }
   };
 
-  const deleteMsg = (id) => {
+  const onDelete = (id) => {
     setChats(chats.filter((_, index) => id !== index));
+  };
+
+  const onCopy = (text) => {
+    navigator.clipboard.writeText(text);
+  };
+
+  const onReply = (text) => {
+    setReplyMsg(text);
+  };
+
+  const clearReplyMsg = () => {
+    setReplyMsg(null);
   };
 
   const moreDropDown = [
@@ -216,10 +244,6 @@ export const Chats = () => {
       icon: "bx bx-video",
       onClick: handleVideoCall,
       show: matches,
-    },
-    {
-      label: "Archive",
-      icon: "bx-archive",
     },
     {
       label: "Muted",
@@ -245,10 +269,15 @@ export const Chats = () => {
       <Conversation
         chats={chats}
         container={chatContainerRef}
-        deleteMsg={deleteMsg}
+        onDelete={onDelete}
+        onCopy={onCopy}
+        onReply={onReply}
       />
       <div className={styles.chat_header}>
         <div className={styles.user_info}>
+          <div className={styles.go_back} onClick={() => router.goBack()}>
+            <i className="bx bx-chevron-left"></i>
+          </div>
           <Avatar
             src="https://themesbrand.com/doot/layouts/assets/images/users/avatar-2.jpg"
             size={50}
@@ -287,6 +316,14 @@ export const Chats = () => {
           </DropDown>
         </div>
       </div>
+      {replyMsg && (
+        <div className={styles.reply_container} ref={replyContainerRef}>
+          <div className={styles.reply_card}>
+            <span className="truncate-4">{replyMsg}</span>
+            <i className={`bx-x ${styles.close}`} onClick={clearReplyMsg}></i>
+          </div>
+        </div>
+      )}
       <TextArea onSend={onSend} />
       <OffCanvas
         isOpen={showInfo}

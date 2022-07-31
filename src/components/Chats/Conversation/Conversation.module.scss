@@ -7,6 +7,9 @@
     display: flex;
     max-width: 75%;
     gap: 5px;
+    &:last-child {
+      margin-bottom: 20px;
+    }
     &:is(.end) {
       flex-direction: row-reverse;
       margin-left: auto;

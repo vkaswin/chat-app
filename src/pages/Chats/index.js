@@ -26,12 +26,7 @@ const Chats = () => {
   };
 
   const handleChat = (userId = "4321") => {
-    const { matches } = window.matchMedia(`(max-width: 768px)`);
-    if (matches) {
-      router.push(`/conversation?userId${userId}`);
-    } else {
-      router.push({ search: `?userId=${userId}` });
-    }
+    router.push({ search: `?userId=${userId}` });
   };
 
   return (
@@ -46,7 +41,7 @@ const Chats = () => {
             className={classNames(styles.user_card, {
               [styles.active]: index === 0,
             })}
-            onClick={handleChat}
+            onClick={() => handleChat()}
           >
             <div className={styles.user}>
               <Avatar src={profile} userName={name} status={status} size={35} />
@@ -76,7 +71,7 @@ const Chats = () => {
             className={classNames(styles.user_card, {
               [styles.active]: false,
             })}
-            onClick={handleChat}
+            onClick={() => handleChat()}
           >
             <div className={styles.user}>
               <Avatar src={profile} userName={name} status={status} size={35} />
@@ -109,7 +104,7 @@ const Chats = () => {
             className={classNames(styles.user_card, {
               [styles.active]: false,
             })}
-            onClick={handleChat}
+            onClick={() => handleChat()}
           >
             <div className={styles.user}>
               <Avatar userName={name} size={35} />

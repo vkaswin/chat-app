@@ -26,10 +26,7 @@ export const Router = () => {
         <Routes>
           <Route
             path="/"
-            element={
-              <Navigate replace to="/chats" />
-              //   <Navigate replace to={user ? "/chats" : "/auth/login"} />
-            }
+            element={<Navigate replace to={user ? "/chats" : "/auth/login"} />}
           />
           {routes.map(({ path, component, children = [], auth }) => {
             if (children.length === 0) {

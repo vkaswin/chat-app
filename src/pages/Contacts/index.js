@@ -51,9 +51,7 @@ const Contacts = () => {
   const handleChat =
     (userId = "4684") =>
     () => {
-      const { matches } = window.matchMedia(`(max-width: 786px)`);
-      if (!matches) return;
-      router.push(`/conversation?userId=${userId}`);
+      router.push({ search: `userId=${userId}` });
     };
 
   return (

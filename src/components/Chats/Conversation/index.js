@@ -4,34 +4,7 @@ import { classNames } from "utils";
 
 import styles from "./Conversation.module.scss";
 
-export const Conversation = ({ chats, deleteMsg }) => {
-  const dropDown = [
-    {
-      icon: "bx-share ms-2",
-      label: "Reply",
-    },
-    {
-      icon: "bx-share-alt",
-      label: "Forward",
-    },
-    {
-      icon: "bx-copy text-muted",
-      label: "Copy",
-    },
-    {
-      icon: "bx-bookmarks text-muted",
-      label: "Bookmark",
-    },
-    {
-      icon: "bx-message-error",
-      label: "Mark as Unread",
-    },
-    {
-      icon: "bx-trash text-muted",
-      label: "Delete",
-    },
-  ];
-
+export const Conversation = ({ chats, onDelete, onCopy, onReply }) => {
   return (
     <div className={styles.conversation_container}>
       {chats.map(({ msg, datetime }, index) => {
@@ -61,18 +34,35 @@ export const Conversation = ({ chats, deleteMsg }) => {
                 id={`chat-option-${index}`}
               ></i>
               <DropDown selector={`#chat-option-${index}`} placement="bottom">
-                {dropDown.map(({ label, icon }, ind) => {
-                  return (
-                    <DropDown.Item
-                      key={ind}
-                      className={styles.chat_option}
-                      onClick={() => deleteMsg(index)}
-                    >
-                      <span>{label}</span>
-                      <i className={icon}></i>
-                    </DropDown.Item>
-                  );
-                })}
+                <DropDown.Item
+                  className={styles.chat_option}
+                  onClick={() => onReply(msg)}
+                >
+                  <span>Reply</span>
+                  <i className="bx-share"></i>
+                </DropDown.Item>
+                <DropDown.Item className={styles.chat_option}>
+                  <span>Forward</span>
+                  <i className="bx-share-alt"></i>
+                </DropDown.Item>
+                <DropDown.Item
+                  className={styles.chat_option}
+                  onClick={() => onCopy(msg)}
+                >
+                  <span>Copy</span>
+                  <i className="bx-copy"></i>
+                </DropDown.Item>
+                <DropDown.Item className={styles.chat_option}>
+                  <span>Mark as Unread</span>
+                  <i className="bx-message-error"></i>
+                </DropDown.Item>
+                <DropDown.Item
+                  className={styles.chat_option}
+                  onClick={() => onDelete(index)}
+                >
+                  <span>Delete</span>
+                  <i className="bx-trash"></i>
+                </DropDown.Item>
               </DropDown>
             </div>
           </div>
