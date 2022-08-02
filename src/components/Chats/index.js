@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DropDown, Avatar, OffCanvas, Toast } from "components";
 import { TextArea } from "./TextArea";
 import { Conversation } from "./Conversation";
@@ -6,8 +6,8 @@ import { VideoPopup } from "./VideoPopup";
 import { io } from "socket.io-client";
 import { sockets } from "config";
 import { useAuth, useRouter } from "hooks";
-import { sendMessage } from "services/Chat";
-import chatData from "data/chats.json";
+import { createMessage } from "services/Message";
+import { CSSTransition } from "react-transition-group";
 
 import styles from "./Chats.module.scss";
 
@@ -26,7 +26,7 @@ export const Chats = () => {
 
   const peerConnection = useRef();
 
-  const [chats, setChats] = useState(chatData.chats);
+  const [chats, setChats] = useState([]);
 
   const [showInfo, setShowInfo] = useState(false);
 
@@ -40,7 +40,7 @@ export const Chats = () => {
     query: { userId, chatId },
   } = useRouter();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     scrollToBottom();
   }, [chats]);
 
@@ -49,7 +49,7 @@ export const Chats = () => {
     const { clientHeight } = replyContainerRef.current;
     chatContainerRef.current.setAttribute(
       "style",
-      `--chat-padding-bottom :${clientHeight}px`
+      `--chat-pb :${clientHeight}px`
     );
     scrollToBottom();
   }, [replyMsg]);
@@ -71,7 +71,6 @@ export const Chats = () => {
   }, []);
 
   const handleTrack = ({ streams: [remoteStream] }) => {
-    console.log(remoteStream);
     let remoteVideo = document.querySelector("#remote-stream");
     remoteVideo.srcObject = remoteStream;
   };
@@ -144,7 +143,7 @@ export const Chats = () => {
   };
 
   const handleReceiveMessage = (msg) => {
-    console.log(msg);
+    setChats((prev) => [...prev, msg]);
   };
 
   const handleVideoCall = async () => {
@@ -182,7 +181,6 @@ export const Chats = () => {
 
   const scrollToBottom = () => {
     const { scrollHeight } = chatContainerRef.current;
-
     chatContainerRef.current.scrollTo({
       top: scrollHeight,
       behavior: "smooth",
@@ -195,16 +193,16 @@ export const Chats = () => {
 
   const onSend = async (msg) => {
     try {
-      let data = {
+      let body = {
         from: userId,
-        to: user.userId,
+        to: user.id,
         msg: msg,
         date: new Date().toISOString(),
-        chatId,
       };
-      let res = await sendMessage(data);
-      console.log(res);
-      socket.current.emit("send-message", res, chatId);
+      let {
+        data: { data },
+      } = await createMessage(chatId, body);
+      socket.current.emit("send-message", data, chatId);
       setChats([...chats, data]);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
@@ -224,6 +222,7 @@ export const Chats = () => {
   };
 
   const clearReplyMsg = () => {
+    chatContainerRef.current.style.removeProperty("--chat-pb");
     setReplyMsg(null);
   };
 
@@ -272,6 +271,7 @@ export const Chats = () => {
         onDelete={onDelete}
         onCopy={onCopy}
         onReply={onReply}
+        userId={user.id}
       />
       <div className={styles.chat_header}>
         <div className={styles.user_info}>
@@ -316,14 +316,22 @@ export const Chats = () => {
           </DropDown>
         </div>
       </div>
-      {replyMsg && (
+      <CSSTransition
+        in={Boolean(replyMsg)}
+        timeout={250}
+        classNames={{
+          enterActive: styles.reply_enter,
+          exitActive: styles.reply_exit,
+        }}
+        unmountOnExit
+      >
         <div className={styles.reply_container} ref={replyContainerRef}>
           <div className={styles.reply_card}>
             <span className="truncate-4">{replyMsg}</span>
             <i className={`bx-x ${styles.close}`} onClick={clearReplyMsg}></i>
           </div>
         </div>
-      )}
+      </CSSTransition>
       <TextArea onSend={onSend} />
       <OffCanvas
         isOpen={showInfo}

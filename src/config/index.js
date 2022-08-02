@@ -16,7 +16,9 @@ export const endpoints = {
     register: `${userURL}/register`,
   },
   chat: {
-    sendMessage: `${messageUrl}/create`,
     getChats: `${chatUrl}`,
+  },
+  message: {
+    create: `${messageUrl}/create`,
   },
 };

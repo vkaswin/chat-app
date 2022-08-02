@@ -26,7 +26,7 @@ const Chats = () => {
   };
 
   const handleChat = (userId = "4321") => {
-    router.push({ search: `?userId=${userId}` });
+    router.push({ search: `?chatId=${userId}` });
   };
 
   return (

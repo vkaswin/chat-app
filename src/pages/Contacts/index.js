@@ -48,11 +48,9 @@ const Contacts = () => {
     setContacts([...contacts, ...contactByAlphabets]);
   };
 
-  const handleChat =
-    (userId = "4684") =>
-    () => {
-      router.push({ search: `userId=${userId}` });
-    };
+  const handleChat = (userId = "4684") => {
+    router.push({ search: `chatId=${userId}` });
+  };
 
   return (
     <div id="contacts-container" className={styles.contacts_list}>
@@ -67,7 +65,7 @@ const Contacts = () => {
                 return (
                   <Fragment key={ind}>
                     <div className={classNames(styles.contact_card)}>
-                      <div className={styles.user} onClick={handleChat()}>
+                      <div className={styles.user} onClick={() => handleChat()}>
                         <Avatar
                           src={profile}
                           userName={name}
