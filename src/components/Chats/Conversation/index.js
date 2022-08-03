@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { DropDown } from "components";
 import { classNames } from "utils";
 import { format } from "date-fns";
@@ -10,15 +10,33 @@ export const Conversation = ({ chats, onDelete, onCopy, onReply, userId }) => {
     <div className={styles.conversation_container}>
       {chats.length > 0 &&
         chats.map(
-          ({ msg, date, from, to, chatId, _id, seen, reply }, index) => {
+          (
+            {
+              msg,
+              date,
+              from,
+              to,
+              chatId,
+              _id,
+              seen,
+              reply: { msg: replyMsg = "", _id: replyMsgId } = {},
+            },
+            index
+          ) => {
             return (
               <div
                 key={index}
                 className={classNames(styles.chat_wrapper, {
-                  [styles.end]: userId === to,
+                  [styles.end]: userId === from,
                 })}
+                data-msgid={_id}
               >
                 <div className={styles.chat_card}>
+                  {replyMsg && (
+                    <div className={styles.reply_card}>
+                      <span>{replyMsg}</span>
+                    </div>
+                  )}
                   <div>
                     <span>{msg}</span>
                   </div>
@@ -27,7 +45,7 @@ export const Conversation = ({ chats, onDelete, onCopy, onReply, userId }) => {
                     <span>{format(new Date(date), "h:mm aaa")}</span>
                     <i
                       className={`bx bx-check-double ${styles.tick}`}
-                      data-seen={true}
+                      data-seen={seen}
                     ></i>
                   </div>
                 </div>
@@ -42,7 +60,7 @@ export const Conversation = ({ chats, onDelete, onCopy, onReply, userId }) => {
                   >
                     <DropDown.Item
                       className={styles.chat_option}
-                      onClick={() => onReply(msg)}
+                      onClick={() => onReply(_id)}
                     >
                       <span>Reply</span>
                       <i className="bx-share"></i>

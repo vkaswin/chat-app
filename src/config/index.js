@@ -20,5 +20,6 @@ export const endpoints = {
   },
   message: {
     create: `${messageUrl}/create`,
+    getMessages: `${messageUrl}`,
   },
 };

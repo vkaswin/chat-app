@@ -10,6 +10,18 @@ import "assets/scss/abstracts.scss";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const App = () => {
+  useEffect(() => {
+    requestNotificationPermission();
+  }, []);
+
+  const requestNotificationPermission = async () => {
+    try {
+      await Notification.requestPermission();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Fragment>
       <ProvideAuth>

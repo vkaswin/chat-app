@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { DropDown, Avatar, OffCanvas, Toast } from "components";
 import { TextArea } from "./TextArea";
 import { Conversation } from "./Conversation";
@@ -6,8 +6,11 @@ import { VideoPopup } from "./VideoPopup";
 import { io } from "socket.io-client";
 import { sockets } from "config";
 import { useAuth, useRouter } from "hooks";
-import { createMessage } from "services/Message";
+import { createMessage, getMessagesByChatId } from "services/Message";
 import { CSSTransition } from "react-transition-group";
+
+import messageRingTone from "assets/audio/fade-in-tone.mp3";
+import favicon from "assets/images/favicon.ico";
 
 import styles from "./Chats.module.scss";
 
@@ -32,29 +35,20 @@ export const Chats = () => {
 
   const [showVideo, setShowVideo] = useState(false);
 
-  const [replyMsg, setReplyMsg] = useState(null);
+  const [replyId, setReplyId] = useState(null);
 
-  let iceCandidate;
+  const [page, setPage] = useState(1);
 
   const {
     query: { userId, chatId },
   } = useRouter();
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [chats]);
+  let iceCandidate;
 
+  //   Socket
   useEffect(() => {
-    if (!replyMsg) return;
-    const { clientHeight } = replyContainerRef.current;
-    chatContainerRef.current.setAttribute(
-      "style",
-      `--chat-pb :${clientHeight}px`
-    );
-    scrollToBottom();
-  }, [replyMsg]);
+    if (socket.current) return;
 
-  useEffect(() => {
     const webSocket = io(sockets.chat);
 
     webSocket.on("connect", () => {
@@ -68,8 +62,111 @@ export const Chats = () => {
 
       socket.current = webSocket;
     });
+
+    return () => {
+      webSocket.current && webSocket.disconnect();
+    };
   }, []);
 
+  //   Fetch Messages
+  useEffect(() => {
+    getMessages();
+  }, [page]);
+
+  //   Scroll To Chat End
+  useEffect(() => {
+    scrollToBottom();
+  }, [chats]);
+
+  //   Reply Msg UI
+  useEffect(() => {
+    if (!replyId) return;
+    const { clientHeight } = replyContainerRef.current;
+    chatContainerRef.current.setAttribute(
+      "style",
+      `--chat-pb :${clientHeight}px`
+    );
+    scrollToBottom();
+  }, [replyId]);
+
+  //   Profile
+  const toggleInfo = () => {
+    setShowInfo(!showInfo);
+  };
+
+  //   Chats
+  const getMessages = async () => {
+    try {
+      let params = {
+        limit: 10,
+        page,
+      };
+      let {
+        data: { data },
+      } = await getMessagesByChatId(chatId, params);
+      setChats(data);
+    } catch (error) {
+      Toast({ type: "error", message: error?.message });
+    }
+  };
+
+  const scrollToBottom = () => {
+    const { scrollHeight } = chatContainerRef.current;
+    chatContainerRef.current.scrollTo({
+      top: scrollHeight,
+      behavior: "smooth",
+    });
+  };
+
+  const onSend = async (msg) => {
+    try {
+      let body = {
+        from: user.id,
+        to: userId,
+        msg: msg,
+        date: new Date().toISOString(),
+        seen: false,
+        ...(replyId && { reply: replyId }),
+      };
+      let {
+        data: { data },
+      } = await createMessage(chatId, body);
+      socket.current.emit("send-message", data, chatId);
+      addMessageInChats(data);
+      replyId && clearReplyMsg();
+    } catch (error) {
+      Toast({ type: "error", message: error?.message });
+    }
+  };
+
+  const addMessageInChats = (msg) => {
+    setChats((prev) => [...prev, msg]);
+  };
+
+  const onDelete = (id) => {
+    setChats(chats.filter((_, index) => id !== index));
+  };
+
+  //   Copy Msg
+  const onCopy = (text) => {
+    navigator.clipboard.writeText(text);
+  };
+
+  //   Reply Msg
+  const onReply = (id) => {
+    setReplyId(id);
+  };
+
+  const clearReplyMsg = () => {
+    chatContainerRef.current.style.removeProperty("--chat-pb");
+    setReplyId(null);
+  };
+
+  const replyMsg = useMemo(() => {
+    return chats.find(({ _id }) => replyId === _id);
+  }, [replyId]);
+
+  //   Video Call
   const handleTrack = ({ streams: [remoteStream] }) => {
     let remoteVideo = document.querySelector("#remote-stream");
     remoteVideo.srcObject = remoteStream;
@@ -142,8 +239,10 @@ export const Chats = () => {
     }
   };
 
-  const handleReceiveMessage = (msg) => {
-    setChats((prev) => [...prev, msg]);
+  const handleReceiveMessage = (data) => {
+    showNotification(data.msg);
+    playMessageRingTone();
+    addMessageInChats(data);
   };
 
   const handleVideoCall = async () => {
@@ -179,89 +278,22 @@ export const Chats = () => {
     }
   };
 
-  const scrollToBottom = () => {
-    const { scrollHeight } = chatContainerRef.current;
-    chatContainerRef.current.scrollTo({
-      top: scrollHeight,
-      behavior: "smooth",
+  // Ringtone
+  const playMessageRingTone = () => {
+    const audio = new Audio(messageRingTone);
+    audio.muted = false;
+    audio.play();
+  };
+
+  // Notification
+  const showNotification = async (body) => {
+    if (Notification.permission !== "granted") return;
+
+    new Notification("New Message", {
+      body,
+      icon: favicon,
     });
   };
-
-  const toggleInfo = () => {
-    setShowInfo(!showInfo);
-  };
-
-  const onSend = async (msg) => {
-    try {
-      let body = {
-        from: userId,
-        to: user.id,
-        msg: msg,
-        date: new Date().toISOString(),
-      };
-      let {
-        data: { data },
-      } = await createMessage(chatId, body);
-      socket.current.emit("send-message", data, chatId);
-      setChats([...chats, data]);
-    } catch (error) {
-      Toast({ type: "error", message: error?.message });
-    }
-  };
-
-  const onDelete = (id) => {
-    setChats(chats.filter((_, index) => id !== index));
-  };
-
-  const onCopy = (text) => {
-    navigator.clipboard.writeText(text);
-  };
-
-  const onReply = (text) => {
-    setReplyMsg(text);
-  };
-
-  const clearReplyMsg = () => {
-    chatContainerRef.current.style.removeProperty("--chat-pb");
-    setReplyMsg(null);
-  };
-
-  const moreDropDown = [
-    {
-      label: "View Profile",
-      icon: "bx bx-user",
-      onClick: toggleInfo,
-      show: matches,
-    },
-    {
-      label: "Audio",
-      icon: "bx bxs-phone-call",
-      show: matches,
-    },
-    {
-      label: "Video",
-      icon: "bx bx-video",
-      onClick: handleVideoCall,
-      show: matches,
-    },
-    {
-      label: "Muted",
-      icon: "bx-microphone-off",
-    },
-    {
-      label: "Delete",
-      icon: "bx-trash",
-    },
-  ];
-
-  //   bx bx-microphone
-  //   bx bx-video
-  //   bx-exit-fullscreen
-  //   bx-fullscreen
-  //   bxs-phone-call
-  //   bxs-phone
-  //   bx-cast
-  //   bx-stop
 
   return (
     <div ref={chatContainerRef} className={styles.chat_wrapper}>
@@ -299,25 +331,41 @@ export const Chats = () => {
             placement="bottom-end"
             zIndex={1026}
           >
-            {moreDropDown.map(
-              ({ label, icon, onClick = false, show = true }, index) => {
-                return show ? (
-                  <DropDown.Item
-                    key={index}
-                    className={styles.more_option}
-                    {...(typeof onClick === "function" && { onClick })}
-                  >
-                    <span>{label}</span>
-                    <i className={icon}></i>
-                  </DropDown.Item>
-                ) : null;
-              }
+            {matches && (
+              <Fragment>
+                <DropDown.Item
+                  className={styles.more_option}
+                  onClick={toggleInfo}
+                >
+                  <span>View Profile</span>
+                  <i className="bx bx-user"></i>
+                </DropDown.Item>
+                <DropDown.Item className={styles.more_option}>
+                  <span>Audio</span>
+                  <i className="bx bxs-phone-call"></i>
+                </DropDown.Item>
+                <DropDown.Item
+                  className={styles.more_option}
+                  onClick={handleVideoCall}
+                >
+                  <span>Video</span>
+                  <i className="bx bx-video"></i>
+                </DropDown.Item>
+              </Fragment>
             )}
+            <DropDown.Item className={styles.more_option}>
+              <span>Muted</span>
+              <i className="bx-microphone-off"></i>
+            </DropDown.Item>
+            <DropDown.Item className={styles.more_option}>
+              <span>Delete</span>
+              <i className="bx-trash"></i>
+            </DropDown.Item>
           </DropDown>
         </div>
       </div>
       <CSSTransition
-        in={Boolean(replyMsg)}
+        in={Boolean(replyId)}
         timeout={250}
         classNames={{
           enterActive: styles.reply_enter,
@@ -327,7 +375,7 @@ export const Chats = () => {
       >
         <div className={styles.reply_container} ref={replyContainerRef}>
           <div className={styles.reply_card}>
-            <span className="truncate-4">{replyMsg}</span>
+            <span className="truncate-4">{replyMsg?.msg}</span>
             <i className={`bx-x ${styles.close}`} onClick={clearReplyMsg}></i>
           </div>
         </div>
@@ -345,3 +393,12 @@ export const Chats = () => {
     </div>
   );
 };
+
+//   bx bx-microphone
+//   bx bx-video
+//   bx-exit-fullscreen
+//   bx-fullscreen
+//   bxs-phone-call
+//   bxs-phone
+//   bx-cast
+//   bx-stop

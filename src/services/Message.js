@@ -8,3 +8,11 @@ export const createMessage = (chatId, data) => {
     data,
   });
 };
+
+export const getMessagesByChatId = (chatId, params) => {
+  return axios({
+    url: `${endpoints.message.getMessages}/${chatId}`,
+    method: "get",
+    params,
+  });
+};
