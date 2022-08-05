@@ -9,13 +9,9 @@ export const useObserver = () => {
 
   useEffect(() => {
     let observer = new IntersectionObserver(handleObserver, options);
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
-    }
+    observerRef.current && observer.observe(observerRef.current);
     return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
-      }
+      observerRef.current && observer.unobserve(observerRef.current);
     };
   }, []);
 
@@ -23,5 +19,5 @@ export const useObserver = () => {
     setIsVisible(event.isIntersecting);
   };
 
-  return { observerRef, isVisible };
+  return [observerRef, isVisible];
 };

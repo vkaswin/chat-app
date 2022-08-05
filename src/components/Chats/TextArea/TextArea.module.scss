@@ -7,7 +7,7 @@
   background-color: rgba(255, 255, 255, 0.05);
   -webkit-backdrop-filter: blur(7px);
   backdrop-filter: blur(7px);
-  padding: 10px 15px 0px 15px;
+  padding: 10px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,6 +15,7 @@
   z-index: 1025;
   .input_field {
     position: relative;
+    display: flex;
     max-width: 85%;
     width: 100%;
     textarea {
@@ -42,7 +43,7 @@
     }
     i {
       position: absolute;
-      top: 45%;
+      top: 50%;
       right: 10px;
       transform: translateY(-50%);
     }

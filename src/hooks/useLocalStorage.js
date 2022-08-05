@@ -3,8 +3,9 @@ export const useLocalStorage = () => {
     return localStorage.getItem(key);
   };
 
-  const setValue = ({ key = "", value = "" }) => {
-    localStorage.setItem(key, JSON.stringify(value));
+  const setValue = ({ key, value }) => {
+    if (!key || !value) return;
+    localStorage.setItem(key, value);
   };
 
   const remove = (key) => {

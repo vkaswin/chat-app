@@ -5,7 +5,7 @@ import { Conversation } from "./Conversation";
 import { VideoPopup } from "./VideoPopup";
 import { io } from "socket.io-client";
 import { sockets } from "config";
-import { useAuth, useRouter } from "hooks";
+import { useAuth, useObserver, useRouter } from "hooks";
 import { createMessage, getMessagesByChatId } from "services/Message";
 import { CSSTransition } from "react-transition-group";
 
@@ -39,9 +39,13 @@ export const Chats = () => {
 
   const [page, setPage] = useState(1);
 
+  const [loading, setLoading] = useState(true);
+
   const {
     query: { userId, chatId },
   } = useRouter();
+
+  const [loaderRef, isVisible] = useObserver();
 
   let iceCandidate;
 
@@ -72,6 +76,11 @@ export const Chats = () => {
   useEffect(() => {
     getMessages();
   }, [page]);
+
+  useEffect(() => {
+    console.log("loading...");
+    // setPage(page + 1);
+  }, [isVisible]);
 
   //   Scroll To Chat End
   useEffect(() => {
@@ -104,9 +113,11 @@ export const Chats = () => {
       let {
         data: { data },
       } = await getMessagesByChatId(chatId, params);
-      setChats(data);
+      prependMessageInChat(data);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -132,15 +143,27 @@ export const Chats = () => {
         data: { data },
       } = await createMessage(chatId, body);
       socket.current.emit("send-message", data, chatId);
-      addMessageInChats(data);
+      appendMessageInChats(data);
       replyId && clearReplyMsg();
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     }
   };
 
-  const addMessageInChats = (msg) => {
-    setChats((prev) => [...prev, msg]);
+  const prependMessageInChat = (msg) => {
+    if (Array.isArray(msg)) {
+      setChats((prev) => [...msg, ...prev]);
+    } else {
+      setChats((prev) => [msg, ...prev]);
+    }
+  };
+
+  const appendMessageInChats = (msg) => {
+    if (Array.isArray(msg)) {
+      setChats((prev) => [...prev, ...msg]);
+    } else {
+      setChats((prev) => [...prev, msg]);
+    }
   };
 
   const onDelete = (id) => {
@@ -160,6 +183,15 @@ export const Chats = () => {
   const clearReplyMsg = () => {
     chatContainerRef.current.style.removeProperty("--chat-pb");
     setReplyId(null);
+  };
+
+  const focusMsgById = (id) => {
+    const element = document.querySelector(`[data-msgid='${id}']`);
+    if (!element) return;
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
   };
 
   const replyMsg = useMemo(() => {
@@ -242,7 +274,7 @@ export const Chats = () => {
   const handleReceiveMessage = (data) => {
     showNotification(data.msg);
     playMessageRingTone();
-    addMessageInChats(data);
+    appendMessageInChats(data);
   };
 
   const handleVideoCall = async () => {
@@ -297,14 +329,26 @@ export const Chats = () => {
 
   return (
     <div ref={chatContainerRef} className={styles.chat_wrapper}>
-      <Conversation
-        chats={chats}
-        container={chatContainerRef}
-        onDelete={onDelete}
-        onCopy={onCopy}
-        onReply={onReply}
-        userId={user.id}
-      />
+      {!loading && (
+        <div ref={loaderRef}>
+          <span>Loading...</span>
+        </div>
+      )}
+      {loading ? (
+        <div className={styles.chat_loader}>
+          <span></span>
+        </div>
+      ) : (
+        <Conversation
+          chats={chats}
+          container={chatContainerRef}
+          onDelete={onDelete}
+          onCopy={onCopy}
+          onReply={onReply}
+          userId={user.id}
+          focusMsgById={focusMsgById}
+        />
+      )}
       <div className={styles.chat_header}>
         <div className={styles.user_info}>
           <div className={styles.go_back} onClick={() => router.goBack()}>
@@ -387,7 +431,7 @@ export const Chats = () => {
         className={styles.profile_sidebar}
         toggle={toggleInfo}
       >
-        <div>helo</div>
+        <div>Hello</div>
       </OffCanvas>
       <VideoPopup isOpen={showVideo} />
     </div>

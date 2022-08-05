@@ -4,22 +4,20 @@ import PropTypes from "prop-types";
 import { clickOutside } from "utils";
 import { PopperPlacements } from "utils/constants";
 import { CSSTransition } from "react-transition-group";
-import { usePopper } from "react-popper";
+import { usePopper } from "hooks";
 
 import styles from "./Popover.module.scss";
 
-export const Popover = ({ children, placement, offset, selector }) => {
-  const targetRef = useRef();
+export const Popover = ({ children, placement, arrow, offset, selector }) => {
+  const referenceRef = useRef();
 
   const [isOpen, setIsOpen] = useState(false);
 
   const [popperRef, setPopperRef] = useState();
 
-  const {
-    styles: { popper },
-    attributes,
-  } = usePopper(targetRef.current, popperRef, {
-    modifiers: [{ name: "offset", options: { offset } }],
+  const { popper, placement: position } = usePopper({
+    reference: referenceRef.current,
+    popper: popperRef,
     placement,
   });
 
@@ -34,12 +32,12 @@ export const Popover = ({ children, placement, offset, selector }) => {
   useEffect(() => {
     if (selector.length === 0) return;
 
-    const element = document.querySelector(selector);
+    const ele = document.querySelector(selector);
 
-    if (!element) return;
+    if (!ele) return;
 
-    targetRef.current = element;
-    element.onclick = show;
+    referenceRef.current = ele;
+    ele.onclick = show;
   }, []);
 
   const onEntered = (ele) => {
@@ -47,7 +45,7 @@ export const Popover = ({ children, placement, offset, selector }) => {
       ref: ele,
       onClose: hide,
       doNotClose: (event) => {
-        return targetRef.current.contains(event);
+        return referenceRef.current.contains(event);
       },
     });
   };
@@ -58,17 +56,17 @@ export const Popover = ({ children, placement, offset, selector }) => {
         in={isOpen}
         timeout={250}
         classNames={{
-          enterActive: styles.popover_enter,
-          exitActive: styles.popover_exit,
+          enterActive: styles.enter,
+          exitActive: styles.exit,
         }}
         unmountOnExit
         onEntered={onEntered}
       >
         <div
           ref={setPopperRef}
-          className={styles.popover}
+          className={styles.container}
+          data-placement={position}
           style={popper}
-          {...attributes.popper}
         >
           <div className={styles.menu}>{children}</div>
         </div>
@@ -79,16 +77,17 @@ export const Popover = ({ children, placement, offset, selector }) => {
 
 Popover.propTypes = {
   children: PropTypes.node.isRequired,
-  placement: PropTypes.oneOf(PopperPlacements),
-  offset: PropTypes.arrayOf(PropTypes.number),
+  position: PropTypes.oneOf(PopperPlacements),
+  offset: PropTypes.number,
   arrow: PropTypes.bool,
   className: PropTypes.string,
   selector: PropTypes.string.isRequired,
 };
 
 Popover.defaultProps = {
-  placement: "top",
+  position: "top-center",
   arrow: true,
-  offset: [0, 10],
+  offset: 15,
   className: null,
+  selector: "",
 };

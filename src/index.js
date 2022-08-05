@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import ReactDOM from "react-dom/client";
 import { ProvideAuth } from "hooks/useAuth";
 import { Router } from "./router";
@@ -10,18 +10,6 @@ import "assets/scss/abstracts.scss";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const App = () => {
-  useEffect(() => {
-    requestNotificationPermission();
-  }, []);
-
-  const requestNotificationPermission = async () => {
-    try {
-      await Notification.requestPermission();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <Fragment>
       <ProvideAuth>

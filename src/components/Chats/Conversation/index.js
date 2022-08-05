@@ -1,28 +1,23 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { DropDown } from "components";
 import { classNames } from "utils";
-import { format } from "date-fns";
+import moment from "moment";
 
 import styles from "./Conversation.module.scss";
 
-export const Conversation = ({ chats, onDelete, onCopy, onReply, userId }) => {
+export const Conversation = ({
+  chats,
+  onDelete,
+  onCopy,
+  onReply,
+  userId,
+  focusMsgById,
+}) => {
   return (
     <div className={styles.conversation_container}>
       {chats.length > 0 &&
         chats.map(
-          (
-            {
-              msg,
-              date,
-              from,
-              to,
-              chatId,
-              _id,
-              seen,
-              reply: { msg: replyMsg = "", _id: replyMsgId } = {},
-            },
-            index
-          ) => {
+          ({ msg, date, from, to, chatId, _id, seen, reply = null }, index) => {
             return (
               <div
                 key={index}
@@ -32,9 +27,12 @@ export const Conversation = ({ chats, onDelete, onCopy, onReply, userId }) => {
                 data-msgid={_id}
               >
                 <div className={styles.chat_card}>
-                  {replyMsg && (
-                    <div className={styles.reply_card}>
-                      <span>{replyMsg}</span>
+                  {reply && (
+                    <div
+                      className={styles.reply_card}
+                      onClick={() => focusMsgById(reply._id)}
+                    >
+                      <span>{reply.msg}</span>
                     </div>
                   )}
                   <div>
@@ -42,7 +40,7 @@ export const Conversation = ({ chats, onDelete, onCopy, onReply, userId }) => {
                   </div>
                   <div className={styles.msg_time}>
                     <i className={`bx-time ${styles.clock}`}></i>
-                    <span>{format(new Date(date), "h:mm aaa")}</span>
+                    <span>{moment(new Date(date)).format("h:mm aaa")}</span>
                     <i
                       className={`bx bx-check-double ${styles.tick}`}
                       data-seen={seen}

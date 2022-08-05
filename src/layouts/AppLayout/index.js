@@ -10,7 +10,6 @@ const AppLayout = () => {
   const { getItem, setItem } = useLocalStorage();
 
   const {
-    pathName,
     query: { chatId = null },
   } = useRouter();
 
@@ -19,6 +18,7 @@ const AppLayout = () => {
   const { width } = useWindowSize();
 
   useEffect(() => {
+    Notification.permission !== "granted" && requestNotificationPermission();
     document.body.classList.add("hide-scroll");
     let val = getItem("theme") ?? "light";
     let root = document.querySelector(":root");
@@ -29,11 +29,20 @@ const AppLayout = () => {
     };
   }, []);
 
-  const toggleTheme = (val) => () => {
+  const requestNotificationPermission = async () => {
+    try {
+      await Notification.requestPermission();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const toggleTheme = (value) => () => {
+    console.log(value);
     let root = document.querySelector(":root");
-    root.setAttribute("data-theme", val);
-    setItem("theme", val);
-    setTheme(val);
+    root.setAttribute("data-theme", value);
+    setItem({ key: "theme", value });
+    setTheme(value);
   };
 
   return (
