@@ -1,0 +1,16 @@
+.bar {
+  position: fixed;
+  width: 7px;
+  background-color: #d0d6db;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  transition: opacity 250ms ease-in;
+}
+
+.bar[aria-hidden="true"] {
+  opacity: 1;
+}
+
+.bar[aria-hidden="false"] {
+  opacity: 0;
+}

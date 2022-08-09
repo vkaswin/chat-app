@@ -25,16 +25,22 @@ export class Popper {
       "bottom-center": this.placeOnBottomCenter.bind(this),
       "bottom-end": this.placeOnBottomEnd.bind(this),
     };
+    this.parent = this.getScrollParent(this.reference);
 
     this.init();
   }
 
   init() {
     this.handlePopper();
+    // this.parent.addEventListener("scroll", this.handlePopper.bind(this, true));
     window.addEventListener("resize", this.handlePopper.bind(this));
   }
 
   destroy() {
+    // this.parent.removeEventListener(
+    //   "scroll",
+    //   this.handlePopper.bind(this, true)
+    // );
     window.removeEventListener("resize", this.handlePopper.bind(this));
   }
 
@@ -282,7 +288,7 @@ export class Popper {
     }
   };
 
-  handlePopper() {
+  handlePopper(isScroll = false) {
     const { innerWidth, innerHeight } = window;
 
     this.innerHeight = innerHeight;
@@ -290,10 +296,32 @@ export class Popper {
 
     const rect = this.popperPositions[this.placement]?.();
 
+    if (isScroll) {
+      const { scrollTop, scrollLeft, scrollHeight, scrollWidth } = this.parent;
+      //   console.log(
+      //     scrollWidth - scrollLeft,
+      //     "left",
+      //     scrollHeight - scrollTop,
+      //     "top"
+      //   );
+    }
+
     if (rect) {
       this.onchange({ popper: rect.popper, placement: this.placement });
     } else {
-      this.autoPlacement();
+      this.autoPlacement(isScroll);
+    }
+  }
+
+  getScrollParent(node) {
+    if (node == null) {
+      return null;
+    }
+
+    if (node.scrollHeight > node.clientHeight) {
+      return node;
+    } else {
+      return this.getScrollParent(node.parentNode);
     }
   }
 }

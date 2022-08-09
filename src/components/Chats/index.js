@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { DropDown, Avatar, OffCanvas, Toast } from "components";
+import { DropDown, Avatar, OffCanvas, Toast, ScrollBar } from "components";
 import { TextArea } from "./TextArea";
 import { Conversation } from "./Conversation";
 import { VideoPopup } from "./VideoPopup";
@@ -434,6 +434,7 @@ export const Chats = () => {
         <div>Hello</div>
       </OffCanvas>
       <VideoPopup isOpen={showVideo} />
+      <ScrollBar />
     </div>
   );
 };

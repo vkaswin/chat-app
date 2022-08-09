@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { SideBar } from "./SideBar";
-import { Chats } from "components";
+import { Chats, ScrollBar } from "components";
 import { useLocalStorage, useRouter, useWindowSize } from "hooks";
 import { Outlet } from "react-router-dom";
 
@@ -62,6 +62,7 @@ const AppLayout = () => {
         ) : (
           <div className={styles.pages_container}>
             <Outlet />
+            <ScrollBar />
           </div>
         )}
         {width < 768 ? chatId && <Chats /> : <Chats />}
