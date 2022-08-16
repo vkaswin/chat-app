@@ -23,7 +23,6 @@ axios.interceptors.response.use(
   },
   (error) => {
     if (error.response.status === 401) {
-      clearCookie("authToken");
       const event = new CustomEvent("logout");
       document.dispatchEvent(event);
     }

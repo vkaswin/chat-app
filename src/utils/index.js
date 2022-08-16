@@ -1,3 +1,7 @@
+import { Toast } from "components/Toast/toast";
+import { uploadFile } from "services/Others";
+// import { uploadFile } from "services/Others";
+
 export const debounce = (fn, delay) => {
   let timeoutID;
   return (...args) => {
@@ -103,5 +107,15 @@ export const getScrollParent = (node) => {
     return node;
   } else {
     return getScrollParent(node.parentNode);
+  }
+};
+
+export const fileUpload = async (formData) => {
+  try {
+    console.log(formData);
+    let res = await uploadFile(formData);
+    console.log(res);
+  } catch (error) {
+    Toast({ type: "error", message: error?.message });
   }
 };

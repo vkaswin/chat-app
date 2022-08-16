@@ -74,11 +74,11 @@ export const Chats = () => {
 
   //   Fetch Messages
   useEffect(() => {
-    getMessages();
+    // getMessages();
   }, [page]);
 
   useEffect(() => {
-    console.log("loading...");
+    // console.log("loading...");
     // setPage(page + 1);
   }, [isVisible]);
 

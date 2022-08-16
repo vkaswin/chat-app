@@ -9,15 +9,6 @@ const PageNotFound = lazy(() => import("../pages/404"));
 export const Router = () => {
   const { user, isLoading } = useAuth();
 
-  useEffect(() => {
-    document.addEventListener("logout", handleLogOut);
-    return () => document.removeEventListener("logout", handleLogOut);
-  }, []);
-
-  const handleLogOut = (e) => {
-    console.log(e);
-  };
-
   if (isLoading) return null;
 
   return (

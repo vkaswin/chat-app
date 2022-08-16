@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Portal } from "components";
 import { ToastCard } from "../ToastCard";
-import { EventEmitter } from "../Toast";
+import { EventEmitter } from "../toast";
 
 import "./ToastContainer.scss";
 

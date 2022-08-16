@@ -5,6 +5,7 @@ export const baseURL =
 const userURL = "/api/users";
 const chatUrl = "/api/chats";
 const messageUrl = "/api/messages";
+const othersUrl = "/api/";
 
 export const sockets = {
   chat: `${baseURL}/chats`,
@@ -21,5 +22,9 @@ export const endpoints = {
   message: {
     create: `${messageUrl}/create`,
     getMessages: `${messageUrl}`,
+  },
+  others: {
+    metaData: `${othersUrl}/metadata`,
+    fileUpload: `${othersUrl}/fileUpload`,
   },
 };

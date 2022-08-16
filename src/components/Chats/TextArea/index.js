@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { fileUpload } from "utils";
 import { Emoji } from "./Emoji";
 
 import styles from "./TextArea.module.scss";
@@ -68,8 +69,14 @@ export const TextArea = ({ onSend }) => {
     rec?.stop();
   };
 
-  const handleFile = (e) => {
-    console.log(e);
+  const handleFile = ({ target: { files } }) => {
+    const formData = new FormData();
+
+    for (const file of files) {
+      formData.append("file", file);
+    }
+
+    fileUpload(formData);
   };
 
   return (
@@ -81,7 +88,13 @@ export const TextArea = ({ onSend }) => {
           <label htmlFor="chat-file">
             <i className="bx-paperclip" id="attach"></i>
           </label>
-          <input id="chat-file" type="file" onChange={handleFile} hidden />
+          <input
+            id="chat-file"
+            type="file"
+            onChange={handleFile}
+            multiple
+            hidden
+          />
         </div>
         <button onClick={handleSend}>
           <i className="bxs-send"></i>

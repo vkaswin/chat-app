@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { getCookie, clearCookie } from "utils";
 import jwt_decode from "jwt-decode";
 
-const StoreContext = createContext();
+const AuthContext = createContext();
 
 export const ProvideAuth = ({ children }) => {
   const [user, setUser] = useState(false);
@@ -10,11 +10,13 @@ export const ProvideAuth = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    document.addEventListener("logout", logout);
     let token = getCookie("authToken");
     if (token !== null) {
       setUser(jwt_decode(token));
     }
     setIsLoading(false);
+    return () => document.removeEventListener("logout", logout);
   }, []);
 
   const logout = () => {
@@ -23,12 +25,12 @@ export const ProvideAuth = ({ children }) => {
   };
 
   return (
-    <StoreContext.Provider value={{ user, isLoading, setUser, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, setUser, logout }}>
       {children}
-    </StoreContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  return useContext(StoreContext);
+  return useContext(AuthContext);
 };
