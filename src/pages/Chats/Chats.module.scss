@@ -85,7 +85,10 @@
         margin: 0px;
         background-color: #4eac6e;
         color: white;
-        padding: 2px 4px;
+        min-width: 18px;
+        width: fit-content;
+        padding: 0px 5px;
+        height: 20px;
         border-radius: 4px;
         font-weight: bold;
         cursor: inherit;

@@ -69,7 +69,7 @@ a {
 
 @keyframes router-in {
   0% {
-    transform: translateX(-100%);
+    transform: translateX(-100px);
     opacity: 0;
   }
   50% {
@@ -90,7 +90,7 @@ a {
     opacity: 0.5;
   }
   100% {
-    transform: translateX(100%);
+    transform: translateX(100px);
     opacity: 0;
   }
 }

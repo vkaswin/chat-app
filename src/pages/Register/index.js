@@ -37,12 +37,12 @@ const Register = () => {
         <Input
           label="Username"
           placeholder="Enter username"
-          register={register("userName", {
+          register={register("name", {
             required: true,
             pattern: /^[A-Za-z ]+$/,
             minLength: 3,
           })}
-          error={errors?.userName}
+          error={errors?.name}
           message={{
             required: "Please enter username",
             minLength: "Username contain atleast 3 characters",

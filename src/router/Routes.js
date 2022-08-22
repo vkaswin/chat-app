@@ -40,6 +40,11 @@ export const routes = [
         component: "pages/Chats",
       },
       {
+        path: "chats/:chatId",
+        auth: true,
+        component: "pages/Chats",
+      },
+      {
         path: "contacts",
         auth: true,
         component: "pages/Contacts",

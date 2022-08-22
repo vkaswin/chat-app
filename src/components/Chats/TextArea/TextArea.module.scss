@@ -73,6 +73,10 @@
     right: 0px;
     padding: 0px 10px;
     gap: 10px;
+    transform: translateX(100%);
+    &:is(.show) {
+      transform: translateX(0px);
+    }
     button {
       width: 40px;
       padding: 5px 0px;

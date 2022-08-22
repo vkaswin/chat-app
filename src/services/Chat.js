@@ -1,6 +1,21 @@
 import { axios } from "services";
 import { endpoints } from "config";
 
-export const getAllChats = () => {
-  return axios({ url: endpoints.chat.getChats, method: "get" });
+export const getRecentChats = () => {
+  return axios({ url: endpoints.chat.recentChats, method: "get" });
+};
+
+export const getFavouriteChats = () => {
+  return axios({ url: endpoints.chat.favouriteChats, method: "get" });
+};
+
+export const getGroupChats = () => {
+  return axios({ url: endpoints.chat.groupChats, method: "get" });
+};
+
+export const getChatById = (chatId) => {
+  return axios({
+    url: `${endpoints.chat.chatDetails}/${chatId}`,
+    method: "get",
+  });
 };

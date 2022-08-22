@@ -17,7 +17,10 @@ export const endpoints = {
     register: `${userURL}/register`,
   },
   chat: {
-    getChats: `${chatUrl}`,
+    recentChats: `${chatUrl}/recent`,
+    favouriteChats: `${chatUrl}/favourite`,
+    groupChats: `${chatUrl}/group`,
+    chatDetails: `${chatUrl}/detail`,
   },
   message: {
     create: `${messageUrl}/create`,

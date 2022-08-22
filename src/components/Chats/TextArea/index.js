@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { fileUpload } from "utils";
+import { fileUpload } from "services/Others";
 import { Emoji } from "./Emoji";
 
 import styles from "./TextArea.module.scss";

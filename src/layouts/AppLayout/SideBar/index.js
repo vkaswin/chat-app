@@ -19,27 +19,27 @@ export const SideBar = ({ theme, toggleTheme }) => {
     {
       icon: "bx-user-circle",
       label: "Profile",
-      to: "/profile",
+      to: "profile",
     },
     {
       icon: "bx-conversation",
       label: "Chats",
-      to: "/chats",
+      to: "chats",
     },
     {
       icon: "bxs-user-detail",
       label: "Contacts",
-      to: "/contacts",
+      to: "contacts",
     },
     {
       icon: "bx-phone-call",
       label: "Calls",
-      to: "/calls",
+      to: "calls",
     },
     {
       icon: "bx-cog",
       label: "Settings",
-      to: "/settings",
+      to: "settings",
     },
   ];
 
@@ -62,7 +62,7 @@ export const SideBar = ({ theme, toggleTheme }) => {
   ];
 
   useLayoutEffect(() => {
-    let index = tabs.findIndex(({ to }) => to === pathName);
+    let index = tabs.findIndex(({ to }) => to === pathName.split("/")[1]);
 
     const { matches } = window.matchMedia(`(max-width: 768px)`);
 

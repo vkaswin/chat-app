@@ -7,7 +7,6 @@
   max-height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  //   scrollbar-width: none;
   &::-webkit-scrollbar {
     // display: none;
   }
@@ -195,10 +194,20 @@
 
 @media only screen and (max-width: 768px) {
   .chat_wrapper {
+    position: absolute;
+    left: 0px;
+    padding: 0px;
+    &:is(.show) {
+      padding: 80px 7px calc(var(--chat-pb, 0px) + 85px) 15px;
+      .chat_header {
+        transform: translateX(0px);
+      }
+    }
     .chat_header {
       width: 100%;
       right: 0px;
       padding: 0px 10px;
+      transform: translateX(100%);
       .user_info {
         .go_back {
           display: flex;

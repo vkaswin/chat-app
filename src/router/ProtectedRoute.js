@@ -1,9 +1,11 @@
 import React from "react";
 import { Navigate } from "react-router";
-import { getCookie } from "utils";
+import { cookies } from "utils";
 
 export const ProtectedRoute = ({ component, auth = true }) => {
-  const token = getCookie("authToken");
+  const cookie = cookies();
+
+  const token = cookie.get("authToken");
 
   if (auth && token) return component;
 

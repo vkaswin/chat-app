@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CheckBox, Input, PasswordInput } from "components";
-import { getCookie, setCookie } from "utils";
+import { cookies } from "utils";
 import { useRouter } from "hooks";
 import { NavLink } from "react-router-dom";
 import { Toast } from "components";
@@ -19,10 +19,12 @@ const Login = () => {
 
   const router = useRouter();
 
+  const cookie = cookies();
+
   const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
-    let session = getCookie("login_session") ?? null;
+    let session = cookie.get("login_session") ?? null;
     if (!session) return;
     const { email, password } = JSON.parse(session);
     reset({ email, password });
@@ -36,13 +38,13 @@ const Login = () => {
         data: { token },
       } = await loginUser(data);
       if (rememberMe) {
-        setCookie({
+        cookie.set({
           name: "login_session",
           value: { email, password },
           days: 14,
         });
       }
-      setCookie({ name: "authToken", value: token, days: 7 });
+      cookie.set({ name: "authToken", value: token, days: 7 });
       router.push("/chats");
     } catch (error) {
       if (error?.message === "User not exist") {

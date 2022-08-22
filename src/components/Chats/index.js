@@ -7,6 +7,7 @@ import { io } from "socket.io-client";
 import { sockets } from "config";
 import { useAuth, useObserver, useRouter } from "hooks";
 import { createMessage, getMessagesByChatId } from "services/Message";
+import { getChatById } from "services/Chat";
 import { CSSTransition } from "react-transition-group";
 
 import messageRingTone from "assets/audio/fade-in-tone.mp3";
@@ -41,8 +42,10 @@ export const Chats = () => {
 
   const [loading, setLoading] = useState(true);
 
+  const [chatDetails, setChatDetails] = useState({});
+
   const {
-    query: { userId, chatId },
+    query: { chatId = null },
   } = useRouter();
 
   const [loaderRef, isVisible] = useObserver();
@@ -51,7 +54,9 @@ export const Chats = () => {
 
   //   Socket
   useEffect(() => {
-    if (socket.current) return;
+    if (socket.current || !chatId) return;
+
+    getChatDetails();
 
     const webSocket = io(sockets.chat);
 
@@ -68,19 +73,19 @@ export const Chats = () => {
     });
 
     return () => {
-      webSocket.current && webSocket.disconnect();
+      webSocket && webSocket.close();
     };
-  }, []);
+  }, [chatId]);
 
   //   Fetch Messages
   useEffect(() => {
-    // getMessages();
+    getMessages();
   }, [page]);
 
-  useEffect(() => {
-    // console.log("loading...");
-    // setPage(page + 1);
-  }, [isVisible]);
+  //   useEffect(() => {
+  //     console.log("loading...");
+  //     setPage(page + 1);
+  //   }, [isVisible]);
 
   //   Scroll To Chat End
   useEffect(() => {
@@ -104,6 +109,17 @@ export const Chats = () => {
   };
 
   //   Chats
+  const getChatDetails = async () => {
+    try {
+      let {
+        data: { data },
+      } = await getChatById(chatId);
+      setChatDetails(data);
+    } catch (error) {
+      Toast({ type: "error", message: error?.message });
+    }
+  };
+
   const getMessages = async () => {
     try {
       let params = {
@@ -133,7 +149,7 @@ export const Chats = () => {
     try {
       let body = {
         from: user.id,
-        to: userId,
+        to: chatDetails?.user?.name,
         msg: msg,
         date: new Date().toISOString(),
         seen: false,
@@ -329,112 +345,122 @@ export const Chats = () => {
 
   return (
     <div ref={chatContainerRef} className={styles.chat_wrapper}>
-      {!loading && (
-        <div ref={loaderRef}>
-          <span>Loading...</span>
-        </div>
-      )}
-      {loading ? (
-        <div className={styles.chat_loader}>
-          <span></span>
-        </div>
-      ) : (
-        <Conversation
-          chats={chats}
-          container={chatContainerRef}
-          onDelete={onDelete}
-          onCopy={onCopy}
-          onReply={onReply}
-          userId={user.id}
-          focusMsgById={focusMsgById}
-        />
-      )}
-      <div className={styles.chat_header}>
-        <div className={styles.user_info}>
-          <div className={styles.go_back} onClick={() => router.goBack()}>
-            <i className="bx bx-chevron-left"></i>
-          </div>
-          <Avatar
-            src="https://themesbrand.com/doot/layouts/assets/images/users/avatar-2.jpg"
-            size={50}
-            status
-          />
-          <div className={styles.user_name}>
-            <b>Bella Cote</b>
-            <span>Online</span>
-          </div>
-        </div>
-        <div className={styles.chat_icons}>
-          <i className="bx-search"></i>
-          <i className="bxs-phone-call"></i>
-          <i className="bx-video" onClick={handleVideoCall}></i>
-          <i className="bxs-info-circle" onClick={toggleInfo}></i>
-          <i className="bx-dots-vertical-rounded" id="more-option"></i>
-          <DropDown
-            selector="#more-option"
-            placement="bottom-end"
-            zIndex={1026}
-          >
-            {matches && (
-              <Fragment>
-                <DropDown.Item
-                  className={styles.more_option}
-                  onClick={toggleInfo}
-                >
-                  <span>View Profile</span>
-                  <i className="bx bx-user"></i>
+      {chatId ? (
+        <Fragment>
+          {!loading && (
+            <div ref={loaderRef}>
+              <span>Loading...</span>
+            </div>
+          )}
+          {loading ? (
+            <div className={styles.chat_loader}>
+              <span></span>
+            </div>
+          ) : (
+            <Conversation
+              chats={chats}
+              container={chatContainerRef}
+              onDelete={onDelete}
+              onCopy={onCopy}
+              onReply={onReply}
+              userId={user.id}
+              focusMsgById={focusMsgById}
+            />
+          )}
+          <div className={styles.chat_header}>
+            <div className={styles.user_info}>
+              <div className={styles.go_back} onClick={() => router.goBack()}>
+                <i className="bx bx-chevron-left"></i>
+              </div>
+              <Avatar
+                src={chatDetails?.user?.url}
+                userName={chatDetails?.user?.name}
+                size={50}
+                status
+              />
+              <div className={styles.user_name}>
+                <b>{chatDetails?.user?.name}</b>
+                <span>Online</span>
+              </div>
+            </div>
+            <div className={styles.chat_icons}>
+              <i className="bx-search"></i>
+              <i className="bxs-phone-call"></i>
+              <i className="bx-video" onClick={handleVideoCall}></i>
+              <i className="bxs-info-circle" onClick={toggleInfo}></i>
+              <i className="bx-dots-vertical-rounded" id="more-option"></i>
+              <DropDown
+                selector="#more-option"
+                placement="bottom-end"
+                zIndex={1026}
+              >
+                {matches && (
+                  <Fragment>
+                    <DropDown.Item
+                      className={styles.more_option}
+                      onClick={toggleInfo}
+                    >
+                      <span>View Profile</span>
+                      <i className="bx bx-user"></i>
+                    </DropDown.Item>
+                    <DropDown.Item className={styles.more_option}>
+                      <span>Audio</span>
+                      <i className="bx bxs-phone-call"></i>
+                    </DropDown.Item>
+                    <DropDown.Item
+                      className={styles.more_option}
+                      onClick={handleVideoCall}
+                    >
+                      <span>Video</span>
+                      <i className="bx bx-video"></i>
+                    </DropDown.Item>
+                  </Fragment>
+                )}
+                <DropDown.Item className={styles.more_option}>
+                  <span>Muted</span>
+                  <i className="bx-microphone-off"></i>
                 </DropDown.Item>
                 <DropDown.Item className={styles.more_option}>
-                  <span>Audio</span>
-                  <i className="bx bxs-phone-call"></i>
+                  <span>Delete</span>
+                  <i className="bx-trash"></i>
                 </DropDown.Item>
-                <DropDown.Item
-                  className={styles.more_option}
-                  onClick={handleVideoCall}
-                >
-                  <span>Video</span>
-                  <i className="bx bx-video"></i>
-                </DropDown.Item>
-              </Fragment>
-            )}
-            <DropDown.Item className={styles.more_option}>
-              <span>Muted</span>
-              <i className="bx-microphone-off"></i>
-            </DropDown.Item>
-            <DropDown.Item className={styles.more_option}>
-              <span>Delete</span>
-              <i className="bx-trash"></i>
-            </DropDown.Item>
-          </DropDown>
-        </div>
-      </div>
-      <CSSTransition
-        in={Boolean(replyId)}
-        timeout={250}
-        classNames={{
-          enterActive: styles.reply_enter,
-          exitActive: styles.reply_exit,
-        }}
-        unmountOnExit
-      >
-        <div className={styles.reply_container} ref={replyContainerRef}>
-          <div className={styles.reply_card}>
-            <span className="truncate-4">{replyMsg?.msg}</span>
-            <i className={`bx-x ${styles.close}`} onClick={clearReplyMsg}></i>
+              </DropDown>
+            </div>
           </div>
-        </div>
-      </CSSTransition>
-      <TextArea onSend={onSend} />
-      <OffCanvas
-        isOpen={showInfo}
-        position="right"
-        className={styles.profile_sidebar}
-        toggle={toggleInfo}
-      >
-        <div>Hello</div>
-      </OffCanvas>
-      <VideoPopup isOpen={showVideo} />
-      <ScrollBar />
+          <CSSTransition
+            in={Boolean(replyId)}
+            timeout={250}
+            classNames={{
+              enterActive: styles.reply_enter,
+              exitActive: styles.reply_exit,
+            }}
+            unmountOnExit
+          >
+            <div className={styles.reply_container} ref={replyContainerRef}>
+              <div className={styles.reply_card}>
+                <span className="truncate-4">{replyMsg?.msg}</span>
+                <i
+                  className={`bx-x ${styles.close}`}
+                  onClick={clearReplyMsg}
+                ></i>
+              </div>
+            </div>
+          </CSSTransition>
+          <TextArea onSend={onSend} />
+          <OffCanvas
+            isOpen={showInfo}
+            position="right"
+            className={styles.profile_sidebar}
+            toggle={toggleInfo}
+          >
+            <div>Hello</div>
+          </OffCanvas>
+          <VideoPopup isOpen={showVideo} />
+          <ScrollBar />
+        </Fragment>
+      ) : (
+        <div>Chat is Empty</div>
+      )}
     </div>
   );
 };

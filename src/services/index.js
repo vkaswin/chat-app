@@ -1,12 +1,14 @@
 import Axios from "axios";
-import { getCookie, clearCookie } from "utils";
+import { cookies } from "utils";
 import { baseURL } from "config";
 
 export const axios = Axios.create({ baseURL });
 
 axios.interceptors.request.use(
   (config) => {
-    const token = getCookie("authToken");
+    const cookie = cookies();
+
+    const token = cookie.get("authToken");
     if (token) {
       config.headers.Authorization = token;
     }
