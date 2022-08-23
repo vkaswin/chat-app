@@ -67,6 +67,12 @@ const Chats = () => {
 
   const handleNewMessage = (data) => {
     console.log(data);
+    switch ("recent") {
+      case "recent":
+        break;
+      default:
+        break;
+    }
   };
 
   if (isLoading) return <div>Loading...</div>;

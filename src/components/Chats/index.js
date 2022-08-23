@@ -49,6 +49,8 @@ export const Chats = () => {
 
   const [loaderRef, isVisible] = useObserver();
 
+  const prevChatId = useRef();
+
   let iceCandidate;
 
   //   Socket
@@ -57,9 +59,18 @@ export const Chats = () => {
       setChats([]);
     }
 
+    if (prevChatId.current && prevChatId.current !== chatId) {
+      socket.connect();
+      leaveRoom();
+    }
+
+    prevChatId.current = chatId;
+
     if (!socket.io || !chatId) return;
 
     getChatDetails();
+
+    socket.io.emit("join-room", chatId);
 
     socket.io.on("receive-message", handleReceiveMessage);
 
@@ -68,7 +79,7 @@ export const Chats = () => {
     socket.io.on("receive-answer", handleReceiveAnswer);
 
     return () => {
-      socket.io && socket.io.close();
+      leaveRoom();
     };
   }, [chatId]);
 
@@ -276,6 +287,8 @@ export const Chats = () => {
   };
 
   const handleReceiveMessage = (data) => {
+    if (data.sender === user.id) return;
+
     showNotification(data.msg);
     playMessageRingTone();
     appendMessageInChats(data);
@@ -328,6 +341,10 @@ export const Chats = () => {
       body,
       icon: favicon,
     });
+  };
+
+  const leaveRoom = () => {
+    socket.io.emit("leave-room", prevChatId);
   };
 
   return (
