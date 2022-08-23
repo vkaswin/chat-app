@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { cookies } from "utils";
 import jwt_decode from "jwt-decode";
+import { socket } from "socket";
 
 const AuthContext = createContext();
 
@@ -15,7 +16,9 @@ export const ProvideAuth = ({ children }) => {
     document.addEventListener("logout", logout);
     let token = cookie.get("authToken");
     if (token !== null) {
-      setUser(jwt_decode(token));
+      const user = jwt_decode(token);
+      socket.init(user.id);
+      setUser(user);
     }
     setIsLoading(false);
     return () => document.removeEventListener("logout", logout);

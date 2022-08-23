@@ -1,12 +1,13 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Avatar, Toast } from "components";
 import { classNames } from "utils";
-import { useRouter } from "hooks";
+import { useAuth, useRouter } from "hooks";
 import {
   getFavouriteChats,
   getRecentChats,
   getGroupChats,
 } from "services/Chat";
+import { socket } from "socket";
 
 import styles from "./Chats.module.scss";
 
@@ -14,6 +15,8 @@ const Chats = () => {
   const router = useRouter();
 
   const { chatId = null } = router.query;
+
+  const { user } = useAuth();
 
   const [chatList, setChatList] = useState({
     recent: [],
@@ -24,6 +27,14 @@ const Chats = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const { favourites, recent, groups } = chatList;
+
+  useEffect(() => {
+    if (!socket.io || !user) return;
+
+    socket.io.emit("join-room", user.id);
+
+    socket.io.on("new-message", handleNewMessage);
+  }, []);
 
   useEffect(() => {
     getChats();
@@ -52,6 +63,10 @@ const Chats = () => {
   const handleChat = (chatId) => {
     if (!chatId) return;
     router.push(`/chats/${chatId}`);
+  };
+
+  const handleNewMessage = (data) => {
+    console.log(data);
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -90,7 +105,7 @@ const Chats = () => {
                     />
                     <div className={styles.msg}>
                       <span className="truncate-1">{name}</span>
-                      <span>{msg}</span>
+                      <span className="truncate-2">{msg}</span>
                     </div>
                   </div>
                   <div
@@ -139,7 +154,7 @@ const Chats = () => {
                     />
                     <div className={styles.msg}>
                       <span className="truncate-1">{name}</span>
-                      <span>{msg}</span>
+                      <span className="truncate-2">{msg}</span>
                     </div>
                   </div>
                   <div
@@ -178,7 +193,7 @@ const Chats = () => {
                     <Avatar userName={name} size={35} />
                     <div className={styles.msg}>
                       <span className="truncate-1">{name}</span>
-                      <span>Loreum Ipsum</span>
+                      <span className="truncate-2">Loreum Ipsum</span>
                     </div>
                   </div>
                   <div

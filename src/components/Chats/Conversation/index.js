@@ -16,12 +16,12 @@ export const Conversation = ({
   return (
     <div className={styles.conversation_container}>
       {chats.length > 0 &&
-        chats.map(({ msg, date, from, _id, seen, reply = null }, index) => {
+        chats.map(({ msg, date, sender, _id, seen, reply = null }, index) => {
           return (
             <div
               key={index}
               className={classNames(styles.chat_wrapper, {
-                [styles.end]: userId === from,
+                [styles.end]: userId === sender,
               })}
               data-msgid={_id}
             >

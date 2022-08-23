@@ -13,14 +13,7 @@ export const Avatar = ({
   outlineSize = 3,
   upload = false,
 }) => {
-  const colors = [
-    "#EF4770",
-    "#4eac6e",
-    "#6F6F6F",
-    "#DCB604",
-    "#199393",
-    "#029ACD",
-  ];
+  const colors = ["#EF4770", "#6F6F6F", "#DCB604", "#199393", "#029ACD"];
 
   const getRandomColor = useMemo(() => {
     let index = Math.floor(Math.random() * colors.length);

@@ -5,22 +5,23 @@ import { localStorage } from "utils";
 import { Outlet } from "react-router-dom";
 
 import styles from "./AppLayout.module.scss";
+import { useRouter } from "hooks";
 
 const AppLayout = () => {
   const storage = localStorage();
 
   const [theme, setTheme] = useState();
 
+  const {
+    query: { chatId = null },
+  } = useRouter();
+
   useEffect(() => {
     Notification.permission !== "granted" && requestNotificationPermission();
-    document.body.classList.add("hide-scroll");
     let val = storage.get("theme") ?? "light";
     let root = document.querySelector(":root");
     root.setAttribute("data-theme", val);
     setTheme(val);
-    return () => {
-      document.body.classList.remove("hide-scroll");
-    };
   }, []);
 
   const requestNotificationPermission = async () => {
@@ -46,7 +47,7 @@ const AppLayout = () => {
         <div className={styles.pages_container}>
           <Outlet />
         </div>
-        <Chats />
+        {chatId ? <Chats /> : <div>Empyt Chat</div>}
       </div>
     </Fragment>
   );

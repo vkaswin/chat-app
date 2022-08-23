@@ -9,6 +9,7 @@ const othersUrl = "/api/";
 
 export const sockets = {
   chat: `${baseURL}/chats`,
+  message: `${baseURL}/message`,
 };
 
 export const endpoints = {
