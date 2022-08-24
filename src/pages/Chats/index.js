@@ -66,13 +66,25 @@ const Chats = () => {
   };
 
   const handleNewMessage = (data) => {
-    console.log(data);
-    switch ("recent") {
-      case "recent":
-        break;
-      default:
-        break;
-    }
+    setChatList((prev) => {
+      const key = data.type;
+      const chats = [...prev[key]];
+      const index = chats.findIndex(({ _id }) => {
+        return _id === data.chatId;
+      });
+      const [element] = chats.splice(index, 1);
+
+      element.message = {
+        date: data.date,
+        msg: data.msg,
+        seen: data.seen,
+        _id: data._id,
+        name: "Aswin",
+      };
+      element.count += 1;
+
+      return { ...prev, [key]: [element, ...chats] };
+    });
   };
 
   if (isLoading) return <div>Loading...</div>;

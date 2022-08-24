@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { cookies } from "utils";
-import jwt_decode from "jwt-decode";
+import jwtDecode from "jwt-decode";
 import { socket } from "socket";
 
 const AuthContext = createContext();
@@ -16,13 +16,18 @@ export const ProvideAuth = ({ children }) => {
     document.addEventListener("logout", logout);
     let token = cookie.get("authToken");
     if (token !== null) {
-      const user = jwt_decode(token);
-      socket.init(user.id);
+      const user = jwtDecode(token);
+      !socket.io && socket.init(user.id);
       setUser(user);
     }
     setIsLoading(false);
     return () => document.removeEventListener("logout", logout);
   }, []);
+
+  const setUserData = (user) => {
+    !socket.io && socket.init();
+    setUser(user);
+  };
 
   const logout = () => {
     cookie.remove("authToken");
@@ -33,7 +38,9 @@ export const ProvideAuth = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, setUser, logout }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, setUser: setUserData, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

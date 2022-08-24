@@ -60,15 +60,15 @@ export const Chats = () => {
     }
 
     if (prevChatId.current && prevChatId.current !== chatId) {
-      socket.connect();
+      socket.io.connect();
       leaveRoom();
     }
 
     prevChatId.current = chatId;
 
-    if (!socket.io || !chatId) return;
-
     getChatDetails();
+
+    if (!socket.io || !chatId) return;
 
     socket.io.emit("join-room", chatId);
 
@@ -125,7 +125,7 @@ export const Chats = () => {
   const getMessages = async () => {
     try {
       let params = {
-        limit: 10,
+        limit: 30,
         page,
       };
       let {
@@ -158,6 +158,7 @@ export const Chats = () => {
       let {
         data: { data },
       } = await createMessage(chatId, body);
+      socket.io.emit("send-message", data, chatId);
       appendMessageInChats(data);
       replyId && clearReplyMsg();
     } catch (error) {
@@ -287,8 +288,6 @@ export const Chats = () => {
   };
 
   const handleReceiveMessage = (data) => {
-    if (data.sender === user.id) return;
-
     showNotification(data.msg);
     playMessageRingTone();
     appendMessageInChats(data);

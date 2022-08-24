@@ -22,6 +22,8 @@ export const DropDown = ({
   placement,
   trigger,
   className,
+  isOpen,
+  toggle,
   zIndex,
 }) => {
   const referenceRef = useRef();
@@ -33,14 +35,14 @@ export const DropDown = ({
     placement,
   });
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [show, setShow] = useState(false);
 
-  const show = () => {
-    setIsOpen(true);
+  const open = () => {
+    setShow(true);
   };
 
-  const hide = () => {
-    setIsOpen(false);
+  const close = () => {
+    setShow(false);
   };
 
   useEffect(() => {
@@ -53,17 +55,17 @@ export const DropDown = ({
     referenceRef.current = element;
 
     if (trigger === "hover") {
-      element.onmouseenter = show;
-      element.onmouseleave = hide;
+      element.onmouseenter = typeof isOpen === "boolean" ? toggle : open;
+      element.onmouseleave = typeof isOpen === "boolean" ? toggle : close;
     } else {
-      element.onclick = show;
+      element.onclick = typeof isOpen === "boolean" ? toggle : open;
     }
   }, []);
 
   const onEntered = (ele) => {
     clickOutside({
       ref: ele,
-      onClose: hide,
+      onClose: typeof isOpen === "boolean" ? toggle : close,
       doNotClose: (event) => {
         return referenceRef.current.contains(event);
       },
@@ -73,7 +75,7 @@ export const DropDown = ({
   return (
     <Portal>
       <CSSTransition
-        in={isOpen}
+        in={typeof isOpen === "boolean" ? isOpen : show}
         timeout={200}
         unmountOnExit
         classNames={{
@@ -82,7 +84,9 @@ export const DropDown = ({
         }}
         onEntered={onEntered}
       >
-        <DropDownContext.Provider value={{ hide }}>
+        <DropDownContext.Provider
+          value={{ close: typeof isOpen === "boolean" ? toggle : close }}
+        >
           <div
             ref={setPopperRef}
             className={styles.container}
@@ -114,13 +118,15 @@ DropDown.defaultProps = {
   className: null,
   selector: "",
   zIndex: null,
+  toggle: null,
+  isOpen: null,
 };
 
 const Item = ({ children, onClick, className }) => {
-  const { hide } = useContext(DropDownContext);
+  const { close } = useContext(DropDownContext);
 
   const handleClick = () => {
-    hide();
+    close();
     if (typeof onClick === "function") onClick();
   };
 

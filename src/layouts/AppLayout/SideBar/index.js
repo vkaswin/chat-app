@@ -105,7 +105,7 @@ export const SideBar = ({ theme, toggleTheme }) => {
                 id={`nav-${index}`}
               ></i>
               <Tooltip
-                offset={[0, 20]}
+                offset={20}
                 placement={tooltipPlacement}
                 selector={`#nav-${index}`}
               >
@@ -121,11 +121,7 @@ export const SideBar = ({ theme, toggleTheme }) => {
               className={theme === "light" ? "bx-moon" : "bx-sun"}
               onClick={toggleTheme(theme === "light" ? "dark" : "light")}
             ></i>
-            <Tooltip
-              placement={tooltipPlacement}
-              selector="#theme"
-              offset={[0, 20]}
-            >
+            <Tooltip placement={tooltipPlacement} selector="#theme" offset={20}>
               {theme === "light" ? "Dark Mode" : "Light Mode"}
             </Tooltip>
           </div>

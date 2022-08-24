@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CheckBox, Input, PasswordInput } from "components";
 import { cookies } from "utils";
-import { useRouter } from "hooks";
+import { useAuth, useRouter } from "hooks";
 import { NavLink } from "react-router-dom";
 import { Toast } from "components";
 import { loginUser } from "services/Auth";
+import jwt_decode from "jwt-decode";
 
 import styles from "./Login.module.scss";
+import jwtDecode from "jwt-decode";
 
 const Login = () => {
   const {
@@ -16,6 +18,8 @@ const Login = () => {
     formState: { errors },
     reset,
   } = useForm();
+
+  const { setUser } = useAuth();
 
   const router = useRouter();
 
@@ -45,6 +49,7 @@ const Login = () => {
         });
       }
       cookie.set({ name: "authToken", value: token, days: 7 });
+      setUser(jwtDecode(token));
       router.push("/chats");
     } catch (error) {
       if (error?.message === "User not exist") {

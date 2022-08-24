@@ -7,9 +7,9 @@
   max-height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  &::-webkit-scrollbar {
-    // display: none;
-  }
+  //   &::-webkit-scrollbar {
+  //     display: none;
+  //   }
   .chat_header {
     position: fixed;
     top: 0px;
@@ -24,7 +24,7 @@
     -webkit-backdrop-filter: blur(7px);
     backdrop-filter: blur(7px);
     padding: 0px 15px;
-    z-index: 1025;
+    z-index: 2000;
     .user_info {
       display: flex;
       align-items: center;

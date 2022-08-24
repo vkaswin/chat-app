@@ -51,7 +51,12 @@ export const Emoji = ({ toggle, isOpen, selector, onChange }) => {
   };
 
   return (
-    <DropDown selector={selector} placement="top-center">
+    <DropDown
+      isOpen={isOpen}
+      toggle={toggle}
+      selector={selector}
+      placement="top-center"
+    >
       <div className={styles.emoji_container}>
         <div className={styles.emoji_header}>
           {types.map(({ label, icon }, index) => {
@@ -66,7 +71,7 @@ export const Emoji = ({ toggle, isOpen, selector, onChange }) => {
                 <Tooltip
                   placement="top"
                   selector={`#emoji-type-${index}`}
-                  offset={[0, 10]}
+                  offset={10}
                 >
                   {label}
                 </Tooltip>
@@ -75,7 +80,7 @@ export const Emoji = ({ toggle, isOpen, selector, onChange }) => {
           })}
           <div id="emoji-close" className={styles.close} onClick={toggle}>
             <span>&#10799;</span>
-            <Tooltip placement="top" selector={`#emoji-close`} offset={[0, 10]}>
+            <Tooltip placement="top" selector={`#emoji-close`} offset={10}>
               Close
             </Tooltip>
           </div>
