@@ -12,13 +12,13 @@ export const usePopper = ({ reference, placement, popper }) => {
       reference,
       popper,
       placement,
-      onchange: handlePopper,
+      onUpdate,
     });
 
     return () => popperInstance.destroy();
   }, [reference, popper]);
 
-  const handlePopper = ({ popper, placement }) => {
+  const onUpdate = ({ popper, placement }) => {
     setState({ ...state, popper, placement });
   };
 

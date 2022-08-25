@@ -2,9 +2,10 @@ export const baseURL =
   process.env.NODE_ENV === "development"
     ? "http://localhost:8000"
     : "https://chat-api-mern.herokuapp.com";
-const userURL = "/api/users";
-const chatUrl = "/api/chats";
-const messageUrl = "/api/messages";
+const userURL = "/api/user";
+const chatUrl = "/api/chat";
+const messageUrl = "/api/message";
+const contactUrl = "/api/contact";
 const othersUrl = "/api/";
 
 export const sockets = {
@@ -24,8 +25,13 @@ export const endpoints = {
     chatDetails: `${chatUrl}/detail`,
   },
   message: {
-    create: `${messageUrl}/create`,
+    createMessage: `${messageUrl}/create`,
     getMessages: `${messageUrl}`,
+  },
+  contact: {
+    getContact: `${contactUrl}`,
+    createContact: `${contactUrl}`,
+    deleteContact: `${contactUrl}`,
   },
   others: {
     metaData: `${othersUrl}/metadata`,

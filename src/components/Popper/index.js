@@ -1,5 +1,5 @@
 export class Popper {
-  constructor({ reference, popper, placement, onchange }) {
+  constructor({ reference, popper, placement, onUpdate }) {
     this.reference = reference;
     this.popper = popper;
     this.referenceRect = reference.getBoundingClientRect();
@@ -7,7 +7,7 @@ export class Popper {
     this.placement = placement;
     this.innerWidth = undefined;
     this.innerHeight = undefined;
-    this.onchange = onchange;
+    this.onUpdate = onUpdate;
     this.popperStyle = { position: "absolute", inset: "0px auto auto 0px" };
     this.arrowStyle = { position: "absolute", inset: "0px auto auto 0px" };
     this.popperAttributes = { placement };
@@ -31,15 +31,22 @@ export class Popper {
 
   init() {
     this.handlePopper();
-    this.parent.addEventListener("scroll", this.handlePopper.bind(this, true));
+    if (this.parent) {
+      this.parent.addEventListener(
+        "scroll",
+        this.handlePopper.bind(this, true)
+      );
+    }
     window.addEventListener("resize", this.handlePopper.bind(this));
   }
 
   destroy() {
-    this.parent.removeEventListener(
-      "scroll",
-      this.handlePopper.bind(this, true)
-    );
+    if (this.parent) {
+      this.parent.removeEventListener(
+        "scroll",
+        this.handlePopper.bind(this, true)
+      );
+    }
     window.removeEventListener("resize", this.handlePopper.bind(this));
   }
 
@@ -292,10 +299,10 @@ export class Popper {
     if (posiblePositions.length !== 0) {
       let placement = `${posiblePositions[0]}-center`;
       let rect = this.popperPositions[placement]?.();
-      this.onchange({ popper: rect.popper, placement });
+      this.onUpdate({ popper: rect.popper, placement });
     } else {
       let rect = this.popperPositions["bottom-start"](true);
-      this.onchange({ popper: rect.popper, placaement: "bottom-start" });
+      this.onUpdate({ popper: rect.popper, placaement: "bottom-start" });
     }
   };
 
@@ -311,31 +318,24 @@ export class Popper {
 
     const rect = this.popperPositions[this.placement]?.();
     if (rect) {
-      this.onchange({ popper: rect.popper, placement: this.placement });
+      this.onUpdate({ popper: rect.popper, placement: this.placement });
     } else {
       this.autoPlacement(isScroll);
     }
   }
 
-  getScrollParent(element, includeHidden = false) {
-    let style = getComputedStyle(element);
-    let excludeStaticParent = style.position === "absolute";
-    let overflowRegex = includeHidden
-      ? /(auto|scroll|hidden)/
-      : /(auto|scroll)/;
+  getScrollParent(element) {
+    if (!element) return null;
 
-    if (style.position === "fixed") return document;
-    for (let parent = element; (parent = parent.parentElement); ) {
-      style = getComputedStyle(parent);
-      if (excludeStaticParent && style.position === "static") {
-        continue;
-      }
-      if (
-        overflowRegex.test(style.overflow + style.overflowY + style.overflowX)
-      )
-        return parent;
-    }
+    let { position, overflow, overflowY, overflowX } =
+      window.getComputedStyle(element);
 
-    return document;
+    if (position === "fixed") return null;
+
+    let overflowRegex = /(auto|scroll)/;
+
+    if (overflowRegex.test(overflow + overflowX + overflowY)) return element;
+
+    return this.getScrollParent(element.parentElement);
   }
 }

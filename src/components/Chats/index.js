@@ -23,7 +23,7 @@ export const Chats = () => {
 
   const replyContainerRef = useRef();
 
-  const { user } = useAuth();
+  const { user, status } = useAuth();
 
   const router = useRouter();
 
@@ -377,7 +377,7 @@ export const Chats = () => {
             src={chatDetails?.user?.url}
             userName={chatDetails?.user?.name}
             size={50}
-            status
+            status={chatDetails?.user?.status}
           />
           <div className={styles.user_name}>
             <b>{chatDetails?.user?.name}</b>

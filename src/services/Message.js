@@ -3,7 +3,7 @@ import { endpoints } from "config";
 
 export const createMessage = (chatId, data) => {
   return axios({
-    url: `${endpoints.message.create}/${chatId}`,
+    url: `${endpoints.message.createMessage}/${chatId}`,
     method: "post",
     data,
   });

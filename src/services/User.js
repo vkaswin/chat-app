@@ -8,3 +8,7 @@ export const loginUser = (data) => {
 export const registerUser = (data) => {
   return axios({ url: endpoints.auth.register, method: "post", data });
 };
+
+export const updateUserStatus = (data) => {
+  return axios({ method: "put", url: endpoints.user.staus, data });
+};

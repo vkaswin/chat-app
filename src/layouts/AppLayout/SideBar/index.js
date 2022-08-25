@@ -13,7 +13,7 @@ export const SideBar = ({ theme, toggleTheme }) => {
 
   const { pathName } = useRouter();
 
-  const { logout } = useAuth();
+  const { logout, status, user } = useAuth();
 
   const tabs = [
     {
@@ -134,6 +134,7 @@ export const SideBar = ({ theme, toggleTheme }) => {
             src="https://themesbrand.com/doot/layouts/assets/images/users/avatar-1.jpg"
             size={40}
             outline
+            status
           />
         </div>
         <DropDown selector="#avatar" placement="top">

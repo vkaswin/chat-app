@@ -1,39 +1,65 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Avatar, DropDown } from "components";
+import { Avatar, DropDown, Toast } from "components";
 import { classNames } from "utils";
-import { useRouter } from "hooks";
-import alphabets from "data/alphabets.json";
-import contactsList from "data/contacts.json";
+import { useAuth, useRouter } from "hooks";
+import { getContacts } from "services/Contact";
 
 import styles from "./Contacts.module.scss";
 
-const Contacts = () => {
-  const dropdown = [
-    {
-      label: "Edit",
-      icon: "bx-pencil",
-    },
-    {
-      label: "Block",
-      icon: "bx-block",
-    },
-    {
-      label: "Delete",
-      icon: "bx-trash",
-    },
-  ];
+const alphabets = [
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g",
+  "h",
+  "i",
+  "j",
+  "k",
+  "l",
+  "m",
+  "n",
+  "o",
+  "p",
+  "q",
+  "r",
+  "s",
+  "t",
+  "u",
+  "v",
+  "w",
+  "x",
+  "y",
+  "z",
+];
 
+const Contacts = () => {
   const router = useRouter();
+
+  const { status } = useAuth();
 
   const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
-    sortContactsByName();
+    getAllContacts();
   }, []);
 
-  const sortContactsByName = () => {
+  const getAllContacts = async () => {
+    try {
+      let {
+        data: { data },
+      } = await getContacts();
+      sortContactsByName(data);
+    } catch (error) {
+      Toast({ type: "error", message: error?.message });
+    }
+  };
+
+  const sortContactsByName = (contactList) => {
     let contactByAlphabets = alphabets.map((letter) => {
-      let list = contactsList.filter(({ name }) => {
+      let list = contactList.filter(({ user: { name } }) => {
         return name.charAt(0).toLowerCase() === letter;
       });
 
@@ -41,15 +67,15 @@ const Contacts = () => {
         word: letter.toUpperCase(),
         users:
           list.length > 0
-            ? list.sort((a, b) => a.name.localeCompare(b.name))
+            ? list.sort((a, b) => a.user.name.localeCompare(b.user.name))
             : list,
       };
     });
     setContacts([...contacts, ...contactByAlphabets]);
   };
 
-  const handleChat = (userId = "4684") => {
-    router.push({ search: `chatId=${userId}` });
+  const handleChat = (chatId) => {
+    router.push(`/chats/${chatId}`);
   };
 
   return (
@@ -61,40 +87,42 @@ const Contacts = () => {
               <div className={styles.title}>
                 <b>{word}</b>
               </div>
-              {users.map(({ name, profile, status }, ind) => {
-                return (
-                  <Fragment key={ind}>
-                    <div className={classNames(styles.contact_card)}>
-                      <div className={styles.user} onClick={() => handleChat()}>
-                        <Avatar
-                          src={profile}
-                          userName={name}
-                          size={35}
-                          status={status}
-                        />
-                        <span>{name}</span>
+              {users.map(
+                ({ user: { name, url, status }, chatId, _id }, ind) => {
+                  return (
+                    <Fragment key={ind}>
+                      <div className={classNames(styles.contact_card)}>
+                        <div
+                          className={styles.user}
+                          onClick={() => handleChat(chatId)}
+                        >
+                          <Avatar
+                            src={url}
+                            userName={name}
+                            size={35}
+                            status={status}
+                          />
+                          <span>{name}</span>
+                        </div>
+                        <i
+                          className="bx-dots-vertical-rounded"
+                          id={`${word}-${ind}`}
+                        ></i>
                       </div>
-                      <i
-                        className="bx-dots-vertical-rounded"
-                        id={`${word}-${ind}`}
-                      ></i>
-                    </div>
-                    <DropDown placement="bottom" selector={`#${word}-${ind}`}>
-                      {dropdown.map(({ icon, label }, i) => {
-                        return (
-                          <DropDown.Item
-                            key={i}
-                            className={styles.contact_option}
-                          >
-                            <span>{label}</span>
-                            <i className={icon}></i>
-                          </DropDown.Item>
-                        );
-                      })}
-                    </DropDown>
-                  </Fragment>
-                );
-              })}
+                      <DropDown placement="bottom" selector={`#${word}-${ind}`}>
+                        <DropDown.Item className={styles.contact_option}>
+                          <span>Block</span>
+                          <i className="bx-block"></i>
+                        </DropDown.Item>
+                        <DropDown.Item className={styles.contact_option}>
+                          <span>Delete</span>
+                          <i className="bx-trash"></i>
+                        </DropDown.Item>
+                      </DropDown>
+                    </Fragment>
+                  );
+                }
+              )}
             </Fragment>
           )
         );

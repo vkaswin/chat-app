@@ -16,7 +16,7 @@ const Chats = () => {
 
   const { chatId = null } = router.query;
 
-  const { user } = useAuth();
+  const { user, status } = useAuth();
 
   const [chatList, setChatList] = useState({
     recent: [],

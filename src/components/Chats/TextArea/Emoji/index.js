@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Tooltip, DropDown } from "components";
-import emojis from "data/emoji.json";
+import emojis from "./emoji.json";
 
 import styles from "./Emoji.module.scss";
 

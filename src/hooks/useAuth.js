@@ -10,22 +10,38 @@ export const ProvideAuth = ({ children }) => {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const [status, setStatus] = useState({});
+
   const cookie = cookies();
 
   useEffect(() => {
+    // window.addEventListener("beforeunload", handleBeforeUnLoad);
     document.addEventListener("logout", logout);
     let token = cookie.get("authToken");
     if (token !== null) {
       const user = jwtDecode(token);
-      !socket.io && socket.init(user.id);
+      !socket.io && socket.init(user.id, handleStatus);
       setUser(user);
     }
     setIsLoading(false);
-    return () => document.removeEventListener("logout", logout);
+    return () => {
+      socket.close();
+      document.removeEventListener("logout", logout);
+    };
   }, []);
 
+  const handleStatus = ({ userId, status }) => {
+    setStatus((prev) => {
+      return { ...prev, [userId]: status };
+    });
+  };
+
+  //   const handleBeforeUnLoad = (e) => {
+  //     socket.io.emit("close-browser");
+  //   };
+
   const setUserData = (user) => {
-    !socket.io && socket.init();
+    !socket.io && socket.init(user.id, handleStatus);
     setUser(user);
   };
 
@@ -39,7 +55,7 @@ export const ProvideAuth = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoading, setUser: setUserData, logout }}
+      value={{ user, status, isLoading, setUser: setUserData, logout }}
     >
       {children}
     </AuthContext.Provider>

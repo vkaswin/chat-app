@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Input, PasswordInput, Toast } from "components";
-import { registerUser } from "services/Auth";
+import { registerUser } from "services/User";
 import { useRouter } from "hooks";
 
 import styles from "./Register.module.scss";

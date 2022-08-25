@@ -5,11 +5,10 @@ import { cookies } from "utils";
 import { useAuth, useRouter } from "hooks";
 import { NavLink } from "react-router-dom";
 import { Toast } from "components";
-import { loginUser } from "services/Auth";
-import jwt_decode from "jwt-decode";
+import { loginUser } from "services/User";
+import jwtDecode from "jwt-decode";
 
 import styles from "./Login.module.scss";
-import jwtDecode from "jwt-decode";
 
 const Login = () => {
   const {
