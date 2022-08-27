@@ -25,8 +25,10 @@
     text-transform: uppercase;
     width: var(--size);
     height: var(--size);
+    font-size: var(--size);
     span {
       color: white !important;
+      font-size: 0.4em;
     }
   }
   .status {

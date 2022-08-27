@@ -6,6 +6,7 @@ const userURL = "/api/user";
 const chatUrl = "/api/chat";
 const messageUrl = "/api/message";
 const contactUrl = "/api/contact";
+const callUrl = "/api/call";
 const othersUrl = "/api/";
 
 export const sockets = {
@@ -32,6 +33,11 @@ export const endpoints = {
     getContact: `${contactUrl}`,
     createContact: `${contactUrl}`,
     deleteContact: `${contactUrl}`,
+  },
+  call: {
+    history: `${callUrl}/history`,
+    initiate: `${callUrl}/initiate`,
+    join: `${callUrl}/join`,
   },
   others: {
     metaData: `${othersUrl}/metadata`,

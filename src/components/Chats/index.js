@@ -6,6 +6,7 @@ import { VideoPopup } from "./VideoPopup";
 import { useAuth, useObserver, useRouter } from "hooks";
 import { createMessage, getMessagesByChatId } from "services/Message";
 import { getChatById } from "services/Chat";
+import { initiateCall } from "services/Call";
 import { socket } from "socket";
 import { CSSTransition } from "react-transition-group";
 
@@ -23,7 +24,7 @@ export const Chats = () => {
 
   const replyContainerRef = useRef();
 
-  const { user, status } = useAuth();
+  const { user } = useAuth();
 
   const router = useRouter();
 
@@ -74,9 +75,9 @@ export const Chats = () => {
 
     socket.io.on("receive-message", handleReceiveMessage);
 
-    socket.io.on("receive-offer", handleReceiveOffer);
+    socket.io.on("receive-offer", handleOffer);
 
-    socket.io.on("receive-answer", handleReceiveAnswer);
+    socket.io.on("receive-answer", handleAnswer);
 
     return () => {
       leaveRoom();
@@ -246,7 +247,7 @@ export const Chats = () => {
     }
   };
 
-  const handleReceiveOffer = async ({ iceCandidate, offer }) => {
+  const handleOffer = async ({ iceCandidate, offer }) => {
     setShowVideo(true);
 
     const pc = new RTCPeerConnection();
@@ -278,7 +279,7 @@ export const Chats = () => {
     }
   };
 
-  const handleReceiveAnswer = async ({ iceCandidate, answer }) => {
+  const handleAnswer = async ({ iceCandidate, answer }) => {
     try {
       await peerConnection.current.setRemoteDescription(answer);
       await peerConnection.current.addIceCandidate(iceCandidate);
@@ -293,16 +294,15 @@ export const Chats = () => {
     appendMessageInChats(data);
   };
 
-  const handleVideoCall = async () => {
+  const handleCall = async (type) => {
     setShowVideo(true);
 
-    const pc = new RTCPeerConnection();
-    peerConnection.current = pc;
-
-    peerConnection.current.onicecandidate = handleIceCandidate;
-    peerConnection.current.ontrack = handleTrack;
-
     try {
+      peerConnection.current = new RTCPeerConnection();
+
+      peerConnection.current.onicecandidate = handleIceCandidate;
+      peerConnection.current.ontrack = handleTrack;
+
       let localStream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
@@ -320,9 +320,14 @@ export const Chats = () => {
         offerToReceiveAudio: 1,
         offerToReceiveVideo: 1,
       });
+
       await peerConnection.current.setLocalDescription(offer);
+
+      const data = { date: new Date().toISOString(), offer, type };
+
+      const res = await initiateCall(chatId, data);
     } catch (error) {
-      console.log(error);
+      Toast({ type: "error", message: error?.message });
     }
   };
 
@@ -374,8 +379,8 @@ export const Chats = () => {
             <i className="bx bx-chevron-left"></i>
           </div>
           <Avatar
-            src={chatDetails?.user?.url}
-            userName={chatDetails?.user?.name}
+            src={chatDetails?.user?.avatar}
+            name={chatDetails?.user?.name}
             size={50}
             status={chatDetails?.user?.status}
           />
@@ -387,13 +392,13 @@ export const Chats = () => {
         <div className={styles.chat_icons}>
           <i className="bx-search"></i>
           <i className="bxs-phone-call"></i>
-          <i className="bx-video" onClick={handleVideoCall}></i>
+          <i className="bx-video" onClick={() => handleCall("video")}></i>
           <i className="bxs-info-circle" onClick={toggleInfo}></i>
           <i className="bx-dots-vertical-rounded" id="more-option"></i>
           <DropDown
             selector="#more-option"
             placement="bottom-end"
-            zIndex={1026}
+            zIndex={2001}
           >
             {matches && (
               <Fragment>
@@ -404,13 +409,16 @@ export const Chats = () => {
                   <span>View Profile</span>
                   <i className="bx bx-user"></i>
                 </DropDown.Item>
-                <DropDown.Item className={styles.more_option}>
+                <DropDown.Item
+                  className={styles.more_option}
+                  onClick={() => handleCall("audio")}
+                >
                   <span>Audio</span>
                   <i className="bx bxs-phone-call"></i>
                 </DropDown.Item>
                 <DropDown.Item
                   className={styles.more_option}
-                  onClick={handleVideoCall}
+                  onClick={() => handleCall("video")}
                 >
                   <span>Video</span>
                   <i className="bx bx-video"></i>

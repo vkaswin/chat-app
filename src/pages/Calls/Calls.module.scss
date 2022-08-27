@@ -5,6 +5,7 @@
     gap: 10px;
     border-bottom: 1px solid #f6f6f9;
     padding: 10px 15px;
+    cursor: pointer;
     .user {
       display: flex;
       align-items: center;
@@ -39,17 +40,11 @@
         }
       }
     }
-    .call_time {
+    .type_icon {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      width: 75px;
-      b {
-        font-size: 12px;
-        font-weight: bold;
-        color: #797c8c;
-      }
       i {
         font-size: 20px;
         color: #4eac6e;

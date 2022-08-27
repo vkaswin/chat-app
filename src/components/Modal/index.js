@@ -11,6 +11,7 @@ export const Modal = ({
   children,
   width = 550,
   closeClickOnOutside = false,
+  zIndex,
 }) => {
   const Portal = ({ children }) => {
     return createPortal(children, document.body);
@@ -27,7 +28,7 @@ export const Modal = ({
       }}
     >
       <Portal>
-        <div>
+        <div style={{ "--zIndex": zIndex }}>
           <div
             className={styles.modal}
             onClick={() => {

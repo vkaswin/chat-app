@@ -1,9 +1,12 @@
 import React from "react";
 import { Avatar } from "components";
+import { useAuth } from "hooks";
 
 import styles from "./Settings.module.scss";
 
 const Settings = () => {
+  const { user } = useAuth();
+
   const handleFile = (e) => {
     console.log(e);
   };
@@ -29,7 +32,8 @@ const Settings = () => {
         </div>
         <div className={styles.avatar}>
           <Avatar
-            src="https://themesbrand.com/doot/layouts/assets/images/users/avatar-1.jpg"
+            src={user?.avatar}
+            name={user?.name}
             size={75}
             outlineSize={5}
             outline

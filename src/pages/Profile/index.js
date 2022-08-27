@@ -1,5 +1,6 @@
-import { Avatar, DropDown } from "components";
 import React from "react";
+import { Avatar, DropDown } from "components";
+import { useAuth } from "hooks";
 
 import styles from "./Profile.module.scss";
 
@@ -18,6 +19,8 @@ const Profile = () => {
       icon: "bx-help-circle",
     },
   ];
+
+  const { user } = useAuth();
 
   return (
     <div className={styles.profile_container}>
@@ -42,7 +45,8 @@ const Profile = () => {
         </div>
         <div className={styles.avatar}>
           <Avatar
-            src="https://themesbrand.com/doot/layouts/assets/images/users/avatar-1.jpg"
+            src={user?.avatar}
+            name={user?.name}
             size={75}
             outlineSize={5}
             outline

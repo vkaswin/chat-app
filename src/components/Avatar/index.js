@@ -9,27 +9,17 @@ export const Avatar = ({
   size,
   outline,
   status = false,
-  userName,
+  name,
   outlineSize = 3,
   upload = false,
 }) => {
-  const colors = [
-    "#EF4770",
-    "#6F6F6F",
-    "#DCB604",
-    "#199393",
-    "#029ACD",
-    "#11C1DA",
-    "#3B8FFC",
-    "#18C6A0",
-    "#B387FF",
-    "#F75334",
-  ];
+  const isUrl = useMemo(() => {
+    if (!src) return false;
 
-  const getRandomColor = useMemo(() => {
-    let index = Math.floor(Math.random() * colors.length);
-    return colors[index];
-  }, []);
+    return src.match(
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+    );
+  }, [src]);
 
   return (
     <div
@@ -38,19 +28,16 @@ export const Avatar = ({
       })}
       style={{
         "--size": `${size}px`,
-        ...(outline && { "--outline-size": `${outlineSize}px` }),
+        ...(outline && isUrl && { "--outline-size": `${outlineSize}px` }),
       }}
     >
-      {src ? (
+      {isUrl ? (
         <img src={src} />
       ) : (
-        <div
-          className={styles.random_avatar}
-          style={{ "--avatar-bg": getRandomColor }}
-        >
+        <div className={styles.random_avatar} style={{ "--avatar-bg": src }}>
           <span>
-            {userName?.charAt(0)}
-            {userName?.split(" ")?.[1]?.charAt(0) ?? ""}
+            {name?.charAt(0)}
+            {name?.split(" ")?.[1]?.charAt(0) ?? ""}
           </span>
         </div>
       )}
@@ -69,6 +56,7 @@ Avatar.propTypes = {
   size: PropTypes.number,
   outline: PropTypes.bool,
   status: PropTypes.bool,
+  name: PropTypes.string,
 };
 
 Avatar.defaultProps = {
@@ -76,4 +64,5 @@ Avatar.defaultProps = {
   size: 50,
   outline: false,
   status: false,
+  name: "",
 };

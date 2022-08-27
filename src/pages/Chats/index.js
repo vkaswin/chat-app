@@ -16,7 +16,7 @@ const Chats = () => {
 
   const { chatId = null } = router.query;
 
-  const { user, status } = useAuth();
+  const { user } = useAuth();
 
   const [chatList, setChatList] = useState({
     recent: [],
@@ -102,7 +102,7 @@ const Chats = () => {
                 _id,
                 count,
                 message: { msg, date } = {},
-                user: { name, url = null, status },
+                user: { name, avatar, status },
               },
               index
             ) => {
@@ -116,8 +116,8 @@ const Chats = () => {
                 >
                   <div className={styles.user}>
                     <Avatar
-                      src={url}
-                      userName={name}
+                      src={avatar}
+                      name={name}
                       status={status}
                       size={35}
                     />
@@ -151,7 +151,7 @@ const Chats = () => {
                 _id,
                 count,
                 message: { msg } = "",
-                user: { name, url = null, status },
+                user: { name, avatar, status },
               },
               index
             ) => {
@@ -165,8 +165,8 @@ const Chats = () => {
                 >
                   <div className={styles.user}>
                     <Avatar
-                      src={url}
-                      userName={name}
+                      src={avatar}
+                      name={name}
                       status={status}
                       size={35}
                     />
@@ -208,7 +208,7 @@ const Chats = () => {
                   onClick={() => handleChat(_id)}
                 >
                   <div className={styles.user}>
-                    <Avatar userName={name} size={35} />
+                    <Avatar name={name} size={35} />
                     <div className={styles.msg}>
                       <span className="truncate-1">{name}</span>
                       <span className="truncate-2">Loreum Ipsum</span>

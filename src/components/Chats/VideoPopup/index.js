@@ -5,7 +5,12 @@ import styles from "./VideoPopup.module.scss";
 
 export const VideoPopup = ({ isOpen }) => {
   return (
-    <Modal isOpen={isOpen} width={750} closeClickOnOutside={false}>
+    <Modal
+      isOpen={isOpen}
+      width={750}
+      closeClickOnOutside={false}
+      zIndex={2002}
+    >
       <div className={styles.video_container}>
         <video
           id="local-stream"

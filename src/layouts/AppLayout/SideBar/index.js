@@ -13,7 +13,7 @@ export const SideBar = ({ theme, toggleTheme }) => {
 
   const { pathName } = useRouter();
 
-  const { logout, status, user } = useAuth();
+  const { logout, user } = useAuth();
 
   const tabs = [
     {
@@ -131,7 +131,8 @@ export const SideBar = ({ theme, toggleTheme }) => {
           className={classNames(styles.nav_item, styles.profile)}
         >
           <Avatar
-            src="https://themesbrand.com/doot/layouts/assets/images/users/avatar-1.jpg"
+            src={user?.avatar}
+            name={user?.name}
             size={40}
             outline
             status

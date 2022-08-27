@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Avatar, DropDown, Toast } from "components";
 import { classNames } from "utils";
-import { useAuth, useRouter } from "hooks";
+import { useRouter } from "hooks";
 import { getContacts } from "services/Contact";
 
 import styles from "./Contacts.module.scss";
@@ -37,8 +37,6 @@ const alphabets = [
 
 const Contacts = () => {
   const router = useRouter();
-
-  const { status } = useAuth();
 
   const [contacts, setContacts] = useState([]);
 
@@ -88,7 +86,7 @@ const Contacts = () => {
                 <b>{word}</b>
               </div>
               {users.map(
-                ({ user: { name, url, status }, chatId, _id }, ind) => {
+                ({ user: { name, avatar, status }, chatId, _id }, ind) => {
                   return (
                     <Fragment key={ind}>
                       <div className={classNames(styles.contact_card)}>
@@ -97,8 +95,8 @@ const Contacts = () => {
                           onClick={() => handleChat(chatId)}
                         >
                           <Avatar
-                            src={url}
-                            userName={name}
+                            src={avatar}
+                            name={name}
                             size={35}
                             status={status}
                           />
@@ -115,7 +113,7 @@ const Contacts = () => {
                           <i className="bx-block"></i>
                         </DropDown.Item>
                         <DropDown.Item className={styles.contact_option}>
-                          <span>Delete</span>
+                          <span>Remove</span>
                           <i className="bx-trash"></i>
                         </DropDown.Item>
                       </DropDown>
