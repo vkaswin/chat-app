@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[276],{89276:function(t,_,e){e.r(_),_.default={settings_container:"Settings_settings_container__pcnOU",settings_bg:"Settings_settings_bg__5AF42",title:"Settings_title__-CdTy",edit_bg:"Settings_edit_bg__Mpw0P",bg:"Settings_bg__KILzG",avatar:"Settings_avatar__zpTQc"}}}]);
+//# sourceMappingURL=276.827efb4e.chunk.js.map

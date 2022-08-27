@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[406],{68406:function(l,_,a){a.r(_),_.default={calls_container:"Calls_calls_container__julVl",call_card:"Calls_call_card__9L-+S",user:"Calls_user__pFFMG",call_info:"Calls_call_info__ohoQS",type_icon:"Calls_type_icon__xoqiZ"}}}]);
+//# sourceMappingURL=406.96d9d24e.chunk.js.map

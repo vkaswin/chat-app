@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[3739],{13739:function(t,n,e){e.r(n),e.d(n,{loginUser:function(){return u},registerUser:function(){return o}});var r=e(39599),a=e(40077),u=function(t){return(0,r.axios)({url:a.endpoints.auth.login,method:"post",data:t})},o=function(t){return(0,r.axios)({url:a.endpoints.auth.register,method:"post",data:t})}}}]);
-//# sourceMappingURL=3739.0d98436b.chunk.js.map
