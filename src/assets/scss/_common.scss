@@ -44,6 +44,27 @@ a {
   }
 }
 
+.dropdown-option {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  button {
+    &:nth-child(1) {
+      display: none;
+    }
+    &:nth-child(2) {
+      display: none;
+    }
+    &:nth-child(3) {
+      display: none;
+    }
+  }
+  i {
+    color: #90929e;
+    font-size: 18px;
+  }
+}
+
 .btn-primary {
   background-color: #4eac6d;
   border: none;

@@ -13,6 +13,7 @@ export const OffCanvas = ({
   children,
   className,
   overlay,
+  zIndex,
 }) => {
   return (
     <Portal>
@@ -24,6 +25,7 @@ export const OffCanvas = ({
           enterActive: styles.offcanvas_enter,
           exitActive: styles.offcanvas_exit,
         }}
+        style={{ "--zIndex": zIndex }}
       >
         <div style={{ "--anime": `from-${position}` }}>
           <div

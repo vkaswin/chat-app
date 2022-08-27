@@ -108,11 +108,11 @@ const Contacts = () => {
                         ></i>
                       </div>
                       <DropDown placement="bottom" selector={`#${word}-${ind}`}>
-                        <DropDown.Item className={styles.contact_option}>
+                        <DropDown.Item className="dropdown-option">
                           <span>Block</span>
                           <i className="bx-block"></i>
                         </DropDown.Item>
-                        <DropDown.Item className={styles.contact_option}>
+                        <DropDown.Item className="dropdown-option">
                           <span>Remove</span>
                           <i className="bx-trash"></i>
                         </DropDown.Item>

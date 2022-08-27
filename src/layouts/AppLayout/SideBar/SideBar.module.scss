@@ -62,16 +62,6 @@
   }
 }
 
-.avatar_option {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  i {
-    color: #90929e;
-    font-size: 18px;
-  }
-}
-
 @media only screen and (max-width: 768px) {
   .sidebar {
     inset: auto auto 0px 0px;

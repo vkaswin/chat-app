@@ -53,29 +53,29 @@ export const Conversation = ({
                 ></i>
                 <DropDown selector={`#chat-option-${index}`} placement="bottom">
                   <DropDown.Item
-                    className={styles.chat_option}
+                    className="dropdown-option"
                     onClick={() => onReply(_id)}
                   >
                     <span>Reply</span>
                     <i className="bx-share"></i>
                   </DropDown.Item>
-                  <DropDown.Item className={styles.chat_option}>
+                  <DropDown.Item className="dropdown-option">
                     <span>Forward</span>
                     <i className="bx-share-alt"></i>
                   </DropDown.Item>
                   <DropDown.Item
-                    className={styles.chat_option}
+                    className="dropdown-option"
                     onClick={() => onCopy(msg)}
                   >
                     <span>Copy</span>
                     <i className="bx-copy"></i>
                   </DropDown.Item>
-                  <DropDown.Item className={styles.chat_option}>
+                  <DropDown.Item className="dropdown-option">
                     <span>Mark as Unread</span>
                     <i className="bx-message-error"></i>
                   </DropDown.Item>
                   <DropDown.Item
-                    className={styles.chat_option}
+                    className="dropdown-option"
                     onClick={() => onDelete(index)}
                   >
                     <span>Delete</span>

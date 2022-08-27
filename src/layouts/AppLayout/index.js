@@ -42,12 +42,16 @@ const AppLayout = () => {
 
   return (
     <Fragment>
-      <SideBar theme={theme} toggleTheme={toggleTheme} />
+      {!chatId && <SideBar theme={theme} toggleTheme={toggleTheme} />}
       <div className={styles.app_layout}>
         <div className={styles.pages_container}>
           <Outlet />
         </div>
-        {chatId ? <Chats /> : <div>Empyt Chat</div>}
+        {chatId ? (
+          <Chats />
+        ) : (
+          <div className={styles.empty_chat}>Empyt Chat</div>
+        )}
       </div>
     </Fragment>
   );

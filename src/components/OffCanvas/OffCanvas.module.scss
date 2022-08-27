@@ -37,7 +37,7 @@
 .offcanvas {
   position: fixed;
   background-color: #ffffff;
-  z-index: 1050;
+  z-index: var(--zIndex, 1050);
 }
 
 .offcanvas_overlay {
@@ -47,7 +47,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1049;
+  z-index: calc(var(--zIndex, 1049) - 1);
 }
 
 .offcanvas[data-position="left"],

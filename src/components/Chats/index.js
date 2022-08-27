@@ -198,7 +198,6 @@ export const Chats = () => {
   };
 
   const clearReplyMsg = () => {
-    chatContainerRef.current.style.removeProperty("--chat-pb");
     setReplyId(null);
   };
 
@@ -358,34 +357,19 @@ export const Chats = () => {
           <span>Loading...</span>
         </div>
       )} */}
-      {loading ? (
-        <div className={styles.chat_loader}>
-          <span></span>
-        </div>
-      ) : (
-        <Conversation
-          chats={chats}
-          container={chatContainerRef}
-          onDelete={onDelete}
-          onCopy={onCopy}
-          onReply={onReply}
-          userId={user.id}
-          focusMsgById={focusMsgById}
-        />
-      )}
       <div className={styles.chat_header}>
         <div className={styles.user_info}>
           <div className={styles.go_back} onClick={() => router.goBack()}>
             <i className="bx bx-chevron-left"></i>
           </div>
           <Avatar
-            src={chatDetails?.user?.avatar}
-            name={chatDetails?.user?.name}
+            src={chatDetails?.avatar}
+            name={chatDetails?.name}
             size={50}
-            status={chatDetails?.user?.status}
+            status={chatDetails?.status}
           />
           <div className={styles.user_name}>
-            <b>{chatDetails?.user?.name}</b>
+            <b>{chatDetails?.name}</b>
             <span>Online</span>
           </div>
         </div>
@@ -402,22 +386,19 @@ export const Chats = () => {
           >
             {matches && (
               <Fragment>
-                <DropDown.Item
-                  className={styles.more_option}
-                  onClick={toggleInfo}
-                >
+                <DropDown.Item className="dropdown-option" onClick={toggleInfo}>
                   <span>View Profile</span>
                   <i className="bx bx-user"></i>
                 </DropDown.Item>
                 <DropDown.Item
-                  className={styles.more_option}
+                  className="dropdown-option"
                   onClick={() => handleCall("audio")}
                 >
                   <span>Audio</span>
                   <i className="bx bxs-phone-call"></i>
                 </DropDown.Item>
                 <DropDown.Item
-                  className={styles.more_option}
+                  className="dropdown-option"
                   onClick={() => handleCall("video")}
                 >
                   <span>Video</span>
@@ -425,17 +406,32 @@ export const Chats = () => {
                 </DropDown.Item>
               </Fragment>
             )}
-            <DropDown.Item className={styles.more_option}>
+            <DropDown.Item className="dropdown-option">
               <span>Muted</span>
               <i className="bx-microphone-off"></i>
             </DropDown.Item>
-            <DropDown.Item className={styles.more_option}>
+            <DropDown.Item className="dropdown-option">
               <span>Delete</span>
               <i className="bx-trash"></i>
             </DropDown.Item>
           </DropDown>
         </div>
       </div>
+      {loading ? (
+        <div className={styles.chat_loader}>
+          <span></span>
+        </div>
+      ) : (
+        <Conversation
+          chats={chats}
+          container={chatContainerRef}
+          onDelete={onDelete}
+          onCopy={onCopy}
+          onReply={onReply}
+          userId={user.id}
+          focusMsgById={focusMsgById}
+        />
+      )}
       <CSSTransition
         in={Boolean(replyId)}
         timeout={250}
@@ -458,6 +454,7 @@ export const Chats = () => {
         position="right"
         className={styles.profile_sidebar}
         toggle={toggleInfo}
+        zIndex={2001}
       >
         <div>Hello</div>
       </OffCanvas>

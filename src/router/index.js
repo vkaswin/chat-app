@@ -34,29 +34,21 @@ export const Router = () => {
               const LayoutComponent = lazy(() => import(`../${component}`));
               return (
                 <Route key={path} path={path} element={<LayoutComponent />}>
-                  {children.map(
-                    ({
-                      path: childPath,
-                      component: childComponent,
-                      auth: childAuth,
-                    }) => {
-                      const ChildComponent = lazy(() =>
-                        import(`../${childComponent}`)
-                      );
-                      return (
-                        <Route
-                          key={childPath}
-                          path={childPath}
-                          element={
-                            <ProtectedRoute
-                              auth={childAuth}
-                              component={<ChildComponent />}
-                            />
-                          }
-                        />
-                      );
-                    }
-                  )}
+                  {children.map(({ path, component, auth }) => {
+                    const Component = lazy(() => import(`../${component}`));
+                    return (
+                      <Route
+                        key={path}
+                        path={path}
+                        element={
+                          <ProtectedRoute
+                            auth={auth}
+                            component={<Component />}
+                          />
+                        }
+                      />
+                    );
+                  })}
                 </Route>
               );
             }

@@ -142,14 +142,14 @@ export const SideBar = ({ theme, toggleTheme }) => {
           {dropdown.map(({ label, icon, to }, index) => {
             return (
               <NavLink key={index} to={to}>
-                <DropDown.Item className={styles.avatar_option}>
+                <DropDown.Item className="dropdown-option">
                   <span>{label}</span>
                   <i className={icon}></i>
                 </DropDown.Item>
               </NavLink>
             );
           })}
-          <DropDown.Item onClick={logout} className={styles.avatar_option}>
+          <DropDown.Item onClick={logout} className="dropdown-option">
             <span>Logout</span>
             <i className="bx-log-out-circle"></i>
           </DropDown.Item>

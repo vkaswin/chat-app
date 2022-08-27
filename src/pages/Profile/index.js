@@ -35,7 +35,7 @@ const Profile = () => {
           <DropDown selector="#my-profile" placement="bottom">
             {dropDown.map(({ label, icon }, index) => {
               return (
-                <DropDown.Item key={index} className={styles.profile_option}>
+                <DropDown.Item key={index} className="dropdown-option">
                   <span>{label}</span>
                   <i className={icon}></i>
                 </DropDown.Item>
