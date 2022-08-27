@@ -6,7 +6,7 @@ import { Avatar, DropDown, Tooltip } from "components";
 
 import styles from "./SideBar.module.scss";
 
-export const SideBar = ({ theme, toggleTheme }) => {
+export const SideBar = ({ theme, toggleTheme, className }) => {
   let tabRef = useRef();
 
   let indicatorRef = useRef();
@@ -84,7 +84,7 @@ export const SideBar = ({ theme, toggleTheme }) => {
   }, []);
 
   return (
-    <div className={styles.sidebar}>
+    <div className={`${styles.sidebar} ${className}`}>
       <div className={styles.logo}>
         <i className="bxs-message-alt-detail"></i>
       </div>

@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { SideBar } from "./SideBar";
 import { Chats, ScrollBar } from "components";
-import { localStorage } from "utils";
+import { classNames, localStorage } from "utils";
 import { Outlet } from "react-router-dom";
 
 import styles from "./AppLayout.module.scss";
@@ -33,7 +33,6 @@ const AppLayout = () => {
   };
 
   const toggleTheme = (value) => () => {
-    console.log(value);
     let root = document.querySelector(":root");
     root.setAttribute("data-theme", value);
     storage.set({ key: "theme", value });
@@ -42,7 +41,13 @@ const AppLayout = () => {
 
   return (
     <Fragment>
-      {!chatId && <SideBar theme={theme} toggleTheme={toggleTheme} />}
+      {
+        <SideBar
+          className={classNames(chatId && styles.hide)}
+          theme={theme}
+          toggleTheme={toggleTheme}
+        />
+      }
       <div className={styles.app_layout}>
         <div className={styles.pages_container}>
           <Outlet />

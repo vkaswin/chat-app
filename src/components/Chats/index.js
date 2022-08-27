@@ -422,15 +422,19 @@ export const Chats = () => {
           <span></span>
         </div>
       ) : (
-        <Conversation
-          chats={chats}
-          container={chatContainerRef}
-          onDelete={onDelete}
-          onCopy={onCopy}
-          onReply={onReply}
-          userId={user.id}
-          focusMsgById={focusMsgById}
-        />
+        <Fragment>
+          <Conversation
+            chats={chats}
+            container={chatContainerRef}
+            onDelete={onDelete}
+            onCopy={onCopy}
+            onReply={onReply}
+            userId={user.id}
+            focusMsgById={focusMsgById}
+          />
+
+          <TextArea onSend={onSend} />
+        </Fragment>
       )}
       <CSSTransition
         in={Boolean(replyId)}
@@ -448,7 +452,6 @@ export const Chats = () => {
           </div>
         </div>
       </CSSTransition>
-      <TextArea onSend={onSend} />
       <OffCanvas
         isOpen={showInfo}
         position="right"

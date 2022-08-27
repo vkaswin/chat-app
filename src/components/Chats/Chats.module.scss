@@ -4,6 +4,7 @@
   background-color: #e2ebe5;
   height: 100%;
   max-height: 100%;
+  width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   //   &::-webkit-scrollbar {
@@ -180,10 +181,6 @@
       }
     }
     .chat_header {
-      //   width: 100%;
-      //   right: 0px;
-      //   padding: 0px 10px;
-      //   transform: translateX(100%);
       .user_info {
         .go_back {
           display: flex;
