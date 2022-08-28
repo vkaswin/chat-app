@@ -4,7 +4,7 @@ import { Emoji } from "./Emoji";
 
 import styles from "./TextArea.module.scss";
 
-export const TextArea = ({ onSend }) => {
+export const TextArea = ({ onSend, onFocus }) => {
   const [showEmoji, setShowEmoji] = useState(false);
 
   const [text, setText] = useState("");
@@ -84,7 +84,12 @@ export const TextArea = ({ onSend }) => {
       <div className={styles.chat_input}>
         <i className="bx-smile" id="emoji"></i>
         <div className={styles.input_field}>
-          <textarea name="chat-input" value={text} onChange={handleChange} />
+          <textarea
+            name="chat-input"
+            value={text}
+            onChange={handleChange}
+            onFocus={onFocus}
+          />
           <label htmlFor="chat-file">
             <i className="bx-paperclip" id="attach"></i>
           </label>

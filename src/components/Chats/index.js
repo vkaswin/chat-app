@@ -349,6 +349,12 @@ export const Chats = () => {
     socket.io.emit("leave-room", prevChatId);
   };
 
+  const handleFocus = () => {
+    const { matches } = window.matchMedia(`(max-width: 768px)`);
+    if (!matches) return;
+    scrollToBottom();
+  };
+
   return (
     <div ref={chatContainerRef} className={styles.chat_wrapper}>
       {/* {!loading && (
@@ -431,7 +437,7 @@ export const Chats = () => {
           focusMsgById={focusMsgById}
         />
       )}
-      <TextArea onSend={onSend} />
+      <TextArea onSend={onSend} onFocus={handleFocus} />
       <CSSTransition
         in={Boolean(replyId)}
         timeout={250}
