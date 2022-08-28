@@ -153,7 +153,6 @@ export const Chats = () => {
       let body = {
         msg: msg,
         date: new Date().toISOString(),
-        seen: false,
         ...(replyId && { reply: replyId }),
       };
       let {
@@ -422,20 +421,17 @@ export const Chats = () => {
           <span></span>
         </div>
       ) : (
-        <Fragment>
-          <Conversation
-            chats={chats}
-            container={chatContainerRef}
-            onDelete={onDelete}
-            onCopy={onCopy}
-            onReply={onReply}
-            userId={user.id}
-            focusMsgById={focusMsgById}
-          />
-
-          <TextArea onSend={onSend} />
-        </Fragment>
+        <Conversation
+          chats={chats}
+          container={chatContainerRef}
+          onDelete={onDelete}
+          onCopy={onCopy}
+          onReply={onReply}
+          userId={user.id}
+          focusMsgById={focusMsgById}
+        />
       )}
+      <TextArea onSend={onSend} />
       <CSSTransition
         in={Boolean(replyId)}
         timeout={250}

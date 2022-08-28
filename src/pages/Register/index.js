@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { Input, PasswordInput, Toast } from "components";
 import { registerUser } from "services/User";
 import { useRouter } from "hooks";
-import { generateRandomColor } from "utils";
 
 import styles from "./Register.module.scss";
 
@@ -20,7 +19,7 @@ const Register = () => {
     try {
       let {
         data: { message },
-      } = await registerUser({ ...data, avatar: generateRandomColor() });
+      } = await registerUser(data);
       Toast({ type: "success", message });
       router.push("/auth/login");
     } catch (error) {

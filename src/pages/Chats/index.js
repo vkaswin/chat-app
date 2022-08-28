@@ -10,6 +10,7 @@ import {
 import { socket } from "socket";
 
 import styles from "./Chats.module.scss";
+import moment from "moment";
 
 const Chats = () => {
   const router = useRouter();
@@ -20,13 +21,13 @@ const Chats = () => {
 
   const [chatList, setChatList] = useState({
     recent: [],
-    favourites: [],
-    groups: [],
+    favourite: [],
+    group: [],
   });
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const { favourites, recent, groups } = chatList;
+  const { favourite, recent, group } = chatList;
 
   useEffect(() => {
     if (!socket.io || !user) return;
@@ -50,8 +51,8 @@ const Chats = () => {
       setChatList({
         ...chatList,
         recent: recent.data.data,
-        favourites: favourite.data.data,
-        groups: group.data.data,
+        favourite: favourite.data.data,
+        group: group.data.data,
       });
     } catch (error) {
       Toast({ type: "error", message: error?.message });
@@ -66,6 +67,7 @@ const Chats = () => {
   };
 
   const handleNewMessage = (data) => {
+    console.log(data);
     setChatList((prev) => {
       const key = data.type;
       const chats = [...prev[key]];
@@ -73,39 +75,34 @@ const Chats = () => {
         return _id === data.chatId;
       });
       const [element] = chats.splice(index, 1);
-
-      element.message = {
-        date: data.date,
-        msg: data.msg,
-        seen: data.seen,
-        _id: data._id,
-        name: "Aswin",
-      };
       element.count += 1;
-
-      return { ...prev, [key]: [element, ...chats] };
+      return {
+        ...prev,
+        [key]: [{ ...element, ...data }, ...chats],
+      };
     });
+  };
+
+  const getDate = (date) => {
+    const isCurrentDate =
+      date.split("T")[0] === new Date().toISOString().split("T")[0];
+
+    return isCurrentDate
+      ? moment(date).format("h:mm a")
+      : moment(date).format("DD/MM/YY");
   };
 
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className={styles.chat_list_container}>
-      {favourites.length > 0 && (
+      {favourite.length > 0 && (
         <Fragment>
           <div className={styles.title}>
             <b>Favourites</b>
           </div>
-          {favourites.map(
-            (
-              {
-                _id,
-                count,
-                message: { msg, date } = {},
-                user: { name, avatar, status },
-              },
-              index
-            ) => {
+          {favourite.map(
+            ({ _id, count, msg, date, name, avatar, status }, index) => {
               return (
                 <div
                   key={index}
@@ -131,7 +128,7 @@ const Chats = () => {
                       [styles.top]: !count,
                     })}
                   >
-                    <span>{date}</span>
+                    <span>{getDate(date)}</span>
                     {count > 0 && <label>{count}</label>}
                   </div>
                 </div>
@@ -146,15 +143,7 @@ const Chats = () => {
             <b>Recent Chats</b>
           </div>
           {recent.map(
-            (
-              {
-                _id,
-                count,
-                message: { msg } = "",
-                user: { name, avatar, status },
-              },
-              index
-            ) => {
+            ({ _id, count, msg, date, name, avatar, status }, index) => {
               return (
                 <div
                   key={index}
@@ -180,7 +169,7 @@ const Chats = () => {
                       [styles.top]: !count,
                     })}
                   >
-                    <span>12:30 pm</span>
+                    <span>{getDate(date)}</span>
                     {count > 0 && <label>{count}</label>}
                   </div>
                 </div>
@@ -189,7 +178,7 @@ const Chats = () => {
           )}
         </Fragment>
       )}
-      {groups.length > 0 && (
+      {group.length > 0 && (
         <Fragment>
           <div className={styles.title}>
             <b>Groups</b>
@@ -197,35 +186,33 @@ const Chats = () => {
               <i className="bx-plus"></i>
             </button>
           </div>
-          {groups.map(
-            ({ _id, count, message, group, name = "Loreum Ipsum" }, index) => {
-              return (
-                <div
-                  key={index}
-                  className={classNames(styles.user_card, {
-                    [styles.active]: _id === chatId,
-                  })}
-                  onClick={() => handleChat(_id)}
-                >
-                  <div className={styles.user}>
-                    <Avatar name={name} size={35} />
-                    <div className={styles.msg}>
-                      <span className="truncate-1">{name}</span>
-                      <span className="truncate-2">Loreum Ipsum</span>
-                    </div>
-                  </div>
-                  <div
-                    className={classNames(styles.time, {
-                      [styles.top]: !count,
-                    })}
-                  >
-                    <span>12:30 pm</span>
-                    {count > 0 && <label>{count}</label>}
+          {group.map(({ _id, count, msg, date, name, avatar }, index) => {
+            return (
+              <div
+                key={index}
+                className={classNames(styles.user_card, {
+                  [styles.active]: _id === chatId,
+                })}
+                onClick={() => handleChat(_id)}
+              >
+                <div className={styles.user}>
+                  <Avatar src={avatar} name={name} size={35} />
+                  <div className={styles.msg}>
+                    <span className="truncate-1">{name}</span>
+                    <span className="truncate-2">{msg}</span>
                   </div>
                 </div>
-              );
-            }
-          )}
+                <div
+                  className={classNames(styles.time, {
+                    [styles.top]: !count,
+                  })}
+                >
+                  <span>{getDate(date)}</span>
+                  {count > 0 && <label>{count}</label>}
+                </div>
+              </div>
+            );
+          })}
         </Fragment>
       )}
     </div>

@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  min-height: calc(100% - 140px);
   .chat_wrapper {
     display: flex;
     max-width: 75%;
