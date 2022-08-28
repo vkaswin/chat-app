@@ -143,7 +143,7 @@ export const localStorage = () => {
 
 export const sessionStorage = () => {
   const get = (key) => {
-    return JSON.parse(window.sessionStorage.getItem(key));
+    return window.sessionStorage.getItem(key);
   };
 
   const set = ({ key = "", value = "" }) => {
@@ -164,4 +164,14 @@ export const sessionStorage = () => {
     remove,
     reset,
   };
+};
+
+export const handleChat = (chatId) => {
+  const currentChatId = window.sessionStorage.getItem("chatId");
+
+  if (currentChatId === chatId) return;
+
+  window.sessionStorage.setItem("chatId", chatId);
+  const event = new CustomEvent("chatId", { detail: { chatId } });
+  document.dispatchEvent(event);
 };

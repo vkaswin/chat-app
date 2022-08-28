@@ -3,7 +3,7 @@ import { DropDown, Avatar, OffCanvas, Toast, ScrollBar } from "components";
 import { TextArea } from "./TextArea";
 import { Conversation } from "./Conversation";
 import { VideoPopup } from "./VideoPopup";
-import { useAuth, useObserver, useRouter } from "hooks";
+import { useAuth, useRouter } from "hooks";
 import { createMessage, getMessagesByChatId } from "services/Message";
 import { getChatById } from "services/Chat";
 import { initiateCall } from "services/Call";
@@ -24,7 +24,7 @@ export const Chats = () => {
 
   const replyContainerRef = useRef();
 
-  const { user } = useAuth();
+  const { user, chatId } = useAuth();
 
   const router = useRouter();
 
@@ -43,12 +43,6 @@ export const Chats = () => {
   const [loading, setLoading] = useState(true);
 
   const [chatDetails, setChatDetails] = useState({});
-
-  const {
-    query: { chatId = null },
-  } = router;
-
-  const [loaderRef, isVisible] = useObserver();
 
   const prevChatId = useRef();
 
@@ -323,7 +317,7 @@ export const Chats = () => {
 
       const data = { date: new Date().toISOString(), offer, type };
 
-      const res = await initiateCall(chatId, data);
+      await initiateCall(chatId, data);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     }
@@ -357,11 +351,6 @@ export const Chats = () => {
 
   return (
     <div ref={chatContainerRef} className={styles.chat_wrapper}>
-      {/* {!loading && (
-        <div ref={loaderRef}>
-          <span>Loading...</span>
-        </div>
-      )} */}
       <div className={styles.chat_header}>
         <div className={styles.user_info}>
           <div className={styles.go_back} onClick={() => router.goBack()}>
@@ -375,7 +364,11 @@ export const Chats = () => {
           />
           <div className={styles.user_name}>
             <b>{chatDetails?.name}</b>
-            <span>Online</span>
+            <span>
+              {chatDetails?.users
+                ? `${chatDetails?.users?.length} Members`
+                : "Online"}
+            </span>
           </div>
         </div>
         <div className={styles.chat_icons}>

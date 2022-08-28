@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Toast } from "components";
-import { useAuth, useRouter } from "hooks";
+import { useAuth } from "hooks";
 import { getCallHistory } from "services/Call";
+import { handleChat } from "utils";
+import moment from "moment";
 
 import styles from "./Calls.module.scss";
-import moment from "moment";
 
 const Calls = () => {
   const { user } = useAuth();
-
-  const router = useRouter();
 
   const [callHistory, setCallHistory] = useState([]);
 
@@ -32,10 +31,6 @@ const Calls = () => {
     }
   };
 
-  const handleClick = (chatId) => {
-    router.push(`/chats/${chatId}`);
-  };
-
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -50,7 +45,7 @@ const Calls = () => {
               <div
                 key={index}
                 className={styles.call_card}
-                onClick={() => handleClick(chatId)}
+                onClick={() => handleChat(chatId)}
               >
                 <div className={styles.user}>
                   <Avatar src={avatar} name={name} size={40} status={status} />

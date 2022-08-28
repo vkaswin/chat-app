@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Avatar, DropDown, Toast } from "components";
-import { classNames } from "utils";
-import { useRouter } from "hooks";
+import { classNames, handleChat } from "utils";
 import { getContacts } from "services/Contact";
 
 import styles from "./Contacts.module.scss";
@@ -36,8 +35,6 @@ const alphabets = [
 ];
 
 const Contacts = () => {
-  const router = useRouter();
-
   const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
@@ -70,10 +67,6 @@ const Contacts = () => {
       };
     });
     setContacts([...contacts, ...contactByAlphabets]);
-  };
-
-  const handleChat = (chatId) => {
-    router.push(`/chats/${chatId}`);
   };
 
   return (

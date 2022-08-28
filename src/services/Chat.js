@@ -19,3 +19,11 @@ export const getChatById = (chatId) => {
     method: "get",
   });
 };
+
+export const addToFavourite = (chatId) => {
+  return axios({ url: endpoints.chat.addFavourite, method: "put" });
+};
+
+export const removeFromFavourite = (chatId) => {
+  return axios({ url: endpoints.chat.removeFavourite, method: "delete" });
+};

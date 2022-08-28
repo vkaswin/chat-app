@@ -1,20 +1,18 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { SideBar } from "./SideBar";
 import { Chats, ScrollBar } from "components";
+import { useAuth } from "hooks";
 import { classNames, localStorage } from "utils";
 import { Outlet } from "react-router-dom";
 
 import styles from "./AppLayout.module.scss";
-import { useRouter } from "hooks";
 
 const AppLayout = () => {
+  const { chatId } = useAuth();
+
   const storage = localStorage();
 
   const [theme, setTheme] = useState();
-
-  const {
-    query: { chatId = null },
-  } = useRouter();
 
   useEffect(() => {
     Notification.permission !== "granted" && requestNotificationPermission();

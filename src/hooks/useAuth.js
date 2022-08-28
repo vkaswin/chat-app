@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { cookies } from "utils";
+import { cookies, sessionStorage } from "utils";
 import jwtDecode from "jwt-decode";
 import { socket } from "socket";
 
@@ -10,18 +10,24 @@ export const ProvideAuth = ({ children }) => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const [status, setStatus] = useState({});
+  const [chatId, setChatId] = useState();
 
   const cookie = cookies();
 
+  const session = sessionStorage();
+
   useEffect(() => {
-    // window.addEventListener("beforeunload", handleBeforeUnLoad);
     document.addEventListener("logout", logout);
-    let token = cookie.get("authToken");
+    document.addEventListener("chatId", handleChat);
+    const token = cookie.get("authToken");
+    const chatId = session.get("chatId");
     if (token !== null) {
       const user = jwtDecode(token);
-      !socket.io && socket.init(user.id, handleStatus);
+      !socket.io && socket.init(user.id);
       setUser(user);
+    }
+    if (chatId) {
+      setChatId(chatId);
     }
     setIsLoading(false);
     return () => {
@@ -30,19 +36,13 @@ export const ProvideAuth = ({ children }) => {
     };
   }, []);
 
-  const handleStatus = ({ userId, status }) => {
-    setStatus((prev) => {
-      return { ...prev, [userId]: status };
-    });
+  const setUserData = (user) => {
+    !socket.io && socket.init(user.id);
+    setUser(user);
   };
 
-  //   const handleBeforeUnLoad = (e) => {
-  //     socket.io.emit("close-browser");
-  //   };
-
-  const setUserData = (user) => {
-    !socket.io && socket.init(user.id, handleStatus);
-    setUser(user);
+  const handleChat = ({ detail: { chatId } }) => {
+    setChatId(chatId);
   };
 
   const logout = () => {
@@ -55,7 +55,7 @@ export const ProvideAuth = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, status, isLoading, setUser: setUserData, logout }}
+      value={{ user, chatId, isLoading, setUser: setUserData, logout }}
     >
       {children}
     </AuthContext.Provider>

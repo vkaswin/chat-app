@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Avatar, Toast } from "components";
-import { classNames } from "utils";
+import { classNames, handleChat } from "utils";
 import { useAuth, useRouter } from "hooks";
 import {
   getFavouriteChats,
@@ -8,16 +8,12 @@ import {
   getGroupChats,
 } from "services/Chat";
 import { socket } from "socket";
-
-import styles from "./Chats.module.scss";
 import moment from "moment";
 
+import styles from "./Chats.module.scss";
+
 const Chats = () => {
-  const router = useRouter();
-
-  const { chatId = null } = router.query;
-
-  const { user } = useAuth();
+  const { user, chatId } = useAuth();
 
   const [chatList, setChatList] = useState({
     recent: [],
@@ -59,11 +55,6 @@ const Chats = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleChat = (chatId) => {
-    if (!chatId) return;
-    router.push(`/chats/${chatId}`);
   };
 
   const handleNewMessage = (data) => {
