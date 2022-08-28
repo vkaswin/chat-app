@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[898],{94898:function(t,n,e){e.r(n),e.d(n,{loginUser:function(){return a},registerUser:function(){return s},updateUserStatus:function(){return o}});var r=e(39599),u=e(40077),a=function(t){return(0,r.axios)({url:u.endpoints.auth.login,method:"post",data:t})},s=function(t){return(0,r.axios)({url:u.endpoints.auth.register,method:"post",data:t})},o=function(t){return(0,r.axios)({method:"put",url:u.endpoints.user.staus,data:t})}}}]);
+//# sourceMappingURL=898.5596655d.chunk.js.map
