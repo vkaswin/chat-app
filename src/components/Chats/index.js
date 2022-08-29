@@ -462,11 +462,12 @@ export const Chats = () => {
   );
 };
 
-//   bx bx-microphone
-//   bx bx-video
-//   bx-exit-fullscreen
-//   bx-fullscreen
-//   bxs-phone-call
-//   bxs-phone
-//   bx-cast
-//   bx-stop
+/*  bx bx-microphone
+  bx bx-video
+  bx-exit-fullscreen
+  bx-fullscreen
+  bxs-phone-call
+  bxs-phone
+  bx-cast
+  bx-stop
+  bx-pin bxs-pin */

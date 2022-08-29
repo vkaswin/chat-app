@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Input, PasswordInput, Toast } from "components";
 import { registerUser } from "services/User";
 import { useRouter } from "hooks";
+import { cookies } from "utils";
 
 import styles from "./Register.module.scss";
 
@@ -13,6 +14,8 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
+  const cookie = cookies();
+
   const router = useRouter();
 
   const onSubmit = async (data) => {
@@ -20,6 +23,7 @@ const Register = () => {
       let {
         data: { message },
       } = await registerUser(data);
+      cookie.remove("login_session");
       Toast({ type: "success", message });
       router.push("/auth/login");
     } catch (error) {
