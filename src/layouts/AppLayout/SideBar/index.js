@@ -135,7 +135,8 @@ export const SideBar = ({ theme, toggleTheme, className }) => {
             name={user?.name}
             size={40}
             outline
-            status
+            status={true}
+            userId={user?.id}
           />
         </div>
         <DropDown selector="#avatar" placement="top">

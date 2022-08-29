@@ -38,6 +38,8 @@ const Settings = () => {
             outlineSize={5}
             outline
             upload
+            status={true}
+            userId={user?.id}
           />
         </div>
       </div>

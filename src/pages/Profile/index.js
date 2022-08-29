@@ -50,6 +50,8 @@ const Profile = () => {
             size={75}
             outlineSize={5}
             outline
+            status={true}
+            userId={user?.id}
           />
         </div>
       </div>

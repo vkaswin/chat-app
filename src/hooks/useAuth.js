@@ -30,10 +30,7 @@ export const ProvideAuth = ({ children }) => {
       setChatId(chatId);
     }
     setIsLoading(false);
-    return () => {
-      socket.close();
-      document.removeEventListener("logout", logout);
-    };
+    return () => {};
   }, []);
 
   const setUserData = (user) => {
@@ -46,6 +43,8 @@ export const ProvideAuth = ({ children }) => {
   };
 
   const logout = () => {
+    document.removeEventListener("logout", logout);
+    socket.io.close();
     cookie.remove("authToken");
     window.location.href =
       process.env.NODE_ENV === "development"

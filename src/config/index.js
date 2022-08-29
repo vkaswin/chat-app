@@ -15,9 +15,10 @@ export const sockets = {
 };
 
 export const endpoints = {
-  auth: {
+  user: {
     login: `${userURL}/login`,
     register: `${userURL}/register`,
+    status: `${userURL}/status`,
   },
   chat: {
     recentChats: `${chatUrl}/recent`,

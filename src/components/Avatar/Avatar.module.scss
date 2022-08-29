@@ -59,3 +59,15 @@
     }
   }
 }
+
+.avatar[data-status="true"] {
+  .status {
+    display: block;
+  }
+}
+
+.avatar[data-status="false"] {
+  .status {
+    display: none;
+  }
+}

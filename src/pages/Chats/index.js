@@ -93,7 +93,10 @@ const Chats = () => {
             <b>Favourites</b>
           </div>
           {favourite.map(
-            ({ _id, count, msg, date, name, avatar, status }, index) => {
+            (
+              { _id, count, msg, date, name, avatar, status, userId },
+              index
+            ) => {
               return (
                 <div
                   key={index}
@@ -108,6 +111,7 @@ const Chats = () => {
                       name={name}
                       status={status}
                       size={35}
+                      userId={userId}
                     />
                     <div className={styles.msg}>
                       <span className="truncate-1">{name}</span>
@@ -134,7 +138,10 @@ const Chats = () => {
             <b>Recent Chats</b>
           </div>
           {recent.map(
-            ({ _id, count, msg, date, name, avatar, status }, index) => {
+            (
+              { _id, count, msg, date, name, avatar, status, userId },
+              index
+            ) => {
               return (
                 <div
                   key={index}
@@ -149,6 +156,7 @@ const Chats = () => {
                       name={name}
                       status={status}
                       size={35}
+                      userId={userId}
                     />
                     <div className={styles.msg}>
                       <span className="truncate-1">{name}</span>

@@ -12,6 +12,7 @@ export const Avatar = ({
   name,
   outlineSize = 3,
   upload = false,
+  userId = null,
 }) => {
   const isUrl = useMemo(() => {
     if (!src) return false;
@@ -30,6 +31,8 @@ export const Avatar = ({
         "--size": `${size}px`,
         ...(outline && isUrl && { "--outline-size": `${outlineSize}px` }),
       }}
+      {...(userId && { "data-userid": userId })}
+      data-status={status}
     >
       {isUrl ? (
         <img src={src} />
@@ -41,7 +44,7 @@ export const Avatar = ({
           </span>
         </div>
       )}
-      {status && <div className={styles.status}></div>}
+      <div className={styles.status}></div>
       {upload && (
         <div className={styles.upload}>
           <i className="bxs-camera"></i>

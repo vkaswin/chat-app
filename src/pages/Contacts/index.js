@@ -79,7 +79,10 @@ const Contacts = () => {
                 <b>{word}</b>
               </div>
               {users.map(
-                ({ user: { name, avatar, status }, chatId, _id }, ind) => {
+                (
+                  { user: { name, avatar, status, _id: userId }, chatId, _id },
+                  ind
+                ) => {
                   return (
                     <Fragment key={ind}>
                       <div className={classNames(styles.contact_card)}>
@@ -92,6 +95,7 @@ const Contacts = () => {
                             name={name}
                             size={35}
                             status={status}
+                            userId={userId}
                           />
                           <span>{name}</span>
                         </div>

@@ -361,10 +361,11 @@ export const Chats = () => {
             name={chatDetails?.name}
             size={50}
             status={chatDetails?.status}
+            userId={chatDetails?.userId}
           />
           <div className={styles.user_name}>
             <b>{chatDetails?.name}</b>
-            <span>
+            <span data-userid={chatDetails?.userId}>
               {chatDetails?.users
                 ? `${chatDetails?.users?.length} Members`
                 : "Online"}

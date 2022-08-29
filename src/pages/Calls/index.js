@@ -38,7 +38,13 @@ const Calls = () => {
       {callHistory.length > 0 &&
         callHistory.map(
           (
-            { date, type, user: { name, status, avatar }, initiatedBy, chatId },
+            {
+              date,
+              type,
+              user: { name, status, avatar, _id },
+              initiatedBy,
+              chatId,
+            },
             index
           ) => {
             return (
@@ -48,7 +54,13 @@ const Calls = () => {
                 onClick={() => handleChat(chatId)}
               >
                 <div className={styles.user}>
-                  <Avatar src={avatar} name={name} size={40} status={status} />
+                  <Avatar
+                    src={avatar}
+                    name={name}
+                    size={40}
+                    status={status}
+                    userId={_id}
+                  />
                   <div className={styles.call_info}>
                     <span className="truncate-1">{name}</span>
                     <div>
