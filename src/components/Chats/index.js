@@ -30,7 +30,7 @@ export const Chats = () => {
 
   const peerConnection = useRef();
 
-  const [chats, setChats] = useState([]);
+  const [chats, setChats] = useState({});
 
   const [showInfo, setShowInfo] = useState(false);
 
@@ -89,17 +89,6 @@ export const Chats = () => {
     scrollToBottom();
   }, [chats]);
 
-  //   Reply Msg UI
-  useEffect(() => {
-    if (!replyId) return;
-    const { clientHeight } = replyContainerRef.current;
-    chatContainerRef.current.setAttribute(
-      "style",
-      `--chat-pb :${clientHeight}px`
-    );
-    scrollToBottom();
-  }, [replyId]);
-
   //   Profile
   const toggleInfo = () => {
     setShowInfo(!showInfo);
@@ -126,12 +115,38 @@ export const Chats = () => {
       let {
         data: { data },
       } = await getMessagesByChatId(chatId, params);
-      prependMessageInChat(data);
+      groupMessagesByDate(data);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     } finally {
       setLoading(false);
     }
+  };
+
+  const groupMessagesByDate = (data) => {
+    const chatsByDate = data.reduce((initial, msg) => {
+      const key = getDate(msg.date);
+      return initial.hasOwnProperty(key)
+        ? {
+            ...initial,
+            [key]: [...initial[key], msg],
+          }
+        : { ...initial, [key]: [msg] };
+    }, {});
+
+    const mergeObject = (obj) => {
+      return Object.entries(obj).reduce((initial, [date, msg]) => {
+        const key = getDate(date);
+        return initial.hasOwnProperty(key)
+          ? {
+              ...initial,
+              [key]: [...initial[key], ...msg],
+            }
+          : { ...initial, [key]: msg };
+      }, chats);
+    };
+
+    setChats(mergeObject(chatsByDate));
   };
 
   const scrollToBottom = () => {
@@ -152,32 +167,31 @@ export const Chats = () => {
       let {
         data: { data },
       } = await createMessage(chatId, body);
-      socket.io.emit("send-message", data, chatId);
-      appendMessageInChats(data);
+      addMessageInChat(data);
       replyId && clearReplyMsg();
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     }
   };
 
-  const prependMessageInChat = (msg) => {
-    if (Array.isArray(msg)) {
-      setChats((prev) => [...msg, ...prev]);
-    } else {
-      setChats((prev) => [msg, ...prev]);
-    }
+  const addMessageInChat = (data) => {
+    const key = getDate(data.date);
+
+    setChats((prev) => {
+      return prev.hasOwnProperty(key)
+        ? { ...prev, [key]: [...prev[key], data] }
+        : setChats({ ...prev, [key]: [data] });
+    });
   };
 
-  const appendMessageInChats = (msg) => {
-    if (Array.isArray(msg)) {
-      setChats((prev) => [...prev, ...msg]);
-    } else {
-      setChats((prev) => [...prev, msg]);
-    }
-  };
+  const onDelete = (date, id) => {
+    const key = getDate(date);
 
-  const onDelete = (id) => {
-    setChats(chats.filter((_, index) => id !== index));
+    if (!chats.hasOwnProperty(key)) return;
+
+    const data = chats[key].filter(({ _id }) => id !== _id);
+
+    setChats({ ...chats, [key]: data });
   };
 
   //   Copy Msg
@@ -186,8 +200,9 @@ export const Chats = () => {
   };
 
   //   Reply Msg
-  const onReply = (id) => {
-    setReplyId(id);
+  const onReply = (date, id) => {
+    const key = getDate(date);
+    setReplyId({ key, id });
   };
 
   const clearReplyMsg = () => {
@@ -195,7 +210,7 @@ export const Chats = () => {
   };
 
   const focusMsgById = (id) => {
-    const element = document.querySelector(`[data-msgid='${id}']`);
+    const element = document.querySelector(`[msgid='${id}']`);
     if (!element) return;
     element.scrollIntoView({
       behavior: "smooth",
@@ -204,7 +219,8 @@ export const Chats = () => {
   };
 
   const replyMsg = useMemo(() => {
-    return chats.find(({ _id }) => replyId === _id);
+    return null;
+    // return chats.find(({ _id }) => replyId === _id);
   }, [replyId]);
 
   //   Video Call
@@ -281,9 +297,11 @@ export const Chats = () => {
   };
 
   const handleReceiveMessage = (data) => {
+    if (data.sender === user?.id) return;
+
     showNotification(data.msg);
     playMessageRingTone();
-    appendMessageInChats(data);
+    addMessageInChat(data);
   };
 
   const handleCall = async (type) => {
@@ -349,6 +367,10 @@ export const Chats = () => {
     scrollToBottom();
   };
 
+  const getDate = (date) => {
+    return date.split("T")[0];
+  };
+
   return (
     <div ref={chatContainerRef} className={styles.chat_wrapper}>
       <div className={styles.chat_header}>
@@ -365,7 +387,7 @@ export const Chats = () => {
           />
           <div className={styles.user_name}>
             <b>{chatDetails?.name}</b>
-            <span data-userid={chatDetails?.userId}>
+            <span userid={chatDetails?.userId}>
               {chatDetails?.users
                 ? `${chatDetails?.users?.length} Members`
                 : "Online"}

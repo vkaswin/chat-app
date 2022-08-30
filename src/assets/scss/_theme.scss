@@ -1,4 +1,4 @@
-html[data-theme] {
+html[theme] {
   :root {
     transition: background-color, color;
     transition-duration: 300ms;
@@ -6,13 +6,13 @@ html[data-theme] {
   }
 }
 
-html[data-theme="light"] {
+html[theme="light"] {
   :root {
     --primary-clr: "green";
   }
 }
 
-html[data-theme="dark"] {
+html[theme="dark"] {
   :root {
     --primary-clr: "green";
   }

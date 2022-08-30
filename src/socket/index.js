@@ -10,8 +10,8 @@ export const socket = {
   },
   init(userId) {
     document.addEventListener("visibilitychange", this.handleVisibilityChange);
-    document.addEventListener("online", this.handleOnline);
-    document.addEventListener("offline", this.handleOffline);
+    window.addEventListener("online", this.handleOnline);
+    window.addEventListener("offline", this.handleOffline);
 
     const socketIO = io(baseURL);
 
@@ -31,18 +31,24 @@ export const socket = {
   },
   handleOnline() {
     console.log("online");
+    updateUserStatus({
+      status: true,
+    });
   },
   handleOffline() {
     console.log("offline");
+    updateUserStatus({
+      status: false,
+    });
   },
   handleUserStatus({ userId, status }) {
     if (userId === this.userId) return;
-    const elements = document.querySelectorAll(`[data-userid='${userId}']`);
+    const elements = document.querySelectorAll(`[userid='${userId}']`);
     elements.forEach((ele) => {
       if (ele.tagName === "SPAN") {
         ele.textContent = status ? "Online" : "Offline";
       } else {
-        ele.setAttribute("data-status", status);
+        ele.setAttribute("status", status);
       }
     });
   },

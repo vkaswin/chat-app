@@ -57,12 +57,8 @@ const ChangePassword = () => {
           message={{ required: "Please enter confirm password" }}
         />
         <div className={styles.btn}>
-          <button onClick={handleSubmit(onSubmit)} data-ripple>
-            Save
-          </button>
-          <button onClick={onCancel} data-ripple>
-            Cancel
-          </button>
+          <button onClick={handleSubmit(onSubmit)}>Save</button>
+          <button onClick={onCancel}>Cancel</button>
         </div>
       </div>
     </div>

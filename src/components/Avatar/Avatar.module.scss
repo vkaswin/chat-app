@@ -60,13 +60,13 @@
   }
 }
 
-.avatar[data-status="true"] {
+.avatar[status="true"] {
   .status {
     display: block;
   }
 }
 
-.avatar[data-status="false"] {
+.avatar[status="false"] {
   .status {
     display: none;
   }

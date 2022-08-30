@@ -59,8 +59,8 @@ export const ToastCard = ({
       className="toast"
       onMouseEnter={pauseOnHover && handleMouseEnter}
       onMouseLeave={pauseOnHover && handleMouseLeave}
-      data-theme={theme}
-      data-type={type}
+      theme={theme}
+      type={type}
     >
       <div className="icon">
         <i className={toastIcon}></i>

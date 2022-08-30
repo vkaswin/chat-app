@@ -1,120 +1,144 @@
-.conversation_container {
-  padding: 20px 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.section {
   min-height: calc(100% - 140px);
-  .chat_wrapper {
+
+  .container {
+    padding: 20px 15px;
     display: flex;
-    max-width: 75%;
-    gap: 5px;
-    &:is(.end) {
-      flex-direction: row-reverse;
-      margin-left: auto;
+    flex-direction: column;
+    gap: 20px;
+    .chat_wrapper {
+      display: flex;
+      max-width: 75%;
+      gap: 5px;
+      &:is(.end) {
+        flex-direction: row-reverse;
+        margin-left: auto;
+        .chat_card {
+          background-color: #c0ddc9;
+          .reply_card {
+            background-color: #fff;
+          }
+          .msg_time {
+            .tick[seen] {
+              display: block;
+            }
+            .tick[seen="true"] {
+              color: #4eac6e;
+            }
+            .tick[false="false"] {
+              color: #495057;
+            }
+          }
+        }
+      }
       .chat_card {
-        background-color: #c0ddc9;
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        padding: 10px 10px 5px 10px;
+        background-color: #fff;
+        position: relative;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(15, 34, 58, 0.12);
+        color: #495057;
+        font-size: 14px;
+        overflow: hidden;
+        div {
+          &:first-child {
+            display: flex;
+            justify-content: flex-start;
+          }
+          &:last-child {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 5px;
+          }
+        }
         .reply_card {
-          background-color: #fff;
+          position: relative;
+          background-color: #dfeee5;
+          padding: 7px 10px;
+          border-radius: 4px;
+          margin-bottom: 5px;
+          cursor: pointer;
+          &::before {
+            content: "";
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            inset: 0px auto auto 0px;
+            background-color: #4eac6e;
+            border-radius: 4px 0px 0px 4px;
+          }
+          span {
+            color: #495057;
+            font-size: 14px;
+          }
         }
         .msg_time {
-          .tick[data-seen] {
-            display: block;
-          }
-          .tick[data-seen="true"] {
-            color: #4eac6e;
-          }
-          .tick[data-false="false"] {
-            color: #495057;
-          }
-        }
-      }
-    }
-    .chat_card {
-      display: flex;
-      flex-direction: column;
-      width: fit-content;
-      padding: 10px 10px 5px 10px;
-      background-color: #fff;
-      position: relative;
-      border-radius: 4px;
-      box-shadow: 0 2px 4px rgba(15, 34, 58, 0.12);
-      color: #495057;
-      font-size: 14px;
-      overflow: hidden;
-      div {
-        &:first-child {
           display: flex;
-          justify-content: flex-start;
-        }
-        &:last-child {
-          display: flex;
-          justify-content: flex-end;
           align-items: center;
+          justify-content: flex-start;
           gap: 5px;
+          span {
+            color: #495057;
+            font-size: 13px;
+          }
+          .tick {
+            display: none;
+            font-size: 18px;
+          }
+          .clock {
+            font-size: 14px;
+          }
         }
       }
-      .reply_card {
-        position: relative;
-        background-color: #dfeee5;
-        padding: 7px 10px;
-        border-radius: 4px;
-        margin-bottom: 5px;
+      .options {
+        color: #495057;
+        font-size: 18px;
         cursor: pointer;
-        &::before {
-          content: "";
-          position: absolute;
-          width: 4px;
-          height: 100%;
-          inset: 0px auto auto 0px;
-          background-color: #4eac6e;
-          border-radius: 4px 0px 0px 4px;
-        }
-        span {
-          color: #495057;
-          font-size: 14px;
-        }
-      }
-      .msg_time {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 5px;
-        span {
-          color: #495057;
-          font-size: 13px;
-        }
-        .tick {
-          display: none;
-          font-size: 18px;
-        }
-        .clock {
-          font-size: 14px;
-        }
       }
     }
-    .options {
-      color: #495057;
-      font-size: 18px;
-      cursor: pointer;
+  }
+  .date {
+    position: sticky;
+    top: 75px;
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+    margin: 0px auto;
+    background-color: #fff6e0;
+    border-radius: 6px;
+    padding: 5px 15px;
+    span {
+      display: block;
+      color: #cc8f00;
+      font-size: 13px;
+    }
+    &:first-child {
+      margin: 20px auto 0px auto;
     }
   }
 }
 
 @media only screen and (max-width: 768px) {
-  .conversation_container {
-    .chat_wrapper {
-      max-width: 100%;
-      cursor: pointer;
-      .chat_card {
-        .msg_time {
-          span {
-            font-size: 12px;
-          }
-          .tick {
-            font-size: 18px;
-          }
-          .clock {
-            font-size: 12px;
+  .section {
+    .container {
+      .chat_wrapper {
+        max-width: 100%;
+        cursor: pointer;
+        .chat_card {
+          .msg_time {
+            span {
+              font-size: 12px;
+            }
+            .tick {
+              font-size: 18px;
+            }
+            .clock {
+              font-size: 12px;
+            }
           }
         }
       }

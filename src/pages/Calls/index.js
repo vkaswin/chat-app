@@ -65,12 +65,9 @@ const Calls = () => {
                     <span className="truncate-1">{name}</span>
                     <div>
                       {initiatedBy === user?.id ? (
-                        <i className="bx-up-arrow-alt" data-type="outgoing"></i>
+                        <i className="bx-up-arrow-alt" type="outgoing"></i>
                       ) : (
-                        <i
-                          className="bx-down-arrow-alt"
-                          data-type="incoming"
-                        ></i>
+                        <i className="bx-down-arrow-alt" type="incoming"></i>
                       )}
                       <span className="truncate-1">
                         {moment(date).format("D ddd YYYY, hh:mm a")}

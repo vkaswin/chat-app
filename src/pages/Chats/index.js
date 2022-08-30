@@ -58,7 +58,6 @@ const Chats = () => {
   };
 
   const handleNewMessage = (data) => {
-    console.log(data);
     setChatList((prev) => {
       const key = data.type;
       const chats = [...prev[key]];

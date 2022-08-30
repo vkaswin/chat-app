@@ -39,9 +39,7 @@ export const Emoji = ({ toggle, isOpen, selector, onChange }) => {
   const emojiRef = useRef();
 
   const handleFocus = (title) => () => {
-    const { offsetTop } = document.querySelector(
-      `[data-emoji-title="${title}"]`
-    );
+    const { offsetTop } = document.querySelector(`[emoji-title="${title}"]`);
     emojiRef.current.scrollTo(0, offsetTop - 95);
   };
 
@@ -96,7 +94,7 @@ export const Emoji = ({ toggle, isOpen, selector, onChange }) => {
           {Object.entries(emojis).map(([title, list], index) => {
             return (
               <div key={index}>
-                <div className={styles.emoji_title} data-emoji-title={title}>
+                <div className={styles.emoji_title} emoji-title={title}>
                   <b>{title}</b>
                 </div>
                 <div className={styles.emoji_list}>

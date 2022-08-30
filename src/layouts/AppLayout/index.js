@@ -18,7 +18,7 @@ const AppLayout = () => {
     Notification.permission !== "granted" && requestNotificationPermission();
     let val = storage.get("theme") ?? "light";
     let root = document.querySelector(":root");
-    root.setAttribute("data-theme", val);
+    root.setAttribute("theme", val);
     setTheme(val);
   }, []);
 
@@ -32,7 +32,7 @@ const AppLayout = () => {
 
   const toggleTheme = (value) => () => {
     let root = document.querySelector(":root");
-    root.setAttribute("data-theme", value);
+    root.setAttribute("theme", value);
     storage.set({ key: "theme", value });
     setTheme(value);
   };

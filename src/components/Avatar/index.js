@@ -31,8 +31,8 @@ export const Avatar = ({
         "--size": `${size}px`,
         ...(outline && isUrl && { "--outline-size": `${outlineSize}px` }),
       }}
-      {...(userId && { "data-userid": userId })}
-      data-status={status}
+      {...(userId && { userid: userId })}
+      status={status.toString()}
     >
       {isUrl ? (
         <img src={src} />

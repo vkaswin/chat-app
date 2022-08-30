@@ -61,23 +61,23 @@
   }
 }
 
-.toast[data-theme="coloured"][data-type="success"] {
+.toast[theme="coloured"][type="success"] {
   background-color: var(--toast-success);
 }
 
-.toast[data-theme="coloured"][data-type="error"] {
+.toast[theme="coloured"][type="error"] {
   background-color: var(--toast-error);
 }
 
-.toast[data-theme="coloured"][data-type="warning"] {
+.toast[theme="coloured"][type="warning"] {
   background-color: var(--toast-warning);
 }
 
-.toast[data-theme="coloured"][data-type="info"] {
+.toast[theme="coloured"][type="info"] {
   background-color: var(--toast-info);
 }
 
-.toast[data-theme="light"] {
+.toast[theme="light"] {
   background-color: var(--toast-theme-light);
   span {
     color: var(--toast-text-black);
@@ -87,7 +87,7 @@
   }
 }
 
-.toast[data-theme="dark"] {
+.toast[theme="dark"] {
   background-color: var(--toast-theme-dark);
   span {
     color: var(--toast-text-white);
@@ -97,7 +97,7 @@
   }
 }
 
-.toast[data-theme="coloured"] {
+.toast[theme="coloured"] {
   span {
     color: var(--toast-text-white);
   }
@@ -106,7 +106,7 @@
   }
 }
 
-.toast[data-theme="coloured"][data-type] {
+.toast[theme="coloured"][type] {
   .icon {
     i {
       color: var(--toast-text-white);
@@ -114,7 +114,7 @@
   }
 }
 
-.toast[data-type="success"] {
+.toast[type="success"] {
   .icon {
     i {
       color: var(--toast-success);
@@ -125,7 +125,7 @@
   }
 }
 
-.toast[data-type="error"] {
+.toast[type="error"] {
   .icon {
     i {
       color: var(--toast-error);
@@ -136,7 +136,7 @@
   }
 }
 
-.toast[data-type="warning"] {
+.toast[type="warning"] {
   .icon {
     i {
       color: var(--toast-warning);
@@ -147,7 +147,7 @@
   }
 }
 
-.toast[data-type="info"] {
+.toast[type="info"] {
   .icon {
     i {
       color: var(--toast-info);
