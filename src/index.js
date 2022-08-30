@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import ReactDOM from "react-dom/client";
-import { ProvideAuth } from "hooks/useAuth";
 import { Router } from "./router";
 import { ToastContainer } from "components";
 import reportWebVitals from "./reportWebVitals";
@@ -12,10 +11,8 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 const App = () => {
   return (
     <Fragment>
-      <ProvideAuth>
-        <Router />
-        <ToastContainer />
-      </ProvideAuth>
+      <Router />
+      <ToastContainer />
     </Fragment>
   );
 };

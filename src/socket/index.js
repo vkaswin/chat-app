@@ -21,25 +21,17 @@ export const socket = {
       this.io.emit("join-room", userId);
       this.io.on("user-status", this.handleUserStatus);
     });
-
-    updateUserStatus({ status: true });
   },
   handleVisibilityChange() {
-    updateUserStatus({
-      status: document.visibilityState === "visible",
-    });
+    updateUserStatus(document.visibilityState === "visible");
   },
   handleOnline() {
     console.log("online");
-    updateUserStatus({
-      status: true,
-    });
+    updateUserStatus(true);
   },
   handleOffline() {
     console.log("offline");
-    updateUserStatus({
-      status: false,
-    });
+    updateUserStatus(false);
   },
   handleUserStatus({ userId, status }) {
     if (userId === this.userId) return;

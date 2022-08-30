@@ -2,6 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { cookies, sessionStorage } from "utils";
 import jwtDecode from "jwt-decode";
 import { socket } from "socket";
+import { updateUserStatus } from "services/User";
+import { useRouter } from "./useRouter";
 
 const AuthContext = createContext();
 
@@ -16,6 +18,8 @@ export const ProvideAuth = ({ children }) => {
 
   const session = sessionStorage();
 
+  const router = useRouter();
+
   useEffect(() => {
     document.addEventListener("logout", logout);
     document.addEventListener("chatId", handleChat);
@@ -26,11 +30,8 @@ export const ProvideAuth = ({ children }) => {
       !socket.io && socket.init(user.id);
       setUser(user);
     }
-    if (chatId) {
-      setChatId(chatId);
-    }
+    chatId && setChatId(chatId);
     setIsLoading(false);
-    return () => {};
   }, []);
 
   const setUserData = (user) => {
@@ -43,13 +44,12 @@ export const ProvideAuth = ({ children }) => {
   };
 
   const logout = () => {
+    const authToken = cookie.get("authToken");
+    authToken && updateUserStatus(false, authToken);
+    cookie.remove("authToken");
     document.removeEventListener("logout", logout);
     socket.io.close();
-    cookie.remove("authToken");
-    window.location.href =
-      process.env.NODE_ENV === "development"
-        ? "/auth/login"
-        : "/react-chat-app/#/auth/login";
+    router.push("/auth/login");
   };
 
   return (

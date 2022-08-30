@@ -5,7 +5,7 @@ import { cookies } from "utils";
 import { useAuth, useRouter } from "hooks";
 import { NavLink } from "react-router-dom";
 import { Toast } from "components";
-import { loginUser } from "services/User";
+import { loginUser, updateUserStatus } from "services/User";
 import jwtDecode from "jwt-decode";
 
 import styles from "./Login.module.scss";
@@ -27,12 +27,20 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
+    document.addEventListener("keyup", handleKeyDown);
     let session = cookie.get("login_session") ?? null;
     if (!session) return;
     const { email, password } = JSON.parse(session);
     reset({ email, password });
     setRememberMe(true);
+    return () => document.removeEventListener("keyup", handleKeyDown);
   }, []);
+
+  const handleKeyDown = ({ keyCode }) => {
+    if (keyCode !== 13) return;
+
+    handleSubmit(onSubmit)();
+  };
 
   const onSubmit = async (data) => {
     const { email, password } = data;
@@ -48,6 +56,7 @@ const Login = () => {
         });
       }
       cookie.set({ name: "authToken", value: token, days: 7 });
+      updateUserStatus(true);
       setUser(jwtDecode(token));
       router.push("/chats");
     } catch (error) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Input, PasswordInput, Toast } from "components";
 import { registerUser } from "services/User";
@@ -17,6 +17,17 @@ const Register = () => {
   const cookie = cookies();
 
   const router = useRouter();
+
+  useEffect(() => {
+    document.addEventListener("keyup", handleKeyDown);
+    return () => document.removeEventListener("keyup", handleKeyDown);
+  }, []);
+
+  const handleKeyDown = ({ keyCode }) => {
+    if (keyCode !== 13) return;
+
+    handleSubmit(onSubmit)();
+  };
 
   const onSubmit = async (data) => {
     try {
