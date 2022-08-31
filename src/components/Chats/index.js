@@ -3,11 +3,10 @@ import { DropDown, Avatar, OffCanvas, Toast, ScrollBar } from "components";
 import { TextArea } from "./TextArea";
 import { Conversation } from "./Conversation";
 import { VideoPopup } from "./VideoPopup";
-import { useAuth, useRouter } from "hooks";
+import { useAuth, useRouter, useSocket } from "hooks";
 import { createMessage, getMessagesByChatId } from "services/Message";
 import { getChatById } from "services/Chat";
 import { initiateCall } from "services/Call";
-import { socket } from "socket";
 import { CSSTransition } from "react-transition-group";
 
 import messageRingTone from "assets/audio/fade-in-tone.mp3";
@@ -26,6 +25,8 @@ export const Chats = () => {
 
   const { user, chatId } = useAuth();
 
+  const { socket, connected } = useSocket();
+
   const router = useRouter();
 
   const peerConnection = useRef();
@@ -40,7 +41,7 @@ export const Chats = () => {
 
   const [page, setPage] = useState(1);
 
-  const [loading, setLoading] = useState(true);
+  const [totalPages, setTotalPages] = useState(0);
 
   const [chatDetails, setChatDetails] = useState({});
 
@@ -50,32 +51,32 @@ export const Chats = () => {
 
   //   Socket
   useEffect(() => {
-    if (chats.length !== 0) {
-      setChats([]);
-    }
+    if (!socket || !connected || !chatId) return;
 
     if (prevChatId.current && prevChatId.current !== chatId) {
-      socket.io.connect();
       leaveRoom();
     }
 
     prevChatId.current = chatId;
 
-    getChatDetails();
+    socket.emit("join-chat", chatId);
 
-    if (!socket.io || !chatId) return;
+    socket.on("receive-message", handleReceiveMessage);
 
-    socket.io.emit("join-room", chatId);
+    socket.on("receive-offer", handleOffer);
 
-    socket.io.on("receive-message", handleReceiveMessage);
-
-    socket.io.on("receive-offer", handleOffer);
-
-    socket.io.on("receive-answer", handleAnswer);
+    socket.on("receive-answer", handleAnswer);
 
     return () => {
       leaveRoom();
     };
+  }, [chatId, connected, socket]);
+
+  useEffect(() => {
+    if (chats.length !== 0) {
+      setChats({});
+    }
+    getChatDetails();
   }, [chatId]);
 
   //   Fetch Messages
@@ -86,7 +87,7 @@ export const Chats = () => {
 
   //   Scroll To Chat End
   useEffect(() => {
-    scrollToBottom();
+    // scrollToBottom();
   }, [chats]);
 
   //   Profile
@@ -113,18 +114,21 @@ export const Chats = () => {
         page,
       };
       let {
-        data: { data },
+        data: {
+          data: {
+            list,
+            pageMeta: { total },
+          },
+        },
       } = await getMessagesByChatId(chatId, params);
-      groupMessagesByDate(data);
+      groupMessagesByDate(list, total);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
-    } finally {
-      setLoading(false);
     }
   };
 
-  const groupMessagesByDate = (data) => {
-    const chatsByDate = data.reduce((initial, msg) => {
+  const groupMessagesByDate = (list, total) => {
+    const chatsByDate = list.reduce((initial, msg) => {
       const key = getDate(msg.date);
       return initial.hasOwnProperty(key)
         ? {
@@ -135,7 +139,9 @@ export const Chats = () => {
     }, {});
 
     const mergeObject = (obj) => {
-      return Object.entries(obj).reduce((initial, [date, msg]) => {
+      if (Object.keys(chats).length === 0) return obj;
+
+      const final = Object.entries(obj).reduce((initial, [date, msg]) => {
         const key = getDate(date);
         return initial.hasOwnProperty(key)
           ? {
@@ -144,9 +150,23 @@ export const Chats = () => {
             }
           : { ...initial, [key]: msg };
       }, chats);
+
+      const sortByDate = Object.keys(final).sort((a, b) => {
+        return new Date(a) - new Date(b);
+      });
+
+      return sortByDate.reduce((initial, date) => {
+        return { ...initial, [date]: final[date] };
+      }, {});
     };
 
     setChats(mergeObject(chatsByDate));
+    setTotalPages(total);
+  };
+
+  const handleScroll = ({ target: { scrollTop } }) => {
+    if (scrollTop !== 0 || page >= totalPages) return;
+    setPage((prev) => prev + 1);
   };
 
   const scrollToBottom = () => {
@@ -180,7 +200,7 @@ export const Chats = () => {
     setChats((prev) => {
       return prev.hasOwnProperty(key)
         ? { ...prev, [key]: [...prev[key], data] }
-        : setChats({ ...prev, [key]: [data] });
+        : { ...prev, [key]: [data] };
     });
   };
 
@@ -244,13 +264,13 @@ export const Chats = () => {
           offer: localDescription,
           iceCandidate,
         };
-        socket.io.emit("send-offer", data, chatId);
+        socket.emit("send-offer", data, chatId);
       } else if (localDescription.type === "answer") {
         let data = {
           answer: localDescription,
           iceCandidate,
         };
-        socket.io.emit("send-answer", data, chatId);
+        socket.emit("send-answer", data, chatId);
       }
     }
   };
@@ -358,7 +378,7 @@ export const Chats = () => {
   };
 
   const leaveRoom = () => {
-    socket.io.emit("leave-room", prevChatId);
+    socket.emit("leave-chat", prevChatId);
   };
 
   const handleFocus = () => {
@@ -372,7 +392,11 @@ export const Chats = () => {
   };
 
   return (
-    <div ref={chatContainerRef} className={styles.chat_wrapper}>
+    <div
+      ref={chatContainerRef}
+      className={styles.chat_wrapper}
+      onScroll={handleScroll}
+    >
       <div className={styles.chat_header}>
         <div className={styles.user_info}>
           <div className={styles.go_back} onClick={() => router.goBack()}>
@@ -390,7 +414,9 @@ export const Chats = () => {
             <span userid={chatDetails?.userId}>
               {chatDetails?.users
                 ? `${chatDetails?.users?.length} Members`
-                : "Online"}
+                : chatDetails?.status
+                ? "Online"
+                : "Offline"}
             </span>
           </div>
         </div>
@@ -438,21 +464,16 @@ export const Chats = () => {
           </DropDown>
         </div>
       </div>
-      {loading ? (
-        <div className={styles.chat_loader}>
-          <span></span>
-        </div>
-      ) : (
-        <Conversation
-          chats={chats}
-          container={chatContainerRef}
-          onDelete={onDelete}
-          onCopy={onCopy}
-          onReply={onReply}
-          userId={user.id}
-          focusMsgById={focusMsgById}
-        />
-      )}
+      <div>Loading...</div>
+      <Conversation
+        chats={chats}
+        container={chatContainerRef}
+        onDelete={onDelete}
+        onCopy={onCopy}
+        onReply={onReply}
+        userId={user.id}
+        focusMsgById={focusMsgById}
+      />
       <TextArea onSend={onSend} onFocus={handleFocus} />
       <CSSTransition
         in={Boolean(replyId)}
@@ -480,7 +501,6 @@ export const Chats = () => {
         <div>Hello</div>
       </OffCanvas>
       <VideoPopup isOpen={showVideo} />
-      <ScrollBar />
     </div>
   );
 };

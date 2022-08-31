@@ -8,6 +8,19 @@ export const debounce = (fn, delay) => {
   };
 };
 
+export const throttle = (cb, delay = 250) => {
+  let shouldWait = false;
+
+  return (...args) => {
+    if (shouldWait) return;
+    cb(...args);
+    shouldWait = true;
+    setTimeout(() => {
+      shouldWait = false;
+    }, delay);
+  };
+};
+
 export const parseQuery = (query = "") => {
   if (query.length == 0) return {};
 

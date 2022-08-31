@@ -1,19 +1,20 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Avatar, Toast } from "components";
 import { classNames, handleChat } from "utils";
-import { useAuth, useRouter } from "hooks";
+import { useAuth, useSocket } from "hooks";
 import {
   getFavouriteChats,
   getRecentChats,
   getGroupChats,
 } from "services/Chat";
-import { socket } from "socket";
 import moment from "moment";
 
 import styles from "./Chats.module.scss";
 
 const Chats = () => {
-  const { user, chatId } = useAuth();
+  const { chatId } = useAuth();
+
+  const { socket, connected } = useSocket();
 
   const [chatList, setChatList] = useState({
     recent: [],
@@ -26,12 +27,9 @@ const Chats = () => {
   const { favourite, recent, group } = chatList;
 
   useEffect(() => {
-    if (!socket.io || !user) return;
-
-    socket.io.emit("join-room", user.id);
-
-    socket.io.on("new-message", handleNewMessage);
-  }, []);
+    if (!socket || !connected) return;
+    socket.on("new-message", handleNewMessage);
+  }, [connected, socket]);
 
   useEffect(() => {
     getChats();
@@ -58,12 +56,15 @@ const Chats = () => {
   };
 
   const handleNewMessage = (data) => {
+    const index = chatList[data.type].findIndex(({ _id }) => {
+      return _id === chatId;
+    });
+
+    if (index === -1) return;
+
     setChatList((prev) => {
       const key = data.type;
       const chats = [...prev[key]];
-      const index = chats.findIndex(({ _id }) => {
-        return _id === data.chatId;
-      });
       const [element] = chats.splice(index, 1);
       element.count += 1;
       return {
@@ -114,7 +115,7 @@ const Chats = () => {
                     />
                     <div className={styles.msg}>
                       <span className="truncate-1">{name}</span>
-                      <span className="truncate-2">{msg}</span>
+                      <span className="truncate-1">{msg}</span>
                     </div>
                   </div>
                   <div
@@ -159,7 +160,7 @@ const Chats = () => {
                     />
                     <div className={styles.msg}>
                       <span className="truncate-1">{name}</span>
-                      <span className="truncate-2">{msg}</span>
+                      <span className="truncate-1">{msg}</span>
                     </div>
                   </div>
                   <div
@@ -197,7 +198,7 @@ const Chats = () => {
                   <Avatar src={avatar} name={name} size={35} />
                   <div className={styles.msg}>
                     <span className="truncate-1">{name}</span>
-                    <span className="truncate-2">{msg}</span>
+                    <span className="truncate-1">{msg}</span>
                   </div>
                 </div>
                 <div

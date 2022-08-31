@@ -1,15 +1,26 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { fileUpload } from "services/Others";
 import { Emoji } from "./Emoji";
+import { useForm } from "react-hook-form";
+import { throttle } from "utils";
 
 import styles from "./TextArea.module.scss";
 
 export const TextArea = ({ onSend, onFocus }) => {
+  const { handleSubmit, reset, register, watch } = useForm();
+
+  const message = watch("message");
+
   const [showEmoji, setShowEmoji] = useState(false);
 
   const [text, setText] = useState("");
 
   const [rec, setRec] = useState();
+
+  useEffect(() => {
+    if (!message || message.length === 0) return;
+    // console.log(message);
+  }, [message]);
 
   useEffect(() => {
     const SpeechRecognition =
@@ -44,8 +55,8 @@ export const TextArea = ({ onSend, onFocus }) => {
     setRec(recognition);
   }, []);
 
-  const handleChange = ({ target: { value } }) => {
-    setText(value);
+  const handleTyping = () => {
+    console.log("typing");
   };
 
   const handleEmoji = (emoji) => {
@@ -56,9 +67,9 @@ export const TextArea = ({ onSend, onFocus }) => {
     setShowEmoji(!showEmoji);
   };
 
-  const handleSend = async () => {
-    await onSend(text);
-    setText("");
+  const onSubmit = async () => {
+    await onSend(message);
+    reset({ message: "" });
   };
 
   const onPointerDown = () => {
@@ -86,9 +97,8 @@ export const TextArea = ({ onSend, onFocus }) => {
         <div className={styles.input_field}>
           <textarea
             name="chat-input"
-            value={text}
-            onChange={handleChange}
             onFocus={onFocus}
+            {...register("message", { required: true })}
           />
           <label htmlFor="chat-file">
             <i className="bx-paperclip" id="attach"></i>
@@ -101,7 +111,7 @@ export const TextArea = ({ onSend, onFocus }) => {
             hidden
           />
         </div>
-        <button onClick={handleSend}>
+        <button onClick={handleSubmit(onSubmit)}>
           <i className="bxs-send"></i>
         </button>
         <i
