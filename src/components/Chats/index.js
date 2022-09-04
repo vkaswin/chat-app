@@ -41,11 +41,13 @@ export const Chats = () => {
 
   const [page, setPage] = useState(1);
 
-  const [totalPages, setTotalPages] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   const [chatDetails, setChatDetails] = useState({});
 
   const prevChatId = useRef();
+
+  const msgId = useRef();
 
   let iceCandidate;
 
@@ -85,9 +87,9 @@ export const Chats = () => {
     getMessages();
   }, [page, chatId]);
 
-  //   Scroll To Chat End
   useEffect(() => {
-    // scrollToBottom();
+    if (!msgId.current) return;
+    focusMsgById(msgId.current);
   }, [chats]);
 
   //   Profile
@@ -128,6 +130,8 @@ export const Chats = () => {
   };
 
   const groupMessagesByDate = (list, total) => {
+    msgId.current = list[list.length - 1]._id;
+
     const chatsByDate = list.reduce((initial, msg) => {
       const key = getDate(msg.date);
       return initial.hasOwnProperty(key)
@@ -146,7 +150,9 @@ export const Chats = () => {
         return initial.hasOwnProperty(key)
           ? {
               ...initial,
-              [key]: [...initial[key], ...msg],
+              [key]: [...initial[key], ...msg].sort((a, b) => {
+                return new Date(a.date) - new Date(b.date);
+              }),
             }
           : { ...initial, [key]: msg };
       }, chats);
@@ -196,6 +202,7 @@ export const Chats = () => {
 
   const addMessageInChat = (data) => {
     const key = getDate(data.date);
+    msgId.current = data[data.length - 1]._id;
 
     setChats((prev) => {
       return prev.hasOwnProperty(key)
@@ -464,7 +471,7 @@ export const Chats = () => {
           </DropDown>
         </div>
       </div>
-      <div>Loading...</div>
+      {page < totalPages && <div>Loading...</div>}
       <Conversation
         chats={chats}
         container={chatContainerRef}

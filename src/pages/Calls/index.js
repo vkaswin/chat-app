@@ -38,13 +38,7 @@ const Calls = () => {
       {callHistory.length > 0 &&
         callHistory.map(
           (
-            {
-              date,
-              type,
-              user: { name, status, avatar, _id },
-              initiatedBy,
-              chatId,
-            },
+            { date, type, name, status, avatar, userId, initiatedBy, chatId },
             index
           ) => {
             return (
@@ -59,7 +53,7 @@ const Calls = () => {
                     name={name}
                     size={40}
                     status={status}
-                    userId={_id}
+                    userId={userId}
                   />
                   <div className={styles.call_info}>
                     <span className="truncate-1">{name}</span>

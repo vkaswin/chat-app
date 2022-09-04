@@ -60,16 +60,19 @@ const Chats = () => {
       return _id === chatId;
     });
 
-    if (index === -1) return;
+    if (index === -1)
+      return setChatList((prev) => {
+        const key = data.type;
+        return { ...prev, [key]: [data] };
+      });
 
     setChatList((prev) => {
       const key = data.type;
       const chats = [...prev[key]];
-      const [element] = chats.splice(index, 1);
-      element.count += 1;
+      chats.splice(index, 1);
       return {
         ...prev,
-        [key]: [{ ...element, ...data }, ...chats],
+        [key]: [data, ...chats],
       };
     });
   };
