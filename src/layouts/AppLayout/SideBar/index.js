@@ -64,7 +64,7 @@ export const SideBar = ({ theme, toggleTheme, className }) => {
   useLayoutEffect(() => {
     let index = tabs.findIndex(({ to }) => to === pathName.split("/")[1]);
 
-    const { matches } = window.matchMedia(`(max-width: 768px)`);
+    const { matches } = matchMedia(`(max-width: 768px)`);
 
     let { clientHeight, offsetTop, offsetLeft, clientWidth } =
       tabRef.current?.children[index];
@@ -79,7 +79,7 @@ export const SideBar = ({ theme, toggleTheme, className }) => {
   }, [pathName]);
 
   const tooltipPlacement = useMemo(() => {
-    const { matches } = window.matchMedia(`(max-width: 768px)`);
+    const { matches } = matchMedia(`(max-width: 768px)`);
     return matches ? "top" : "right";
   }, []);
 

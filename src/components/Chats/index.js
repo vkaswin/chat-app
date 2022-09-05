@@ -7,6 +7,7 @@ import { useAuth, useRouter, useSocket } from "hooks";
 import { createMessage, getMessagesByChatId } from "services/Message";
 import { getChatById } from "services/Chat";
 import { initiateCall } from "services/Call";
+import { debounce } from "utils";
 import { CSSTransition } from "react-transition-group";
 
 import messageRingTone from "assets/audio/fade-in-tone.mp3";
@@ -17,7 +18,7 @@ import styles from "./Chats.module.scss";
 const audio = new Audio(messageRingTone);
 
 export const Chats = () => {
-  const { matches } = window.matchMedia(`(max-width: 768px)`);
+  const { matches } = matchMedia(`(max-width: 768px)`);
 
   const chatContainerRef = useRef();
 
@@ -39,11 +40,13 @@ export const Chats = () => {
 
   const [replyId, setReplyId] = useState(null);
 
-  const [page, setPage] = useState(1);
-
-  const [totalPages, setTotalPages] = useState(1);
+  const [pageMeta, setPageMeta] = useState({});
 
   const [chatDetails, setChatDetails] = useState({});
+
+  const [newMsg, setNewMsg] = useState({ id: null, count: null });
+
+  const [loading, setLoading] = useState(false);
 
   const prevChatId = useRef();
 
@@ -75,20 +78,13 @@ export const Chats = () => {
   }, [chatId, connected, socket]);
 
   useEffect(() => {
-    if (chats.length !== 0) {
-      setChats({});
-    }
+    Object.keys(chats).length !== 0 && setChats({});
     getChatDetails();
   }, [chatId]);
 
-  //   Fetch Messages
   useEffect(() => {
-    if (!chatId) return;
-    getMessages();
-  }, [page, chatId]);
+    if (!msgId.current || Object.keys(chats).length === 0) return;
 
-  useEffect(() => {
-    if (!msgId.current) return;
     focusMsgById(msgId.current);
   }, [chats]);
 
@@ -104,12 +100,13 @@ export const Chats = () => {
         data: { data },
       } = await getChatById(chatId);
       setChatDetails(data);
+      getMessages(1);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     }
   };
 
-  const getMessages = async () => {
+  const getMessages = async (page) => {
     try {
       let params = {
         limit: 30,
@@ -117,20 +114,28 @@ export const Chats = () => {
       };
       let {
         data: {
-          data: {
-            list,
-            pageMeta: { total },
-          },
+          data: { list, newMessages = [], pageMeta },
         },
       } = await getMessagesByChatId(chatId, params);
-      groupMessagesByDate(list, total);
+      groupMessagesByDate(list, newMessages, pageMeta);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
+    } finally {
+      setLoading(false);
     }
   };
 
-  const groupMessagesByDate = (list, total) => {
-    msgId.current = list[list.length - 1]._id;
+  const groupMessagesByDate = (list, newMessages, pageMeta) => {
+    if (list.length === 0 && newMessages.length === 0) return;
+
+    if (newMessages.length > 0) {
+      let id = newMessages[0]?._id;
+      msgId.current = id;
+      list = list.concat(newMessages);
+      setNewMsg({ ...newMsg, id, count: newMessages.length });
+    } else {
+      msgId.current = list[list.length - 1]?._id;
+    }
 
     const chatsByDate = list.reduce((initial, msg) => {
       const key = getDate(msg.date);
@@ -142,20 +147,23 @@ export const Chats = () => {
         : { ...initial, [key]: [msg] };
     }, {});
 
-    const mergeObject = (obj) => {
-      if (Object.keys(chats).length === 0) return obj;
+    if (Object.keys(chatsByDate).length === 0) return;
 
-      const final = Object.entries(obj).reduce((initial, [date, msg]) => {
-        const key = getDate(date);
-        return initial.hasOwnProperty(key)
-          ? {
-              ...initial,
-              [key]: [...initial[key], ...msg].sort((a, b) => {
-                return new Date(a.date) - new Date(b.date);
-              }),
-            }
-          : { ...initial, [key]: msg };
-      }, chats);
+    setChats((prev) => {
+      const final = Object.entries(chatsByDate).reduce(
+        (initial, [date, msg]) => {
+          const key = getDate(date);
+          return initial.hasOwnProperty(key)
+            ? {
+                ...initial,
+                [key]: [...initial[key], ...msg].sort((a, b) => {
+                  return new Date(a.date) - new Date(b.date);
+                }),
+              }
+            : { ...initial, [key]: msg };
+        },
+        prev
+      );
 
       const sortByDate = Object.keys(final).sort((a, b) => {
         return new Date(a) - new Date(b);
@@ -164,23 +172,18 @@ export const Chats = () => {
       return sortByDate.reduce((initial, date) => {
         return { ...initial, [date]: final[date] };
       }, {});
-    };
+    });
 
-    setChats(mergeObject(chatsByDate));
-    setTotalPages(total);
+    setPageMeta(pageMeta);
   };
 
   const handleScroll = ({ target: { scrollTop } }) => {
-    if (scrollTop !== 0 || page >= totalPages) return;
-    setPage((prev) => prev + 1);
-  };
+    const { page, totalPages } = pageMeta;
 
-  const scrollToBottom = () => {
-    const { scrollHeight } = chatContainerRef.current;
-    chatContainerRef.current.scrollTo({
-      top: scrollHeight,
-      behavior: "smooth",
-    });
+    if (scrollTop !== 0 || page >= totalPages) return;
+
+    setLoading(true);
+    getMessages(page + 1);
   };
 
   const onSend = async (msg) => {
@@ -202,7 +205,7 @@ export const Chats = () => {
 
   const addMessageInChat = (data) => {
     const key = getDate(data.date);
-    msgId.current = data[data.length - 1]._id;
+    msgId.current = data._id;
 
     setChats((prev) => {
       return prev.hasOwnProperty(key)
@@ -236,13 +239,14 @@ export const Chats = () => {
     setReplyId(null);
   };
 
-  const focusMsgById = (id) => {
+  const focusMsgById = (id = msgId.current || null, behavior = "auto") => {
+    if (!id) return;
+
     const element = document.querySelector(`[msgid='${id}']`);
+
     if (!element) return;
-    element.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-    });
+
+    element.scrollIntoView({ block: "center", behavior });
   };
 
   const replyMsg = useMemo(() => {
@@ -389,9 +393,11 @@ export const Chats = () => {
   };
 
   const handleFocus = () => {
-    const { matches } = window.matchMedia(`(max-width: 768px)`);
+    const { matches } = matchMedia(`(max-width: 768px)`);
+
     if (!matches) return;
-    scrollToBottom();
+
+    focusMsgById();
   };
 
   const getDate = (date) => {
@@ -402,7 +408,7 @@ export const Chats = () => {
     <div
       ref={chatContainerRef}
       className={styles.chat_wrapper}
-      onScroll={handleScroll}
+      onScroll={debounce(handleScroll, 100)}
     >
       <div className={styles.chat_header}>
         <div className={styles.user_info}>
@@ -471,15 +477,15 @@ export const Chats = () => {
           </DropDown>
         </div>
       </div>
-      {page < totalPages && <div>Loading...</div>}
+      {loading && <div>Loading...</div>}
       <Conversation
         chats={chats}
-        container={chatContainerRef}
         onDelete={onDelete}
         onCopy={onCopy}
         onReply={onReply}
         userId={user.id}
         focusMsgById={focusMsgById}
+        newMsg={newMsg}
       />
       <TextArea onSend={onSend} onFocus={handleFocus} />
       <CSSTransition

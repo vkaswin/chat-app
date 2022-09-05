@@ -56,20 +56,21 @@ const Chats = () => {
   };
 
   const handleNewMessage = (data) => {
-    const index = chatList[data.type].findIndex(({ _id }) => {
-      return _id === chatId;
-    });
-
-    if (index === -1)
-      return setChatList((prev) => {
-        const key = data.type;
-        return { ...prev, [key]: [data] };
-      });
-
     setChatList((prev) => {
       const key = data.type;
+
+      const index = prev[key].findIndex(({ _id }) => {
+        return _id === data._id;
+      });
+
+      if (index === -1) {
+        data.count = 1;
+        return { ...prev, [key]: [data] };
+      }
+
       const chats = [...prev[key]];
-      chats.splice(index, 1);
+      let [oldChat] = chats.splice(index, 1);
+      data.count = oldChat.count + 1;
       return {
         ...prev,
         [key]: [data, ...chats],
