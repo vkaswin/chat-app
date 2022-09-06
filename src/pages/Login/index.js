@@ -5,8 +5,9 @@ import { cookies } from "utils";
 import { useAuth, useRouter } from "hooks";
 import { NavLink } from "react-router-dom";
 import { Toast } from "components";
-import { loginUser, updateUserStatus } from "services/User";
+import { loginUser } from "services/User";
 import jwtDecode from "jwt-decode";
+import { socket } from "socket";
 
 import styles from "./Login.module.scss";
 
@@ -48,6 +49,8 @@ const Login = () => {
       let {
         data: { token },
       } = await loginUser(data);
+      const user = jwtDecode(token);
+      socket.init(user?.id);
       if (rememberMe) {
         cookie.set({
           name: "login_session",
@@ -56,8 +59,7 @@ const Login = () => {
         });
       }
       cookie.set({ name: "authToken", value: token, days: 7 });
-      updateUserStatus(true);
-      setUser(jwtDecode(token));
+      setUser(user);
       router.push("/chats");
     } catch (error) {
       if (error?.message === "User not exist") {

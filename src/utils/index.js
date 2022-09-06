@@ -180,11 +180,13 @@ export const sessionStorage = () => {
 };
 
 export const handleChat = (chatId) => {
-  const currentChatId = window.sessionStorage.getItem("chatId");
+  const oldChatId = window.sessionStorage.getItem("chatId");
 
-  if (currentChatId === chatId) return;
+  if (oldChatId === chatId) return;
 
   window.sessionStorage.setItem("chatId", chatId);
-  const event = new CustomEvent("chatId", { detail: { chatId } });
+  const event = new CustomEvent("chatId", {
+    detail: { chatId, oldChatId },
+  });
   document.dispatchEvent(event);
 };

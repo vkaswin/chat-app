@@ -25,8 +25,7 @@ axios.interceptors.response.use(
   },
   (error) => {
     if (error.response.status === 401) {
-      const event = new CustomEvent("logout");
-      document.dispatchEvent(event);
+      document.dispatchEvent(new CustomEvent("logout"));
     }
     return Promise.reject(error?.response?.data);
   }

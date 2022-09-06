@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { cookies, sessionStorage } from "utils";
 import jwtDecode from "jwt-decode";
-import { updateUserStatus } from "services/User";
 import { useRouter } from "./useRouter";
+import { socket } from "socket";
 
 const AuthContext = createContext();
 
@@ -26,6 +26,7 @@ export const ProvideAuth = ({ children }) => {
     const chatId = session.get("chatId");
     if (token !== null) {
       const user = jwtDecode(token);
+      socket.init(user?.id);
       setUser(user);
     }
     chatId && setChatId(chatId);
@@ -37,8 +38,7 @@ export const ProvideAuth = ({ children }) => {
   };
 
   const logout = () => {
-    const authToken = cookie.get("authToken");
-    authToken && updateUserStatus(false, authToken);
+    document.dispatchEvent(new CustomEvent("close-socket"));
     cookie.remove("authToken");
     document.removeEventListener("logout", logout);
     router.push("/auth/login");

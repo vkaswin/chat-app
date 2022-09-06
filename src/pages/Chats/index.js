@@ -1,20 +1,19 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Avatar, Toast } from "components";
 import { classNames, handleChat } from "utils";
-import { useAuth, useSocket } from "hooks";
+import { useAuth } from "hooks";
 import {
   getFavouriteChats,
   getRecentChats,
   getGroupChats,
 } from "services/Chat";
 import moment from "moment";
+import { socket } from "socket";
 
 import styles from "./Chats.module.scss";
 
 const Chats = () => {
   const { chatId } = useAuth();
-
-  const { socket, connected } = useSocket();
 
   const [chatList, setChatList] = useState({
     recent: [],
@@ -27,13 +26,16 @@ const Chats = () => {
   const { favourite, recent, group } = chatList;
 
   useEffect(() => {
-    if (!socket || !connected) return;
-    socket.on("new-message", handleNewMessage);
-  }, [connected, socket]);
-
-  useEffect(() => {
+    document.addEventListener("socket", handleSocket);
     getChats();
+    return () => {
+      document.removeEventListener("socket", handleSocket);
+    };
   }, []);
+
+  const handleSocket = () => {
+    socket.on("new-message", handleNewMessage);
+  };
 
   const getChats = async () => {
     try {

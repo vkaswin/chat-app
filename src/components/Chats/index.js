@@ -3,12 +3,13 @@ import { DropDown, Avatar, OffCanvas, Toast, ScrollBar } from "components";
 import { TextArea } from "./TextArea";
 import { Conversation } from "./Conversation";
 import { VideoPopup } from "./VideoPopup";
-import { useAuth, useRouter, useSocket } from "hooks";
+import { useAuth, useRouter } from "hooks";
 import { createMessage, getMessagesByChatId } from "services/Message";
 import { getChatById, markAsRead } from "services/Chat";
 import { initiateCall } from "services/Call";
 import { debounce } from "utils";
 import { CSSTransition } from "react-transition-group";
+import { socket } from "socket";
 
 import messageRingTone from "assets/audio/fade-in-tone.mp3";
 import favicon from "assets/images/favicon.ico";
@@ -25,8 +26,6 @@ export const Chats = () => {
   const replyContainerRef = useRef();
 
   const { user, chatId } = useAuth();
-
-  const { socket, connected } = useSocket();
 
   const router = useRouter();
 
@@ -48,36 +47,16 @@ export const Chats = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const prevChatId = useRef();
-
   const msgId = useRef();
 
   let iceCandidate;
 
-  //   Socket
   useEffect(() => {
-    if (!socket || !connected || !chatId) return;
-
-    if (prevChatId.current && prevChatId.current !== chatId) {
-      leaveRoom();
-    }
-
-    prevChatId.current = chatId;
-
-    socket.emit("join-chat", chatId);
-
-    socket.on("message", handleMessage);
-
-    socket.on("seen", handleSeen);
-
-    socket.on("receive-offer", handleOffer);
-
-    socket.on("receive-answer", handleAnswer);
-
+    document.addEventListener("socket", handleSocket);
     return () => {
-      leaveRoom();
+      document.removeEventListener("socket", handleSocket);
     };
-  }, [chatId, connected, socket]);
+  }, []);
 
   useEffect(() => {
     Object.keys(chats).length !== 0 && setChats({});
@@ -96,6 +75,16 @@ export const Chats = () => {
 
     focusMsgById(msgId.current);
   }, [chats]);
+
+  const handleSocket = () => {
+    socket.on("message", handleMessage);
+
+    socket.on("seen", handleSeen);
+
+    socket.on("receive-offer", handleOffer);
+
+    socket.on("receive-answer", handleAnswer);
+  };
 
   //   Profile
   const toggleInfo = () => {
@@ -431,10 +420,6 @@ export const Chats = () => {
       body,
       icon: favicon,
     });
-  };
-
-  const leaveRoom = () => {
-    socket.emit("leave-chat", prevChatId);
   };
 
   const handleFocus = () => {
