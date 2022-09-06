@@ -72,7 +72,7 @@ export const ProvideAuth = ({ children }) => {
   };
 
   const logout = () => {
-    document.dispatchEvent(new CustomEvent("close-socket"));
+    socket.close();
     cookie.remove("authToken");
     router.push("/auth/login");
   };

@@ -20,7 +20,6 @@ export const socket = {
     this.io.emit(...args);
   },
   close() {
-    this.io.close();
-    this.io = null;
+    this.io.disconnect();
   },
 };
