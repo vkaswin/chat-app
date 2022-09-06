@@ -5,7 +5,7 @@ import { Conversation } from "./Conversation";
 import { VideoPopup } from "./VideoPopup";
 import { useAuth, useRouter, useSocket } from "hooks";
 import { createMessage, getMessagesByChatId } from "services/Message";
-import { getChatById } from "services/Chat";
+import { getChatById, markAsRead } from "services/Chat";
 import { initiateCall } from "services/Call";
 import { debounce } from "utils";
 import { CSSTransition } from "react-transition-group";
@@ -44,7 +44,7 @@ export const Chats = () => {
 
   const [chatDetails, setChatDetails] = useState({});
 
-  const [newMsg, setNewMsg] = useState({ id: null, count: null });
+  const [newMsg, setNewMsg] = useState({ id: null, count: null, list: [] });
 
   const [loading, setLoading] = useState(false);
 
@@ -83,6 +83,13 @@ export const Chats = () => {
   }, [chatId]);
 
   useEffect(() => {
+    if (newMsg.list.length > 0) {
+      const msgId = newMsg.list.map(({ _id }) => {
+        return _id;
+      });
+      updateSeenStatus({ msgId });
+    }
+
     if (!msgId.current || Object.keys(chats).length === 0) return;
 
     focusMsgById(msgId.current);
@@ -132,7 +139,12 @@ export const Chats = () => {
       let id = newMessages[0]?._id;
       msgId.current = id;
       list = list.concat(newMessages);
-      setNewMsg({ ...newMsg, id, count: newMessages.length });
+      setNewMsg({
+        ...newMsg,
+        id,
+        count: newMessages.length,
+        list: newMessages,
+      });
     } else {
       msgId.current = list[list.length - 1]?._id;
     }
@@ -177,13 +189,22 @@ export const Chats = () => {
     setPageMeta(pageMeta);
   };
 
+  const updateSeenStatus = async (data) => {
+    try {
+      const res = await markAsRead(chatId, data);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleScroll = ({ target: { scrollTop } }) => {
     const { page, totalPages } = pageMeta;
 
     if (scrollTop !== 0 || page >= totalPages) return;
 
     setLoading(true);
-    getMessages(page + 1);
+    setTimeout(() => getMessages(page + 1), 500);
   };
 
   const onSend = async (msg) => {
@@ -477,7 +498,13 @@ export const Chats = () => {
           </DropDown>
         </div>
       </div>
-      {loading && <div>Loading...</div>}
+      {loading && (
+        <div className={styles.loader}>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      )}
       <Conversation
         chats={chats}
         onDelete={onDelete}

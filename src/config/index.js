@@ -25,6 +25,7 @@ export const endpoints = {
     favouriteChats: `${chatUrl}/favourite`,
     groupChats: `${chatUrl}/group`,
     chatDetails: `${chatUrl}/detail`,
+    markAsRead: `${chatUrl}/markAsRead`,
   },
   message: {
     createMessage: `${messageUrl}/create`,

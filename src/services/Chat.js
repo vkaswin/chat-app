@@ -27,3 +27,11 @@ export const addToFavourite = (chatId) => {
 export const removeFromFavourite = (chatId) => {
   return axios({ url: endpoints.chat.removeFavourite, method: "delete" });
 };
+
+export const markAsRead = (chatId, data) => {
+  return axios({
+    url: `${endpoints.chat.markAsRead}/${chatId}`,
+    method: "put",
+    data,
+  });
+};
