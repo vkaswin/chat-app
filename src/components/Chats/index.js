@@ -86,6 +86,18 @@ export const Chats = () => {
     socket.on("receive-offer", handleOffer);
 
     socket.on("receive-answer", handleAnswer);
+
+    socket.on("start-typing", handleStartTyping);
+
+    socket.on("end-typing", handleEndTyping);
+  };
+
+  const handleStartTyping = (data) => {
+    console.log(data);
+  };
+
+  const handleEndTyping = (data) => {
+    console.log(data);
   };
 
   //   Profile
@@ -523,12 +535,21 @@ export const Chats = () => {
         onDelete={onDelete}
         onCopy={onCopy}
         onReply={onReply}
-        userId={user.id}
+        userId={user?.id}
         otherUserId={chatDetails?.userId || chatDetails?.users}
         focusMsgById={focusMsgById}
         newMsg={newMsg}
       />
-      <TextArea onSend={onSend} onFocus={handleFocus} />
+      <TextArea
+        onSend={onSend}
+        onFocus={handleFocus}
+        chatId={chatId}
+        otherUser={
+          chatDetails?.userId
+            ? { id: chatDetails?.userId, name: chatDetails?.name }
+            : chatDetails?.users
+        }
+      />
       <CSSTransition
         in={Boolean(replyId)}
         timeout={250}

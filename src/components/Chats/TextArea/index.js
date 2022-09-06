@@ -1,26 +1,22 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { fileUpload } from "services/Others";
 import { Emoji } from "./Emoji";
-import { useForm } from "react-hook-form";
+import { Toast } from "components/Toast";
+import { debounce } from "utils";
 
 import styles from "./TextArea.module.scss";
-import { Toast } from "components/Toast";
+import { socket } from "socket";
 
-export const TextArea = ({ onSend, onFocus }) => {
-  const { handleSubmit, reset, register, watch } = useForm();
-
-  const message = watch("message");
-
+export const TextArea = ({ onSend, onFocus, chatId, otherUser }) => {
   const [showEmoji, setShowEmoji] = useState(false);
 
   const [text, setText] = useState("");
 
   const [rec, setRec] = useState();
 
-  useEffect(() => {
-    if (!message || message.length === 0) return;
-    // console.log(message);
-  }, [message]);
+  const [typing, setTyping] = useState(false);
+
+  const inputRef = useRef();
 
   useEffect(() => {
     const SpeechRecognition =
@@ -55,8 +51,26 @@ export const TextArea = ({ onSend, onFocus }) => {
     setRec(recognition);
   }, []);
 
+  const getUsers = () => {
+    return Array.isArray(otherUser)
+      ? otherUser.map(({ _id, name }) => {
+          return {
+            id: _id,
+            name,
+          };
+        })
+      : otherUser;
+  };
+
   const handleTyping = () => {
-    console.log("typing");
+    socket.emit("end-typing", chatId, getUsers());
+    setTyping(false);
+  };
+
+  const handleKeyDown = () => {
+    if (typing) return;
+    socket.emit("start-typing", chatId, getUsers());
+    setTyping(true);
   };
 
   const handleEmoji = (emoji) => {
@@ -68,8 +82,11 @@ export const TextArea = ({ onSend, onFocus }) => {
   };
 
   const onSubmit = async () => {
-    await onSend(message);
-    reset({ message: "" });
+    const text = inputRef.current.value;
+    if (text.length === 0) return;
+
+    await onSend(text);
+    inputRef.current.value = "";
   };
 
   const onPointerDown = () => {
@@ -101,9 +118,11 @@ export const TextArea = ({ onSend, onFocus }) => {
         <i className="bx-smile" id="emoji"></i>
         <div className={styles.input_field}>
           <textarea
+            ref={inputRef}
             name="chat-input"
             onFocus={onFocus}
-            {...register("message", { required: true })}
+            onKeyDown={handleKeyDown}
+            onChange={debounce(handleTyping, 1000)}
           />
           <label htmlFor="chat-file">
             <i className="bx-paperclip" id="attach"></i>
@@ -116,7 +135,7 @@ export const TextArea = ({ onSend, onFocus }) => {
             hidden
           />
         </div>
-        <button onClick={handleSubmit(onSubmit)}>
+        <button onClick={onSubmit}>
           <i className="bxs-send"></i>
         </button>
         <i
