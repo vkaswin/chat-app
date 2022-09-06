@@ -77,6 +77,8 @@ export const Chats = () => {
   }, [chats]);
 
   const handleSocket = () => {
+    socket.emit("join-chat", chatId);
+
     socket.on("message", handleMessage);
 
     socket.on("seen", handleSeen);
@@ -353,10 +355,12 @@ export const Chats = () => {
     if (user?.id === userId) return;
 
     const markAsSeen = (id) => {
-      const element = document
-        .querySelector(`[msgid='${id}']`)
-        .querySelector("[seen]");
-      element.setAttribute("seen", true);
+      const element = document.querySelector(`[msgid='${id}']`);
+
+      if (!element) return;
+
+      const ele = element.querySelector("[seen]");
+      ele.setAttribute("seen", true);
     };
 
     if (!Array.isArray(msgId)) {

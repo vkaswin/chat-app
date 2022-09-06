@@ -22,6 +22,7 @@ export const ProvideAuth = ({ children }) => {
   useEffect(() => {
     document.addEventListener("logout", logout);
     document.addEventListener("chatId", handleChat);
+    document.addEventListener("socket", handleSocket);
     const token = cookie.get("authToken");
     const chatId = session.get("chatId");
     if (token !== null) {
@@ -33,14 +34,46 @@ export const ProvideAuth = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const handleChat = ({ detail: { chatId } }) => {
+  const handleSocket = () => {
+    const token = cookie.get("authToken");
+
+    if (!token) return;
+
+    const user = jwtDecode(token);
+    socket.emit("join-user", user?.id);
+
+    socket.on("user-status", handleUserStatus);
+  };
+
+  const handleUserStatus = ({ userId, status }) => {
+    const token = cookie.get("authToken");
+
+    if (!token) return;
+
+    const user = jwtDecode(token);
+
+    if (userId === user?.id) return;
+
+    const elements = document.querySelectorAll(`[userid='${userId}']`);
+
+    elements.forEach((ele) => {
+      if (ele.tagName === "SPAN") {
+        ele.textContent = status ? "Online" : "Offline";
+      } else {
+        ele.setAttribute("status", status);
+      }
+    });
+  };
+
+  const handleChat = ({ detail: { chatId, oldChatId } }) => {
+    socket.emit("leave-chat", oldChatId);
+    socket.emit("join-chat", chatId);
     setChatId(chatId);
   };
 
   const logout = () => {
     document.dispatchEvent(new CustomEvent("close-socket"));
     cookie.remove("authToken");
-    document.removeEventListener("logout", logout);
     router.push("/auth/login");
   };
 
