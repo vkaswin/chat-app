@@ -13,6 +13,7 @@ export const Conversation = ({
   userId,
   newMsg,
   focusMsgById,
+  otherUserId,
 }) => {
   return (
     <div className={styles.section}>
@@ -67,7 +68,13 @@ export const Conversation = ({
                               </span>
                               <i
                                 className={`bx bx-check-double ${styles.tick}`}
-                                seen={seen.toString()}
+                                seen={
+                                  Array.isArray(otherUserId)
+                                    ? (
+                                        seen.length === otherUserId.length
+                                      ).toString()
+                                    : seen.includes(otherUserId).toString()
+                                }
                               ></i>
                             </div>
                           </div>

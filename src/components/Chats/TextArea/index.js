@@ -2,9 +2,9 @@ import React, { Fragment, useEffect, useState } from "react";
 import { fileUpload } from "services/Others";
 import { Emoji } from "./Emoji";
 import { useForm } from "react-hook-form";
-import { throttle } from "utils";
 
 import styles from "./TextArea.module.scss";
+import { Toast } from "components/Toast";
 
 export const TextArea = ({ onSend, onFocus }) => {
   const { handleSubmit, reset, register, watch } = useForm();
@@ -80,14 +80,19 @@ export const TextArea = ({ onSend, onFocus }) => {
     rec?.stop();
   };
 
-  const handleFile = ({ target: { files } }) => {
-    const formData = new FormData();
+  const handleFile = async ({ target: { files } }) => {
+    try {
+      const formData = new FormData();
 
-    for (const file of files) {
-      formData.append("file", file);
+      for (const file of files) {
+        formData.append("file", file);
+      }
+
+      const res = await fileUpload(formData);
+      console.log(res);
+    } catch (error) {
+      Toast({ type: "error", message: error?.message });
     }
-
-    fileUpload(formData);
   };
 
   return (

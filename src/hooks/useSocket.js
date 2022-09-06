@@ -45,12 +45,10 @@ export const ProvideSocket = ({ children }) => {
   };
 
   const handleOnline = () => {
-    console.log("online");
     updateUserStatus(true);
   };
 
   const handleOffline = () => {
-    console.log("offline");
     updateUserStatus(false);
   };
 

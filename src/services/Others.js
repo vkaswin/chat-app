@@ -7,14 +7,9 @@ export const metaData = (data) => {
 };
 
 export const fileUpload = async (data) => {
-  try {
-    let res = await axios({
-      url: endpoints.others?.fileUpload,
-      method: "post",
-      data,
-    });
-    console.log(res);
-  } catch (error) {
-    Toast({ type: "error", message: error?.message });
-  }
+  return axios({
+    url: endpoints.others?.fileUpload,
+    method: "post",
+    data,
+  });
 };

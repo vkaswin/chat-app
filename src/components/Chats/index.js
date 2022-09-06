@@ -66,7 +66,9 @@ export const Chats = () => {
 
     socket.emit("join-chat", chatId);
 
-    socket.on("receive-message", handleReceiveMessage);
+    socket.on("message", handleMessage);
+
+    socket.on("seen", handleSeen);
 
     socket.on("receive-offer", handleOffer);
 
@@ -190,9 +192,10 @@ export const Chats = () => {
   };
 
   const updateSeenStatus = async (data) => {
+    if (!chatId) return;
+
     try {
-      const res = await markAsRead(chatId, data);
-      console.log(res);
+      await markAsRead(chatId, data);
     } catch (error) {
       console.log(error);
     }
@@ -348,12 +351,33 @@ export const Chats = () => {
     }
   };
 
-  const handleReceiveMessage = (data) => {
+  const handleMessage = (data) => {
     if (data.sender === user?.id) return;
 
     showNotification(data.msg);
     playMessageRingTone();
     addMessageInChat(data);
+    updateSeenStatus({ msgId: data._id });
+  };
+
+  const handleSeen = ({ userId, msgId }) => {
+    if (user?.id === userId) return;
+
+    const markAsSeen = (id) => {
+      const element = document
+        .querySelector(`[msgid='${id}']`)
+        .querySelector("[seen]");
+      element.setAttribute("seen", true);
+    };
+
+    if (!Array.isArray(msgId)) {
+      markAsSeen(msgId);
+      return;
+    }
+
+    msgId.forEach((id) => {
+      markAsSeen(id);
+    });
   };
 
   const handleCall = async (type) => {
@@ -511,6 +535,7 @@ export const Chats = () => {
         onCopy={onCopy}
         onReply={onReply}
         userId={user.id}
+        otherUserId={chatDetails?.userId || chatDetails?.users}
         focusMsgById={focusMsgById}
         newMsg={newMsg}
       />
