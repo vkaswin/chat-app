@@ -131,6 +131,21 @@
       font-size: 14px;
     }
   }
+  .typing[typing] {
+    position: sticky;
+    bottom: 80px;
+    display: flex;
+    justify-content: center;
+    &::before {
+      content: attr(typing);
+      color: #4eac6e;
+      font-size: 14px;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
 }
 
 @media only screen and (max-width: 768px) {

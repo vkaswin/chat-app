@@ -92,12 +92,32 @@ export const Chats = () => {
     socket.on("end-typing", handleEndTyping);
   };
 
-  const handleStartTyping = (data) => {
-    console.log(data);
+  const handleStartTyping = (chatId, userName) => {
+    const id = sessionStorage.getItem("chatId");
+
+    if (!id) return;
+
+    if (chatId !== id || !chatContainerRef.current) return;
+
+    const element = chatContainerRef.current.querySelector("[typingstatus]");
+
+    if (!element) return;
+
+    element.setAttribute("typing", `${userName.split(" ")[0]} is typing...`);
   };
 
-  const handleEndTyping = (data) => {
-    console.log(data);
+  const handleEndTyping = (chatId) => {
+    const id = sessionStorage.getItem("chatId");
+
+    if (!id) return;
+
+    if (chatId !== id || !chatContainerRef.current) return;
+
+    const element = chatContainerRef.current.querySelector("[typingstatus]");
+
+    if (!element) return;
+
+    element.removeAttribute("typing");
   };
 
   //   Profile
@@ -199,6 +219,7 @@ export const Chats = () => {
 
     try {
       await markAsRead(chatId, data);
+      setNewMsg({ ...newMsg, list: [] });
     } catch (error) {
       console.log(error);
     }
@@ -281,7 +302,103 @@ export const Chats = () => {
     // return chats.find(({ _id }) => replyId === _id);
   }, [replyId]);
 
+  const handleMessage = (data) => {
+    if (data.sender === user?.id) return;
+
+    showNotification(data.msg);
+    playMessageRingTone();
+    addMessageInChat(data);
+    updateSeenStatus({ msgId: data._id });
+  };
+
+  const handleSeen = ({ userId, msgId }) => {
+    if (user?.id === userId) return;
+
+    const markAsSeen = (id) => {
+      const element = document.querySelector(`[msgid='${id}']`);
+
+      if (!element) return;
+
+      const ele = element.querySelector("[seen]");
+      ele.setAttribute("seen", true);
+    };
+
+    if (!Array.isArray(msgId)) {
+      markAsSeen(msgId);
+      return;
+    }
+
+    msgId.forEach((id) => {
+      markAsSeen(id);
+    });
+  };
+
+  // Ringtone
+  const playMessageRingTone = () => {
+    audio.muted = false;
+    audio.play();
+  };
+
+  // Notification
+  const showNotification = async (body) => {
+    if (Notification.permission !== "granted") return;
+
+    new Notification("New Message", {
+      body,
+      icon: favicon,
+    });
+  };
+
+  const handleFocus = () => {
+    const { matches } = matchMedia(`(max-width: 768px)`);
+
+    if (!matches) return;
+
+    focusMsgById();
+  };
+
+  const getDate = (date) => {
+    return date.split("T")[0];
+  };
+
   //   Video Call
+  const handleCall = async (type) => {
+    setShowVideo(true);
+
+    try {
+      peerConnection.current = new RTCPeerConnection();
+
+      peerConnection.current.onicecandidate = handleIceCandidate;
+      peerConnection.current.ontrack = handleTrack;
+
+      let localStream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+        video: true,
+      });
+      let localVideo = document.querySelector("#local-stream");
+      localVideo.srcObject = localStream;
+      localStream.getTracks().forEach((track) => {
+        peerConnection.current.addTrack(track, localStream);
+      });
+      let offer = await peerConnection.current.createOffer({
+        offerToReceiveAudio: 1,
+        offerToReceiveVideo: 1,
+      });
+
+      await peerConnection.current.setLocalDescription(offer);
+
+      const data = { date: new Date().toISOString(), offer, type };
+
+      await initiateCall(chatId, data);
+    } catch (error) {
+      Toast({ type: "error", message: error?.message });
+    }
+  };
+
   const handleTrack = ({ streams: [remoteStream] }) => {
     let remoteVideo = document.querySelector("#remote-stream");
     remoteVideo.srcObject = remoteStream;
@@ -352,102 +469,6 @@ export const Chats = () => {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handleMessage = (data) => {
-    if (data.sender === user?.id) return;
-
-    showNotification(data.msg);
-    playMessageRingTone();
-    addMessageInChat(data);
-    updateSeenStatus({ msgId: data._id });
-  };
-
-  const handleSeen = ({ userId, msgId }) => {
-    if (user?.id === userId) return;
-
-    const markAsSeen = (id) => {
-      const element = document.querySelector(`[msgid='${id}']`);
-
-      if (!element) return;
-
-      const ele = element.querySelector("[seen]");
-      ele.setAttribute("seen", true);
-    };
-
-    if (!Array.isArray(msgId)) {
-      markAsSeen(msgId);
-      return;
-    }
-
-    msgId.forEach((id) => {
-      markAsSeen(id);
-    });
-  };
-
-  const handleCall = async (type) => {
-    setShowVideo(true);
-
-    try {
-      peerConnection.current = new RTCPeerConnection();
-
-      peerConnection.current.onicecandidate = handleIceCandidate;
-      peerConnection.current.ontrack = handleTrack;
-
-      let localStream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-        },
-        video: true,
-      });
-      let localVideo = document.querySelector("#local-stream");
-      localVideo.srcObject = localStream;
-      localStream.getTracks().forEach((track) => {
-        peerConnection.current.addTrack(track, localStream);
-      });
-      let offer = await peerConnection.current.createOffer({
-        offerToReceiveAudio: 1,
-        offerToReceiveVideo: 1,
-      });
-
-      await peerConnection.current.setLocalDescription(offer);
-
-      const data = { date: new Date().toISOString(), offer, type };
-
-      await initiateCall(chatId, data);
-    } catch (error) {
-      Toast({ type: "error", message: error?.message });
-    }
-  };
-
-  // Ringtone
-  const playMessageRingTone = () => {
-    audio.muted = false;
-    audio.play();
-  };
-
-  // Notification
-  const showNotification = async (body) => {
-    if (Notification.permission !== "granted") return;
-
-    new Notification("New Message", {
-      body,
-      icon: favicon,
-    });
-  };
-
-  const handleFocus = () => {
-    const { matches } = matchMedia(`(max-width: 768px)`);
-
-    if (!matches) return;
-
-    focusMsgById();
-  };
-
-  const getDate = (date) => {
-    return date.split("T")[0];
   };
 
   return (
@@ -539,6 +560,7 @@ export const Chats = () => {
         otherUserId={chatDetails?.userId || chatDetails?.users}
         focusMsgById={focusMsgById}
         newMsg={newMsg}
+        chatId={chatId}
       />
       <TextArea
         onSend={onSend}

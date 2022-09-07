@@ -35,6 +35,10 @@ const Chats = () => {
 
   const handleSocket = () => {
     socket.on("new-message", handleNewMessage);
+
+    socket.on("start-typing", handleStartTyping);
+
+    socket.on("end-typing", handleEndTyping);
   };
 
   const getChats = async () => {
@@ -89,6 +93,24 @@ const Chats = () => {
       : moment(date).format("DD/MM/YY");
   };
 
+  const handleStartTyping = (chatId, userName) => {
+    const element = document.querySelector(`[chatid='${chatId}']`);
+
+    if (!element) return;
+
+    element
+      .querySelector("[typingstatus]")
+      .setAttribute("typing", `${userName.split(" ")[0]} is typing...`);
+  };
+
+  const handleEndTyping = (chatId) => {
+    const element = document.querySelector(`[chatid='${chatId}']`);
+
+    if (!element) return;
+
+    element.querySelector("[typingstatus]").removeAttribute("typing");
+  };
+
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -110,6 +132,7 @@ const Chats = () => {
                     [styles.active]: _id === chatId,
                   })}
                   onClick={() => handleChat(_id)}
+                  chatid={_id}
                 >
                   <div className={styles.user}>
                     <Avatar
@@ -119,7 +142,7 @@ const Chats = () => {
                       size={35}
                       userId={userId}
                     />
-                    <div className={styles.msg}>
+                    <div className={styles.msg} typingstatus="">
                       <span className="truncate-1">{name}</span>
                       <span className="truncate-1">{msg}</span>
                     </div>
@@ -155,6 +178,7 @@ const Chats = () => {
                     [styles.active]: _id === chatId,
                   })}
                   onClick={() => handleChat(_id)}
+                  chatid={_id}
                 >
                   <div className={styles.user}>
                     <Avatar
@@ -164,7 +188,7 @@ const Chats = () => {
                       size={35}
                       userId={userId}
                     />
-                    <div className={styles.msg}>
+                    <div className={styles.msg} typingstatus="">
                       <span className="truncate-1">{name}</span>
                       <span className="truncate-1">{msg}</span>
                     </div>
@@ -199,10 +223,11 @@ const Chats = () => {
                   [styles.active]: _id === chatId,
                 })}
                 onClick={() => handleChat(_id)}
+                chatid={_id}
               >
                 <div className={styles.user}>
                   <Avatar src={avatar} name={name} size={35} />
-                  <div className={styles.msg}>
+                  <div className={styles.msg} typingstatus="">
                     <span className="truncate-1">{name}</span>
                     <span className="truncate-1">{msg}</span>
                   </div>

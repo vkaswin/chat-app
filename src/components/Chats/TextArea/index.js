@@ -3,9 +3,9 @@ import { fileUpload } from "services/Others";
 import { Emoji } from "./Emoji";
 import { Toast } from "components/Toast";
 import { debounce } from "utils";
+import { socket } from "socket";
 
 import styles from "./TextArea.module.scss";
-import { socket } from "socket";
 
 export const TextArea = ({ onSend, onFocus, chatId, otherUser }) => {
   const [showEmoji, setShowEmoji] = useState(false);
@@ -63,6 +63,7 @@ export const TextArea = ({ onSend, onFocus, chatId, otherUser }) => {
   };
 
   const handleTyping = () => {
+    console.log(chatId, "textarea");
     socket.emit("end-typing", chatId, getUsers());
     setTyping(false);
   };
