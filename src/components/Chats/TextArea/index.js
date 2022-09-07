@@ -63,7 +63,6 @@ export const TextArea = ({ onSend, onFocus, chatId, otherUser }) => {
   };
 
   const handleTyping = () => {
-    console.log(chatId, "textarea");
     socket.emit("end-typing", chatId, getUsers());
     setTyping(false);
   };
