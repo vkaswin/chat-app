@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Avatar, Toast } from "components";
-import { classNames, handleChat } from "utils";
+import { classNames } from "utils";
 import { useAuth } from "hooks";
 import {
   getFavouriteChats,
@@ -13,7 +13,7 @@ import { socket } from "socket";
 import styles from "./Chats.module.scss";
 
 const Chats = () => {
-  const { chatId } = useAuth();
+  const { chatId, handleChat, user } = useAuth();
 
   const [chatList, setChatList] = useState({
     recent: [],
@@ -61,7 +61,9 @@ const Chats = () => {
     }
   };
 
-  const handleNewMessage = (data) => {
+  const handleNewMessage = (data, senderId, userId) => {
+    const chatId = sessionStorage.getItem("chatId");
+
     setChatList((prev) => {
       const key = data.type;
 
@@ -76,7 +78,12 @@ const Chats = () => {
 
       const chats = [...prev[key]];
       let [oldChat] = chats.splice(index, 1);
-      data.count = oldChat.count + 1;
+
+      if (chatId === data._id || userId === senderId) {
+        data.count = 0;
+      } else {
+        data.count = oldChat.count + 1;
+      }
       return {
         ...prev,
         [key]: [data, ...chats],

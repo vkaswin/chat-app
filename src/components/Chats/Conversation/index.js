@@ -19,7 +19,13 @@ export const Conversation = ({
     <div className={styles.section}>
       {Object.keys(chats).length === 0 ? (
         <div className={styles.chat_loader}>
-          <span></span>
+          {Array(Math.floor((window.innerHeight - 140) / 50))
+            .fill("")
+            .map((_, index) => {
+              return (
+                <div key={index} className={styles.chat_placeholder}></div>
+              );
+            })}
         </div>
       ) : (
         <Fragment>

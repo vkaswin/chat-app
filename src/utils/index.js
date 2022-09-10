@@ -133,8 +133,9 @@ export const localStorage = () => {
     return window.localStorage.getItem(key);
   };
 
-  const set = ({ key, value }) => {
+  const set = (key, value) => {
     if (!key || !value) return;
+
     window.localStorage.setItem(key, value);
   };
 
@@ -159,8 +160,10 @@ export const sessionStorage = () => {
     return window.sessionStorage.getItem(key);
   };
 
-  const set = ({ key = "", value = "" }) => {
-    window.sessionStorage.setItem(key, JSON.stringify(value));
+  const set = (key = "", value = "") => {
+    if (!key || !value) return;
+
+    window.sessionStorage.setItem(key, value);
   };
 
   const remove = (key) => {
@@ -177,16 +180,4 @@ export const sessionStorage = () => {
     remove,
     reset,
   };
-};
-
-export const handleChat = (chatId) => {
-  const oldChatId = window.sessionStorage.getItem("chatId");
-
-  if (oldChatId === chatId) return;
-
-  window.sessionStorage.setItem("chatId", chatId);
-  const event = new CustomEvent("chatId", {
-    detail: { chatId, oldChatId },
-  });
-  document.dispatchEvent(event);
 };

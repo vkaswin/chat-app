@@ -33,7 +33,7 @@ const AppLayout = () => {
   const toggleTheme = (value) => () => {
     let root = document.querySelector(":root");
     root.setAttribute("theme", value);
-    storage.set({ key: "theme", value });
+    storage.set("theme", value);
     setTheme(value);
   };
 

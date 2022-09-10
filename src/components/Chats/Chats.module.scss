@@ -193,7 +193,6 @@
     left: 0px;
     padding: 0px;
     &:is(.show) {
-      padding: 80px 7px calc(var(--chat-pb, 0px) + 85px) 15px;
       .chat_header {
         transform: translateX(0px);
       }

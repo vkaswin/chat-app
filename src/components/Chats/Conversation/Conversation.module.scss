@@ -1,5 +1,10 @@
 .section {
   min-height: calc(100% - 140px);
+  .chat_loader {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
   .container {
     display: flex;
     flex-direction: column;
@@ -145,6 +150,12 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
+  }
+}
+
+@keyframes load {
+  100% {
+    background-position: -100% 0;
   }
 }
 

@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Avatar, Toast } from "components";
 import { useAuth } from "hooks";
 import { getCallHistory } from "services/Call";
-import { handleChat } from "utils";
 import moment from "moment";
 
 import styles from "./Calls.module.scss";
 
 const Calls = () => {
-  const { user } = useAuth();
+  const { user, handleChat } = useAuth();
 
   const [callHistory, setCallHistory] = useState([]);
 

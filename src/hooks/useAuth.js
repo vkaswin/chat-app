@@ -21,7 +21,6 @@ export const ProvideAuth = ({ children }) => {
 
   useEffect(() => {
     document.addEventListener("logout", logout);
-    document.addEventListener("chatId", handleChat);
     document.addEventListener("socket", handleSocket);
     const token = cookie.get("authToken");
     const chatId = session.get("chatId");
@@ -58,10 +57,20 @@ export const ProvideAuth = ({ children }) => {
     });
   };
 
-  const handleChat = ({ detail: { chatId, oldChatId } }) => {
+  const handleChat = (chatId) => {
+    const oldChatId = session.get("chatId");
+
+    if (oldChatId === chatId) return;
+
+    session.set("chatId", chatId);
     oldChatId && socket.emit("leave-room", oldChatId);
     socket.emit("join-room", chatId);
     setChatId(chatId);
+  };
+
+  const clearChatId = () => {
+    session.remove("chatId");
+    setChatId(null);
   };
 
   const logout = () => {
@@ -71,7 +80,17 @@ export const ProvideAuth = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, chatId, isLoading, setUser, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        chatId,
+        isLoading,
+        setUser,
+        logout,
+        clearChatId,
+        handleChat,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

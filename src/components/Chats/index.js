@@ -7,7 +7,7 @@ import { useAuth, useRouter } from "hooks";
 import { createMessage, getMessagesByChatId } from "services/Message";
 import { getChatById, markAsRead } from "services/Chat";
 import { initiateCall } from "services/Call";
-import { debounce } from "utils";
+import { classNames, debounce } from "utils";
 import { CSSTransition } from "react-transition-group";
 import { socket } from "socket";
 
@@ -25,9 +25,7 @@ export const Chats = () => {
 
   const replyContainerRef = useRef();
 
-  const { user, chatId } = useAuth();
-
-  const router = useRouter();
+  const { user, chatId, clearChatId } = useAuth();
 
   const peerConnection = useRef();
 
@@ -472,12 +470,12 @@ export const Chats = () => {
   return (
     <div
       ref={chatContainerRef}
-      className={styles.chat_wrapper}
+      className={classNames(styles.chat_wrapper, { [styles.show]: !!chatId })}
       onScroll={debounce(handleScroll, 100)}
     >
       <div className={styles.chat_header}>
         <div className={styles.user_info}>
-          <div className={styles.go_back} onClick={() => router.goBack()}>
+          <div className={styles.go_back} onClick={clearChatId}>
             <i className="bx bx-chevron-left"></i>
           </div>
           <Avatar
@@ -499,8 +497,7 @@ export const Chats = () => {
           </div>
         </div>
         <div className={styles.chat_icons}>
-          <i className="bx-search"></i>
-          <i className="bxs-phone-call"></i>
+          {/* <i className="bxs-phone-call"></i> */}
           <i className="bx-video" onClick={() => handleCall("video")}></i>
           <i className="bxs-info-circle" onClick={toggleInfo}></i>
           <i className="bx-dots-vertical-rounded" id="more-option"></i>
@@ -515,13 +512,13 @@ export const Chats = () => {
                   <span>View Profile</span>
                   <i className="bx bx-user"></i>
                 </DropDown.Item>
-                <DropDown.Item
+                {/* <DropDown.Item
                   className="dropdown-option"
                   onClick={() => handleCall("audio")}
                 >
                   <span>Audio</span>
                   <i className="bx bxs-phone-call"></i>
-                </DropDown.Item>
+                </DropDown.Item> */}
                 <DropDown.Item
                   className="dropdown-option"
                   onClick={() => handleCall("video")}

@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Avatar, DropDown, Toast } from "components";
-import { classNames, handleChat } from "utils";
+import { classNames } from "utils";
+import { useAuth } from "hooks";
 import { getContacts } from "services/Contact";
 
 import styles from "./Contacts.module.scss";
@@ -35,6 +36,8 @@ const alphabets = [
 ];
 
 const Contacts = () => {
+  const { handleChat } = useAuth();
+
   const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
