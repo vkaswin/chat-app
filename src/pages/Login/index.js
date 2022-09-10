@@ -50,7 +50,6 @@ const Login = () => {
         data: { token },
       } = await loginUser(data);
       const user = jwtDecode(token);
-      socket.init(user?.id);
       if (rememberMe) {
         cookie.set({
           name: "login_session",
@@ -59,6 +58,7 @@ const Login = () => {
         });
       }
       cookie.set({ name: "authToken", value: token, days: 7 });
+      socket.init();
       setUser(user);
       router.push("/chats");
     } catch (error) {

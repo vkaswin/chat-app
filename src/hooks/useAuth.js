@@ -35,13 +35,6 @@ export const ProvideAuth = ({ children }) => {
   }, []);
 
   const handleSocket = () => {
-    const token = cookie.get("authToken");
-
-    if (!token) return;
-
-    const user = jwtDecode(token);
-    socket.emit("join-user", user?.id);
-
     socket.on("user-status", handleUserStatus);
   };
 
@@ -66,8 +59,8 @@ export const ProvideAuth = ({ children }) => {
   };
 
   const handleChat = ({ detail: { chatId, oldChatId } }) => {
-    oldChatId && socket.emit("leave-chat", oldChatId);
-    socket.emit("join-chat", chatId);
+    oldChatId && socket.emit("leave-room", oldChatId);
+    socket.emit("join-room", chatId);
     setChatId(chatId);
   };
 

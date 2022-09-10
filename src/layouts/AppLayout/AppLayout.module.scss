@@ -14,7 +14,39 @@
     background-color: var(--page-bg);
   }
   .empty_chat {
-    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    background-image: url("../../assets/images/chat-bg.png");
+    background-color: var(--conversation-bg);
+    background-repeat: repeat;
+    height: 100%;
+    max-height: 100%;
+    width: 100%;
+    svg {
+      width: 220px;
+      height: 220px;
+      fill: #4eac6e;
+    }
+    div {
+      display: flex;
+      flex-direction: column;
+      b,
+      span {
+        display: block;
+        text-align: center;
+      }
+      b {
+        color: var(--chat-name-clr);
+        font-size: 34px;
+      }
+      span {
+        color: var(--status-text-clr);
+        font-size: 18px;
+      }
+    }
   }
 }
 

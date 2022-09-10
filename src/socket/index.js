@@ -1,16 +1,18 @@
 import { io } from "socket.io-client";
 import { baseURL } from "config";
+import { cookies } from "utils";
 
 export const socket = {
   io: null,
-  userId: null,
-  init(userId) {
-    this.userId = userId;
-    this.io = io(baseURL);
+  init() {
+    this.io = io(baseURL, {
+      auth: {
+        token: cookies().get("authToken"),
+        chatId: sessionStorage.getItem("chatId"),
+      },
+    });
     this.io.on("connect", () =>
-      setTimeout(() => {
-        document.dispatchEvent(new CustomEvent("socket"));
-      }, 50)
+      document.dispatchEvent(new CustomEvent("socket"))
     );
   },
   on(...args) {

@@ -77,8 +77,6 @@ export const Chats = () => {
   }, [chats]);
 
   const handleSocket = () => {
-    socket.emit("join-chat", chatId);
-
     socket.on("message", handleMessage);
 
     socket.on("seen", handleSeen);
