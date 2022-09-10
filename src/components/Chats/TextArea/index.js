@@ -119,6 +119,7 @@ export const TextArea = ({ onSend, onFocus, chatId, otherUser }) => {
         <div className={styles.input_field}>
           <textarea
             ref={inputRef}
+            placeholder="Type your message..."
             name="chat-input"
             onFocus={onFocus}
             onKeyDown={handleKeyDown}

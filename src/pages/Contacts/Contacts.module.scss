@@ -18,19 +18,12 @@
       align-items: center;
       gap: 10px;
       span {
-        color: #5a636c;
+        color: var(--text-clr);
         font-size: 14px;
       }
     }
-  }
-}
-
-.contact_option {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  i {
-    color: #90929e;
-    font-size: 16px;
+    i {
+      color: var(--text-clr);
+    }
   }
 }

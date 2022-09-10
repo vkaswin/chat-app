@@ -3,7 +3,7 @@
     display: flex;
     justify-content: space-between;
     gap: 10px;
-    border-bottom: 1px solid #f6f6f9;
+    border-bottom: 1px solid var(--call-border);
     padding: 10px 15px;
     cursor: pointer;
     .user {
@@ -14,7 +14,7 @@
       .call_info {
         line-height: 20px;
         span {
-          color: #5a636c;
+          color: var(--text-clr);
           font-size: 14px;
         }
         div {
@@ -34,7 +34,7 @@
             transform: rotate(45deg);
           }
           span {
-            color: #797c8c;
+            color: var(--text-clr);
             font-size: 12px;
           }
         }

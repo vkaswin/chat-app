@@ -35,6 +35,15 @@
   }
 }
 
+html[theme="dark"] {
+  .container {
+    .menu {
+      background-color: #333;
+      box-shadow: 0 5px 6px rgba(38, 38, 38, 10%);
+    }
+  }
+}
+
 .container {
   position: absolute;
   inset: 0px auto auto 0px;
@@ -48,6 +57,7 @@
     border-radius: 4px;
     min-width: 125px;
     max-width: 100%;
+    padding: 5px 0px;
   }
   .item {
     width: 100%;

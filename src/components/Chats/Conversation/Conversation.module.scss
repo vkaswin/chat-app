@@ -14,7 +14,7 @@
         flex-direction: row-reverse;
         margin-left: auto;
         .chat_card {
-          background-color: #c0ddc9;
+          background-color: var(--conversation-card-bg-left);
           .reply_card {
             background-color: #fff;
           }
@@ -26,7 +26,7 @@
               color: #4eac6e;
             }
             .tick[false="false"] {
-              color: #495057;
+              color: var(--conversation-text-clr);
             }
           }
         }
@@ -36,11 +36,11 @@
         flex-direction: column;
         width: fit-content;
         padding: 10px 10px 5px 10px;
-        background-color: #fff;
+        background-color: var(--conversation-card-bg-right);
         position: relative;
         border-radius: 4px;
         box-shadow: 0 2px 4px rgba(15, 34, 58, 0.12);
-        color: #495057;
+        color: var(--conversation-text-clr);
         font-size: 14px;
         overflow: hidden;
         div {
@@ -72,7 +72,7 @@
             border-radius: 4px 0px 0px 4px;
           }
           span {
-            color: #495057;
+            color: var(--conversation-text-clr);
             font-size: 14px;
           }
         }
@@ -82,7 +82,7 @@
           justify-content: flex-start;
           gap: 5px;
           span {
-            color: #495057;
+            color: var(--conversation-text-clr);
             font-size: 13px;
           }
           .tick {
@@ -95,7 +95,7 @@
         }
       }
       .options {
-        color: #495057;
+        color: var(--conversation-text-clr);
         font-size: 18px;
         cursor: pointer;
       }
@@ -103,7 +103,7 @@
   }
   .date {
     position: sticky;
-    top: 75px;
+    top: 85px;
     display: flex;
     justify-content: center;
     width: fit-content;
@@ -133,7 +133,7 @@
   }
   .typing[typing] {
     position: sticky;
-    bottom: 80px;
+    bottom: 85px;
     display: flex;
     justify-content: center;
     &::before {

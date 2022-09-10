@@ -1,19 +1,39 @@
-html[theme] {
-  :root {
-    transition: background-color, color;
-    transition-duration: 300ms;
-    transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
-  }
+* {
+  transition: background-color, color;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
-html[theme="light"] {
-  :root {
-    --primary-clr: "green";
-  }
+:root[theme="light"] {
+  --conversation-bg: #e2ebe5;
+  --text-field-bg: #fff;
+  --chat-bg: rgba(255, 255, 255, 0.05);
+  --text-field-border: #cfd4d8;
+  --text-field-clr: #495057;
+  --page-bg: #fff;
+  --conversation-card-bg-right: #fff;
+  --conversation-card-bg-left: #c0ddc9;
+  --conversation-text-clr: #495057;
+  --chat-icon: #797c8c;
+  --text-clr: #5a636c;
+  --chat-name-clr: #495057;
+  --status-text-clr: #797c8c;
+  --call-border: #f6f6f9;
 }
 
-html[theme="dark"] {
-  :root {
-    --primary-clr: "green";
-  }
+:root[theme="dark"] {
+  --conversation-bg: #303330;
+  --chat-bg: rgba(46, 46, 46, 0.5);
+  --text-field-bg: #333;
+  --text-field-border: #333;
+  --text-field-clr: white;
+  --page-bg: #262626;
+  --conversation-card-bg-right: #383838;
+  --conversation-text-clr: rgba(255, 255, 255, 0.8);
+  --conversation-card-bg-left: rgba(78, 172, 109, 0.5);
+  --chat-icon: #adb5bd;
+  --text-clr: #adb5bd;
+  --chat-name-clr: #adb5bd;
+  --status-text-clr: #8f9198;
+  --call-border: #2e2e2e;
 }

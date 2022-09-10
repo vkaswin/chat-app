@@ -30,17 +30,15 @@ a {
   text-decoration: none;
 }
 
-.dropdown-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  i {
-    color: #797c8c;
-    font-size: 18px;
-  }
-  span {
-    color: #2d3034;
+html[theme="dark"] {
+  .dropdown-option {
+    &:hover {
+      background-color: #383838;
+    }
+    span,
+    i {
+      color: #8f9198;
+    }
   }
 }
 

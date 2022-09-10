@@ -66,7 +66,7 @@ export const ProvideAuth = ({ children }) => {
   };
 
   const handleChat = ({ detail: { chatId, oldChatId } }) => {
-    socket.emit("leave-chat", oldChatId);
+    oldChatId && socket.emit("leave-chat", oldChatId);
     socket.emit("join-chat", chatId);
     setChatId(chatId);
   };

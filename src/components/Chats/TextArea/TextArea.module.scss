@@ -2,7 +2,7 @@
   position: sticky;
   bottom: 0px;
   height: 75px;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: var(--chat-bg);
   -webkit-backdrop-filter: blur(7px);
   backdrop-filter: blur(7px);
   padding: 10px 15px;
@@ -18,9 +18,9 @@
     width: 100%;
     textarea {
       width: 100%;
-      color: #495057;
-      background-color: #fff;
-      border: 1px solid #cfd4d8;
+      color: var(--text-field-clr);
+      background-color: var(--text-field-bg);
+      border: 1px solid var(--text-field-border);
       padding: 10px 40px 10px 15px;
       height: 50px;
       border-radius: 8px;
