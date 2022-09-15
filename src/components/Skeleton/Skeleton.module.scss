@@ -1,6 +1,9 @@
 .card {
-  width: 200px;
-  height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  //   width: var(--width, 100%);
+  //   height: var(--height, auto);
   background: linear-gradient(
     120deg,
     #e5e5e5 30%,

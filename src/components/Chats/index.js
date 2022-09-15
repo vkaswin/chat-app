@@ -1,13 +1,14 @@
-import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { DropDown, Avatar, OffCanvas, Toast, ScrollBar } from "components";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { OffCanvas, Toast, Skeleton, ScrollBar } from "components";
 import { TextArea } from "./TextArea";
+import { Header } from "./Header";
 import { Conversation } from "./Conversation";
 import { VideoPopup } from "./VideoPopup";
-import { useAuth, useRouter } from "hooks";
+import { useAuth } from "hooks";
 import { createMessage, getMessagesByChatId } from "services/Message";
 import { getChatById, markAsRead } from "services/Chat";
 import { initiateCall } from "services/Call";
-import { classNames, debounce } from "utils";
+import { debounce } from "utils";
 import { CSSTransition } from "react-transition-group";
 import { socket } from "socket";
 
@@ -15,12 +16,12 @@ import messageRingTone from "assets/audio/fade-in-tone.mp3";
 import favicon from "assets/images/favicon.ico";
 
 import styles from "./Chats.module.scss";
+import { Loader } from "./Loader";
+import { PageLoader } from "./PageLoader";
 
 const audio = new Audio(messageRingTone);
 
 export const Chats = () => {
-  const { matches } = matchMedia(`(max-width: 768px)`);
-
   const chatContainerRef = useRef();
 
   const replyContainerRef = useRef();
@@ -62,7 +63,7 @@ export const Chats = () => {
 
   useEffect(() => {
     Object.keys(chats).length !== 0 && setChats({});
-    getChatDetails();
+    // getChatDetails();
   }, [chatId]);
 
   useEffect(() => {
@@ -490,93 +491,34 @@ export const Chats = () => {
   return (
     <div
       ref={chatContainerRef}
-      className={classNames(styles.chat_wrapper, { [styles.show]: !!chatId })}
+      className={styles.chat_wrapper}
       onScroll={debounce(handleScroll, 100)}
     >
-      <div className={styles.chat_header}>
-        <div className={styles.user_info}>
-          <div className={styles.go_back} onClick={clearChatId}>
-            <i className="bx bx-chevron-left"></i>
-          </div>
-          <Avatar
-            src={chatDetails?.avatar}
-            name={chatDetails?.name}
-            size={50}
-            status={chatDetails?.status}
-            userId={chatDetails?.userId}
-          />
-          <div className={styles.user_name}>
-            <b>{chatDetails?.name}</b>
-            <span userid={chatDetails?.userId}>
-              {chatDetails?.users
-                ? `${chatDetails?.users?.length} Members`
-                : chatDetails?.status
-                ? "Online"
-                : "Offline"}
-            </span>
-          </div>
-        </div>
-        <div className={styles.chat_icons}>
-          {/* <i className="bxs-phone-call"></i> */}
-          <i className="bx-video" onClick={() => handleCall("video")}></i>
-          <i className="bxs-info-circle" onClick={toggleInfo}></i>
-          <i className="bx-dots-vertical-rounded" id="more-option"></i>
-          <DropDown
-            selector="#more-option"
-            placement="bottom-end"
-            zIndex={2001}
-          >
-            {matches && (
-              <Fragment>
-                <DropDown.Item className="dropdown-option" onClick={toggleInfo}>
-                  <span>View Profile</span>
-                  <i className="bx bx-user"></i>
-                </DropDown.Item>
-                {/* <DropDown.Item
-                  className="dropdown-option"
-                  onClick={() => handleCall("audio")}
-                >
-                  <span>Audio</span>
-                  <i className="bx bxs-phone-call"></i>
-                </DropDown.Item> */}
-                <DropDown.Item
-                  className="dropdown-option"
-                  onClick={() => handleCall("video")}
-                >
-                  <span>Video</span>
-                  <i className="bx bx-video"></i>
-                </DropDown.Item>
-              </Fragment>
-            )}
-            <DropDown.Item className="dropdown-option">
-              <span>Muted</span>
-              <i className="bx-microphone-off"></i>
-            </DropDown.Item>
-            <DropDown.Item className="dropdown-option">
-              <span>Delete</span>
-              <i className="bx-trash"></i>
-            </DropDown.Item>
-          </DropDown>
-        </div>
-      </div>
-      {loading && (
-        <div className={styles.loader}>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      )}
-      <Conversation
-        chats={chats}
-        onDelete={onDelete}
-        onCopy={onCopy}
-        onReply={onReply}
-        userId={user?.id}
-        otherUserId={chatDetails?.userId || chatDetails?.users}
-        focusMsgById={focusMsgById}
-        newMsg={newMsg}
-        chatId={chatId}
+      <Header
+        clearChatId={clearChatId}
+        chatDetails={chatDetails}
+        handleCall={handleCall}
+        toggleInfo={toggleInfo}
+        show={!!chatId}
       />
+      {loading && <Loader />}
+      <div className={styles.chat_section}>
+        {pageLoader ? (
+          <PageLoader />
+        ) : (
+          <Conversation
+            chats={chats}
+            onDelete={onDelete}
+            onCopy={onCopy}
+            onReply={onReply}
+            userId={user?.id}
+            otherUserId={chatDetails?.userId || chatDetails?.users}
+            focusMsgById={focusMsgById}
+            newMsg={newMsg}
+            chatId={chatId}
+          />
+        )}
+      </div>
       <TextArea
         onSend={onSend}
         onFocus={handleFocus}

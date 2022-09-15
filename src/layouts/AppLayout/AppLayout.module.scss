@@ -10,7 +10,6 @@
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    scrollbar-width: none;
     background-color: var(--page-bg);
   }
   .empty_chat {
@@ -54,9 +53,6 @@
   .app_layout {
     grid-template-columns: 1fr;
     margin-left: 0px;
-    .pages_container {
-      padding-bottom: 65px;
-    }
     .empty_chat {
       display: none;
     }

@@ -1,155 +1,147 @@
-.section {
-  min-height: calc(100% - 140px);
-  .chat_loader {
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 20px;
+  .chat_wrapper {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  .container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-bottom: 20px;
-    .chat_wrapper {
-      display: flex;
-      max-width: 75%;
-      gap: 5px;
-      padding: 0px 15px;
-      &:is(.end) {
-        flex-direction: row-reverse;
-        margin-left: auto;
-        .chat_card {
-          background-color: var(--conversation-card-bg-left);
-          .reply_card {
-            background-color: #fff;
-          }
-          .msg_time {
-            .tick[seen] {
-              display: block;
-            }
-            .tick[seen="true"] {
-              color: #4eac6e;
-            }
-            .tick[false="false"] {
-              color: var(--conversation-text-clr);
-            }
-          }
-        }
-      }
+    max-width: 75%;
+    gap: 5px;
+    padding: 0px 15px;
+    &:is(.end) {
+      flex-direction: row-reverse;
+      margin-left: auto;
       .chat_card {
-        display: flex;
-        flex-direction: column;
-        width: fit-content;
-        padding: 10px 10px 5px 10px;
-        background-color: var(--conversation-card-bg-right);
-        position: relative;
-        border-radius: 4px;
-        box-shadow: 0 2px 4px rgba(15, 34, 58, 0.12);
-        color: var(--conversation-text-clr);
-        font-size: 14px;
-        overflow: hidden;
-        div {
-          &:first-child {
-            display: flex;
-            justify-content: flex-start;
-          }
-          &:last-child {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 5px;
-          }
-        }
+        background-color: var(--conversation-card-bg-left);
         .reply_card {
-          position: relative;
-          background-color: #dfeee5;
-          padding: 7px 10px;
-          border-radius: 4px;
-          margin-bottom: 5px;
-          cursor: pointer;
-          &::before {
-            content: "";
-            position: absolute;
-            width: 4px;
-            height: 100%;
-            inset: 0px auto auto 0px;
-            background-color: #4eac6e;
-            border-radius: 4px 0px 0px 4px;
-          }
-          span {
-            color: var(--conversation-text-clr);
-            font-size: 14px;
-          }
+          background-color: #fff;
         }
         .msg_time {
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-          gap: 5px;
-          span {
+          .tick[seen] {
+            display: block;
+          }
+          .tick[seen="true"] {
+            color: #4eac6e;
+          }
+          .tick[false="false"] {
             color: var(--conversation-text-clr);
-            font-size: 13px;
-          }
-          .tick {
-            display: none;
-            font-size: 18px;
-          }
-          .clock {
-            font-size: 14px;
           }
         }
       }
-      .options {
-        color: var(--conversation-text-clr);
-        font-size: 18px;
+    }
+    .chat_card {
+      display: flex;
+      flex-direction: column;
+      width: fit-content;
+      padding: 10px 10px 5px 10px;
+      background-color: var(--conversation-card-bg-right);
+      position: relative;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(15, 34, 58, 0.12);
+      color: var(--conversation-text-clr);
+      font-size: 14px;
+      overflow: hidden;
+      div {
+        &:first-child {
+          display: flex;
+          justify-content: flex-start;
+        }
+        &:last-child {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          gap: 5px;
+        }
+      }
+      .reply_card {
+        position: relative;
+        background-color: #dfeee5;
+        padding: 7px 10px;
+        border-radius: 4px;
+        margin-bottom: 5px;
         cursor: pointer;
+        &::before {
+          content: "";
+          position: absolute;
+          width: 4px;
+          height: 100%;
+          inset: 0px auto auto 0px;
+          background-color: #4eac6e;
+          border-radius: 4px 0px 0px 4px;
+        }
+        span {
+          color: var(--conversation-text-clr);
+          font-size: 14px;
+        }
+      }
+      .msg_time {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 5px;
+        span {
+          color: var(--conversation-text-clr);
+          font-size: 13px;
+        }
+        .tick {
+          display: none;
+          font-size: 18px;
+        }
+        .clock {
+          font-size: 14px;
+        }
       }
     }
-  }
-  .date {
-    position: sticky;
-    top: 85px;
-    display: flex;
-    justify-content: center;
-    width: fit-content;
-    margin: 15px auto;
-    background-color: #fff6e0;
-    border-radius: 6px;
-    padding: 5px 15px;
-    z-index: 1;
-    span {
-      display: block;
-      color: #cc8f00;
-      font-size: 13px;
+    .options {
+      color: var(--conversation-text-clr);
+      font-size: 18px;
+      cursor: pointer;
     }
   }
-  .unread_msg {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 7px 0px;
-    background-color: #fffadd;
-    z-index: 2;
-    span {
-      color: #ff9526;
-      font-size: 14px;
-    }
+}
+.date {
+  position: sticky;
+  top: 85px;
+  display: flex;
+  justify-content: center;
+  width: fit-content;
+  margin: 15px auto;
+  background-color: #fff6e0;
+  border-radius: 6px;
+  padding: 5px 15px;
+  z-index: 1;
+  span {
+    display: block;
+    color: #cc8f00;
+    font-size: 13px;
   }
-  .typing[typing] {
-    position: sticky;
-    bottom: 85px;
-    display: flex;
-    justify-content: center;
-    &::before {
-      content: attr(typing);
-      color: #4eac6e;
-      font-size: 14px;
-      display: -webkit-box;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
+}
+.unread_msg {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 7px 0px;
+  background-color: #fffadd;
+  z-index: 2;
+  span {
+    color: #ff9526;
+    font-size: 14px;
+  }
+}
+.typing[typing] {
+  position: sticky;
+  bottom: 85px;
+  display: flex;
+  justify-content: center;
+  &::before {
+    content: attr(typing);
+    color: #4eac6e;
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }
 

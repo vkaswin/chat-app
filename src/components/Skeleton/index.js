@@ -2,6 +2,14 @@ import React from "react";
 
 import styles from "./Skeleton.module.scss";
 
-export const Skeleton = () => {
-  return <div className={styles.card}></div>;
+export const Skeleton = ({ width, height }) => {
+  return (
+    <div
+      className={styles.card}
+      style={{
+        ...(width && { "--width": width }),
+        ...(height && { "--height": height }),
+      }}
+    ></div>
+  );
 };
