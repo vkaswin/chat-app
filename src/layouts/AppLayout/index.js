@@ -47,7 +47,9 @@ const AppLayout = () => {
         toggleTheme={toggleTheme}
       />
       <div className={styles.app_layout}>
-        <div className={styles.pages_container}>{/* <Outlet /> */}</div>
+        <div className={styles.pages_container}>
+          <Outlet />
+        </div>
         {!isLoading && <Fragment>{chatId ? <Chat /> : <EmptyChat />}</Fragment>}
       </div>
     </Fragment>

@@ -63,7 +63,7 @@ export const Chat = () => {
 
   useEffect(() => {
     Object.keys(chats).length !== 0 && setChats({});
-    // getChatDetails();
+    getChatDetails();
   }, [chatId]);
 
   useEffect(() => {
