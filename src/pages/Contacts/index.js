@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Avatar, DropDown, Toast } from "components";
+import { Avatar, DropDown, Toast, DropDownItem } from "components";
 import { classNames } from "utils";
 import { useAuth } from "hooks";
 import { getContacts } from "services/Contact";
@@ -108,14 +108,14 @@ const Contacts = () => {
                         ></i>
                       </div>
                       <DropDown placement="bottom" selector={`#${word}-${ind}`}>
-                        <DropDown.Item className="dropdown-option">
+                        <DropDownItem className="dropdown-option">
                           <span>Block</span>
                           <i className="bx-block"></i>
-                        </DropDown.Item>
-                        <DropDown.Item className="dropdown-option">
+                        </DropDownItem>
+                        <DropDownItem className="dropdown-option">
                           <span>Remove</span>
                           <i className="bx-trash"></i>
-                        </DropDown.Item>
+                        </DropDownItem>
                       </DropDown>
                     </Fragment>
                   );

@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 15px;
+  overflow: hidden;
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: var(--width, 50%);
+    background-color: var(--conversation-card-bg-right);
+    border-radius: 8px;
+    padding: 15px;
+    &:is(.end) {
+      margin-left: auto;
+      background-color: var(--conversation-card-bg-left);
+    }
+    .line {
+      height: 15px;
+      border-radius: 4px;
+    }
+  }
+}

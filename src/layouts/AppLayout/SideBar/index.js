@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useMemo, useRef } from "react";
 import { useAuth, useRouter } from "hooks";
 import { NavLink } from "react-router-dom";
 import { classNames } from "utils";
-import { Avatar, DropDown, Tooltip } from "components";
+import { Avatar, DropDown, Tooltip, DropDownItem } from "components";
 
 import styles from "./SideBar.module.scss";
 
@@ -143,17 +143,17 @@ export const SideBar = ({ theme, toggleTheme, className }) => {
           {dropdown.map(({ label, icon, to }, index) => {
             return (
               <NavLink key={index} to={to}>
-                <DropDown.Item className="dropdown-option">
+                <DropDownItem className="dropdown-option">
                   <span>{label}</span>
                   <i className={icon}></i>
-                </DropDown.Item>
+                </DropDownItem>
               </NavLink>
             );
           })}
-          <DropDown.Item onClick={logout} className="dropdown-option">
+          <DropDownItem onClick={logout} className="dropdown-option">
             <span>Logout</span>
             <i className="bx-log-out-circle"></i>
-          </DropDown.Item>
+          </DropDownItem>
         </DropDown>
         <div ref={indicatorRef} className={styles.tab_indicator}></div>
       </div>

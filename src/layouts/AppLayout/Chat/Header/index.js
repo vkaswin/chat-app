@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { DropDown, Avatar } from "components";
+import { DropDown, Avatar, DropDownItem } from "components";
 import { classNames } from "utils";
 
 import styles from "./Header.module.scss";
@@ -45,34 +45,34 @@ export const Header = ({
         <DropDown selector="#more-option" placement="bottom-end" zIndex={2001}>
           {matches && (
             <Fragment>
-              <DropDown.Item className="dropdown-option" onClick={toggleInfo}>
+              <DropDownItem className="dropdown-option" onClick={toggleInfo}>
                 <span>View Profile</span>
                 <i className="bx bx-user"></i>
-              </DropDown.Item>
-              {/* <DropDown.Item
+              </DropDownItem>
+              {/* <DropDownItem
                   className="dropdown-option"
                   onClick={() => handleCall("audio")}
                 >
                   <span>Audio</span>
                   <i className="bx bxs-phone-call"></i>
-                </DropDown.Item> */}
-              <DropDown.Item
+                </DropDownItem> */}
+              <DropDownItem
                 className="dropdown-option"
                 onClick={() => handleCall("video")}
               >
                 <span>Video</span>
                 <i className="bx bx-video"></i>
-              </DropDown.Item>
+              </DropDownItem>
             </Fragment>
           )}
-          <DropDown.Item className="dropdown-option">
+          <DropDownItem className="dropdown-option">
             <span>Muted</span>
             <i className="bx-microphone-off"></i>
-          </DropDown.Item>
-          <DropDown.Item className="dropdown-option">
+          </DropDownItem>
+          <DropDownItem className="dropdown-option">
             <span>Delete</span>
             <i className="bx-trash"></i>
-          </DropDown.Item>
+          </DropDownItem>
         </DropDown>
       </div>
     </div>

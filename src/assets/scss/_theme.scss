@@ -19,6 +19,8 @@
   --chat-name-clr: #495057;
   --status-text-clr: #797c8c;
   --call-border: #f6f6f9;
+  --skeleton-shade: #f2f2f2;
+  --skeleton-bg: #e5e5e5;
 }
 
 :root[theme="dark"] {
@@ -36,4 +38,6 @@
   --chat-name-clr: #adb5bd;
   --status-text-clr: #8f9198;
   --call-border: #2e2e2e;
+  --skeleton-shade: #262626;
+  --skeleton-bg: #3b3d3b;
 }

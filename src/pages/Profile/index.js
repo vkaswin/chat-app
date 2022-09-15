@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, DropDown } from "components";
+import { Avatar, DropDown, DropDownItem } from "components";
 import { useAuth } from "hooks";
 
 import styles from "./Profile.module.scss";
@@ -35,10 +35,10 @@ const Profile = () => {
           <DropDown selector="#my-profile" placement="bottom" zIndex={2001}>
             {dropDown.map(({ label, icon }, index) => {
               return (
-                <DropDown.Item key={index} className="dropdown-option">
+                <DropDownItem key={index} className="dropdown-option">
                   <span>{label}</span>
                   <i className={icon}></i>
-                </DropDown.Item>
+                </DropDownItem>
               );
             })}
           </DropDown>

@@ -5,10 +5,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import PropTypes from "prop-types";
 import { Portal } from "components";
 import { classNames, clickOutside } from "utils";
-import { PopperPlacements } from "utils/constants";
 import { CSSTransition } from "react-transition-group";
 import { usePopper } from "hooks";
 
@@ -18,13 +16,14 @@ const DropDownContext = createContext();
 
 export const DropDown = ({
   children,
-  selector,
-  placement,
-  trigger,
-  className,
-  isOpen,
-  toggle,
-  zIndex,
+  selector = "",
+  placement = "bottom-start",
+  trigger = "click",
+  className = null,
+  isOpen = null,
+  toggle = () => {},
+  zIndex = null,
+  offset = 10,
 }) => {
   const referenceRef = useRef();
   const [popperRef, setPopperRef] = useState();
@@ -101,28 +100,7 @@ export const DropDown = ({
   );
 };
 
-DropDown.propTypes = {
-  children: PropTypes.node.isRequired,
-  position: PropTypes.oneOf(PopperPlacements),
-  offset: PropTypes.number,
-  trigger: PropTypes.oneOf(["click", "hover"]),
-  className: PropTypes.string,
-  selector: PropTypes.string.isRequired,
-  zIndex: PropTypes.number,
-};
-
-DropDown.defaultProps = {
-  position: "bottom-start",
-  offset: 10,
-  trigger: "click",
-  className: null,
-  selector: "",
-  zIndex: null,
-  toggle: null,
-  isOpen: null,
-};
-
-const Item = ({ children, onClick, className }) => {
+export const DropDownItem = ({ children, onClick, className }) => {
   const { close } = useContext(DropDownContext);
 
   const handleClick = () => {
@@ -139,10 +117,3 @@ const Item = ({ children, onClick, className }) => {
     </button>
   );
 };
-
-Item.propTypes = {
-  onClick: PropTypes.func,
-  children: PropTypes.node.isRequired,
-};
-
-DropDown.Item = Item;

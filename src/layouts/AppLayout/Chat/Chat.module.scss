@@ -1,6 +1,6 @@
 .chat_wrapper {
   position: relative;
-  background-image: url("../../assets/images/chat-bg.png");
+  background-image: url("../../../assets/images/chat-bg.png");
   background-color: var(--conversation-bg);
   background-repeat: repeat;
   height: 100%;
@@ -11,7 +11,7 @@
 }
 
 .chat_section {
-  height: calc(100% - 140px);
+  min-height: calc(100% - 140px);
   .chat_skeleton {
     display: flex;
     flex-direction: column;

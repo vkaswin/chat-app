@@ -11,17 +11,17 @@ import { initiateCall } from "services/Call";
 import { debounce } from "utils";
 import { CSSTransition } from "react-transition-group";
 import { socket } from "socket";
+import { Loader } from "./Loader";
+import { PageLoader } from "./PageLoader";
 
 import messageRingTone from "assets/audio/fade-in-tone.mp3";
 import favicon from "assets/images/favicon.ico";
 
-import styles from "./Chats.module.scss";
-import { Loader } from "./Loader";
-import { PageLoader } from "./PageLoader";
+import styles from "./Chat.module.scss";
 
 const audio = new Audio(messageRingTone);
 
-export const Chats = () => {
+export const Chat = () => {
   const chatContainerRef = useRef();
 
   const replyContainerRef = useRef();
@@ -243,6 +243,8 @@ export const Chats = () => {
   };
 
   const handleScroll = ({ target: { scrollTop } }) => {
+    if (pageLoader) return;
+
     const { page, totalPages } = pageMeta;
 
     if (scrollTop !== 0 || page >= totalPages) return;
