@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[411],{4411:function(a,p,_){_.r(p),p.default={app_layout:"AppLayout_app_layout__4MY6X",pages_container:"AppLayout_pages_container__NUOnl",empty_chat:"AppLayout_empty_chat__n2twR",hide:"AppLayout_hide__CjBs-"}}}]);
-//# sourceMappingURL=411.e4946378.chunk.js.map

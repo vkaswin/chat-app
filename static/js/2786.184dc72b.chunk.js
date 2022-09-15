@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[2786],{2786:function(e,o,_){_.r(o),o.default={video_container:"VideoPopup_video_container__EcnPE",remote:"VideoPopup_remote__x1HvW",local:"VideoPopup_local__xIYkj"}}}]);
+//# sourceMappingURL=2786.184dc72b.chunk.js.map
