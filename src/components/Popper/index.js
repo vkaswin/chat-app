@@ -1,17 +1,16 @@
 export class Popper {
   constructor({ reference, popper, placement, onUpdate }) {
-    this.reference = reference;
-    this.popper = popper;
-    this.referenceRect = reference.getBoundingClientRect();
-    this.popperRect = popper.getBoundingClientRect();
-    this.placement = placement;
-    this.innerWidth = undefined;
-    this.innerHeight = undefined;
-    this.onUpdate = onUpdate;
-    this.popperStyle = { position: "absolute", inset: "0px auto auto 0px" };
-    this.arrowStyle = { position: "absolute", inset: "0px auto auto 0px" };
-    this.popperAttributes = { placement };
-    this.popperPositions = {
+    this._reference = reference;
+    this._popper = popper;
+    this._referenceRect = reference.getBoundingClientRect();
+    this._popperRect = popper.getBoundingClientRect();
+    this._placement = placement;
+    this._innerWidth = window.innerWidth;
+    this._innerHeight = window.innerHeight;
+    this._popperStyle = { position: "absolute", inset: "0px auto auto 0px" };
+    this._arrowStyle = { position: "absolute", inset: "0px auto auto 0px" };
+    this._popperAttributes = { placement };
+    this._popperPositions = {
       "left-center": this.placeOnLeftCenter.bind(this),
       "left-start": this.placeOnLeftStart.bind(this),
       "left-end": this.placeOnLeftEnd.bind(this),
@@ -25,14 +24,15 @@ export class Popper {
       "bottom-center": this.placeOnBottomCenter.bind(this),
       "bottom-end": this.placeOnBottomEnd.bind(this),
     };
-    this.parent = this.getScrollParent(this.reference);
+    this._parent = this.getScrollParent(this._reference);
+    this.onUpdate = onUpdate;
     this.init();
   }
 
   init() {
     this.handlePopper();
-    if (this.parent) {
-      this.parent.addEventListener(
+    if (this._parent) {
+      this._parent.addEventListener(
         "scroll",
         this.handlePopper.bind(this, true)
       );
@@ -41,8 +41,8 @@ export class Popper {
   }
 
   destroy() {
-    if (this.parent) {
-      this.parent.removeEventListener(
+    if (this._parent) {
+      this._parent.removeEventListener(
         "scroll",
         this.handlePopper.bind(this, true)
       );
@@ -51,31 +51,31 @@ export class Popper {
   }
 
   canPlaceOnLeft() {
-    return this.referenceRect.x > this.popperRect.width;
+    return this._referenceRect.x > this._popperRect.width;
   }
 
   canPlaceOnRight() {
     return (
-      this.innerWidth - (this.referenceRect.x + this.referenceRect.width) >
-      this.popperRect.width
+      this._innerWidth - (this._referenceRect.x + this._referenceRect.width) >
+      this._popperRect.width
     );
   }
 
   canPlaceOnTop() {
-    return this.referenceRect.y > this.popperRect.height;
+    return this._referenceRect.y > this._popperRect.height;
   }
 
   canPlaceOnBottom() {
     let bottom =
-      this.innerHeight - (this.referenceRect.y + this.referenceRect.height);
-    return bottom > this.popperRect.height;
+      this._innerHeight - (this._referenceRect.y + this._referenceRect.height);
+    return bottom > this._popperRect.height;
   }
 
   placeOnLeftStart() {
     if (!this.canPlaceOnLeft()) return false;
     const { scrollX, scrollY } = window;
-    let left = this.referenceRect.x - this.popperRect.width;
-    let top = this.referenceRect.y;
+    let left = this._referenceRect.x - this._popperRect.width;
+    let top = this._referenceRect.y;
     return {
       popper: {
         left: left + scrollX,
@@ -87,10 +87,10 @@ export class Popper {
   placeOnLeftCenter = () => {
     if (!this.canPlaceOnLeft()) return false;
     const { scrollX, scrollY } = window;
-    let left = this.referenceRect.x - this.popperRect.width;
+    let left = this._referenceRect.x - this._popperRect.width;
     let top =
-      this.referenceRect.y -
-      (this.popperRect.height / 2 - this.referenceRect.height / 2);
+      this._referenceRect.y -
+      (this._popperRect.height / 2 - this._referenceRect.height / 2);
     return {
       popper: {
         left: left + scrollX,
@@ -102,10 +102,10 @@ export class Popper {
   placeOnLeftEnd() {
     if (!this.canPlaceOnLeft()) return false;
     const { scrollX, scrollY } = window;
-    let left = this.referenceRect.x - this.popperRect.width;
+    let left = this._referenceRect.x - this._popperRect.width;
     let top =
-      this.referenceRect.y -
-      (this.popperRect.height - this.referenceRect.height);
+      this._referenceRect.y -
+      (this._popperRect.height - this._referenceRect.height);
     return {
       popper: {
         left: left + scrollX,
@@ -117,8 +117,8 @@ export class Popper {
   placeOnRightStart() {
     if (!this.canPlaceOnRight()) return false;
     const { scrollX, scrollY } = window;
-    let left = this.referenceRect.x + this.referenceRect.width;
-    let top = this.referenceRect.y;
+    let left = this._referenceRect.x + this._referenceRect.width;
+    let top = this._referenceRect.y;
     return {
       popper: {
         left: left + scrollX,
@@ -130,10 +130,10 @@ export class Popper {
   placeOnRightCenter = () => {
     if (!this.canPlaceOnRight()) return false;
     const { scrollX, scrollY } = window;
-    let left = this.referenceRect.x + this.referenceRect.width;
+    let left = this._referenceRect.x + this._referenceRect.width;
     let top =
-      this.referenceRect.y -
-      (this.popperRect.height / 2 - this.referenceRect.height / 2);
+      this._referenceRect.y -
+      (this._popperRect.height / 2 - this._referenceRect.height / 2);
     return {
       popper: {
         left: left + scrollX,
@@ -145,10 +145,10 @@ export class Popper {
   placeOnRightEnd = () => {
     if (!this.canPlaceOnRight()) return false;
     const { scrollX, scrollY } = window;
-    let left = this.referenceRect.x + this.referenceRect.width;
+    let left = this._referenceRect.x + this._referenceRect.width;
     let top =
-      this.referenceRect.y -
-      (this.popperRect.height - this.referenceRect.height);
+      this._referenceRect.y -
+      (this._popperRect.height - this._referenceRect.height);
     return {
       popper: {
         left: left + scrollX,
@@ -160,8 +160,8 @@ export class Popper {
   placeOnTopStart = () => {
     if (!this.canPlaceOnTop()) return false;
     const { scrollX, scrollY } = window;
-    let left = this.referenceRect.x;
-    let top = this.referenceRect.y - this.popperRect.height;
+    let left = this._referenceRect.x;
+    let top = this._referenceRect.y - this._popperRect.height;
     return {
       popper: {
         left: left + scrollX,
@@ -174,9 +174,9 @@ export class Popper {
     if (!this.canPlaceOnTop()) return false;
     const { scrollX, scrollY } = window;
     let left =
-      this.referenceRect.x +
-      (this.referenceRect.width / 2 - this.popperRect.width / 2);
-    let top = this.referenceRect.y - this.popperRect.height;
+      this._referenceRect.x +
+      (this._referenceRect.width / 2 - this._popperRect.width / 2);
+    let top = this._referenceRect.y - this._popperRect.height;
     return {
       popper: {
         left: left + scrollX,
@@ -189,8 +189,9 @@ export class Popper {
     if (!this.canPlaceOnTop()) return false;
     const { scrollX, scrollY } = window;
     let left =
-      this.referenceRect.x - (this.popperRect.width - this.referenceRect.width);
-    let top = this.referenceRect.y - this.popperRect.height;
+      this._referenceRect.x -
+      (this._popperRect.width - this._referenceRect.width);
+    let top = this._referenceRect.y - this._popperRect.height;
     return {
       popper: {
         left: left + scrollX,
@@ -202,8 +203,8 @@ export class Popper {
   placeOnBottomStart(isDefault = false) {
     if (isDefault || !this.canPlaceOnBottom()) return false;
     const { scrollX, scrollY } = window;
-    let left = this.referenceRect.x;
-    let top = this.referenceRect.y + this.referenceRect.height;
+    let left = this._referenceRect.x;
+    let top = this._referenceRect.y + this._referenceRect.height;
     return {
       popper: {
         left: left + scrollX,
@@ -216,9 +217,9 @@ export class Popper {
     if (!this.canPlaceOnBottom()) return false;
     const { scrollX, scrollY } = window;
     let left =
-      this.referenceRect.x +
-      (this.referenceRect.width / 2 - this.popperRect.width / 2);
-    let top = this.referenceRect.y + this.referenceRect.height;
+      this._referenceRect.x +
+      (this._referenceRect.width / 2 - this._popperRect.width / 2);
+    let top = this._referenceRect.y + this._referenceRect.height;
     return {
       popper: {
         left: left + scrollX,
@@ -231,8 +232,9 @@ export class Popper {
     if (!this.canPlaceOnBottom()) return false;
     const { scrollX, scrollY } = window;
     let left =
-      this.referenceRect.x - (this.popperRect.width - this.referenceRect.width);
-    let top = this.referenceRect.y + this.referenceRect.height;
+      this._referenceRect.x -
+      (this._popperRect.width - this._referenceRect.width);
+    let top = this._referenceRect.y + this._referenceRect.height;
     return {
       popper: {
         left: left + scrollX,
@@ -242,7 +244,7 @@ export class Popper {
   }
 
   getPosition = () => {
-    const [position] = this.placement.split("-");
+    const [position] = this._placement.split("-");
     switch (position) {
       case "left":
         return this.canPlaceOnLeft() && "left-center";
@@ -258,7 +260,7 @@ export class Popper {
   };
 
   getOppositePosition = () => {
-    const [position] = this.placement.split("-");
+    const [position] = this._placement.split("-");
     switch (position) {
       case "left":
         return this.canPlaceOnRight() && "right";
@@ -274,7 +276,7 @@ export class Popper {
   };
 
   getAdjacentSides = () => {
-    const [position] = this.placement.split("-");
+    const [position] = this._placement.split("-");
     if (position === "left" || position === "right") {
       return [
         this.canPlaceOnTop() && "top",
@@ -298,10 +300,10 @@ export class Popper {
 
     if (posiblePositions.length !== 0) {
       let placement = `${posiblePositions[0]}-center`;
-      let rect = this.popperPositions[placement]?.();
+      let rect = this._popperPositions[placement]?.();
       this.onUpdate({ popper: rect.popper, placement });
     } else {
-      let rect = this.popperPositions["bottom-start"](true);
+      let rect = this._popperPositions["bottom-start"](true);
       this.onUpdate({ popper: rect.popper, placaement: "bottom-start" });
     }
   };
@@ -309,16 +311,16 @@ export class Popper {
   handlePopper(isScroll = false) {
     const { innerWidth, innerHeight } = window;
 
-    this.innerHeight = innerHeight;
-    this.innerWidth = innerWidth;
+    this._innerHeight = innerHeight;
+    this._innerWidth = innerWidth;
 
     if (isScroll) {
-      this.referenceRect = this.reference.getBoundingClientRect();
+      this._referenceRect = this.reference.getBoundingClientRect();
     }
 
-    const rect = this.popperPositions[this.placement]?.();
+    const rect = this._popperPositions[this._placement]?.();
     if (rect) {
-      this.onUpdate({ popper: rect.popper, placement: this.placement });
+      this.onUpdate({ popper: rect.popper, placement: this._placement });
     } else {
       this.autoPlacement(isScroll);
     }

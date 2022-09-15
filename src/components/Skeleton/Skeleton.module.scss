@@ -1,0 +1,20 @@
+.card {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(
+    120deg,
+    #e5e5e5 30%,
+    #f2f2f2 38%,
+    #f2f2f2 40%,
+    #e5e5e5 48%
+  );
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  animation: load 1s infinite;
+}
+
+@keyframes load {
+  100% {
+    background-position: -100% 0;
+  }
+}

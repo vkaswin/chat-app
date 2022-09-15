@@ -1,13 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Portal } from "components";
-import PropTypes from "prop-types";
-import { PopperPlacements } from "utils/constants";
 import { CSSTransition } from "react-transition-group";
 import { usePopper } from "hooks";
 
 import styles from "./Tooltip.module.scss";
 
-export const Tooltip = ({ children, placement, className, selector }) => {
+export const Tooltip = ({
+  children,
+  placement = "top-center",
+  className = null,
+  selector,
+  arrow = true,
+  offset = 10,
+}) => {
   const referenceRef = useRef();
 
   const [popperRef, setPopperRef] = useState();
@@ -62,21 +67,4 @@ export const Tooltip = ({ children, placement, className, selector }) => {
       </CSSTransition>
     </Portal>
   );
-};
-
-Tooltip.propTypes = {
-  children: PropTypes.node.isRequired,
-  placement: PropTypes.oneOf(PopperPlacements),
-  offset: PropTypes.number,
-  arrow: PropTypes.bool,
-  className: PropTypes.string,
-  selector: PropTypes.string.isRequired,
-};
-
-Tooltip.defaultProps = {
-  placement: "top-center",
-  arrow: true,
-  offset: 10,
-  className: null,
-  selector: "",
 };

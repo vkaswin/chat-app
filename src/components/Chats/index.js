@@ -45,7 +45,11 @@ export const Chats = () => {
 
   const [loading, setLoading] = useState(false);
 
+  const [pageLoader, setPageLoader] = useState(true);
+
   const msgId = useRef();
+
+  const limit = 30;
 
   let iceCandidate;
 
@@ -123,26 +127,42 @@ export const Chats = () => {
 
   //   Chats
   const getChatDetails = async () => {
+    let params = {
+      page: 1,
+      limit,
+    };
     try {
-      let {
-        data: { data },
-      } = await getChatById(chatId);
+      let [
+        {
+          data: { data },
+        },
+        {
+          data: {
+            data: { list, newMessages, pageMeta },
+          },
+        },
+      ] = await Promise.all([
+        getChatById(chatId),
+        getMessagesByChatId(chatId, params),
+      ]);
       setChatDetails(data);
-      getMessages(1);
+      groupMessagesByDate(list, newMessages, pageMeta);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
+    } finally {
+      setPageLoader(false);
     }
   };
 
   const getMessages = async (page) => {
     try {
       let params = {
-        limit: 30,
+        limit,
         page,
       };
       let {
         data: {
-          data: { list, newMessages = [], pageMeta },
+          data: { list, newMessages, pageMeta },
         },
       } = await getMessagesByChatId(chatId, params);
       groupMessagesByDate(list, newMessages, pageMeta);
@@ -153,7 +173,7 @@ export const Chats = () => {
     }
   };
 
-  const groupMessagesByDate = (list, newMessages, pageMeta) => {
+  const groupMessagesByDate = (list, newMessages = [], pageMeta) => {
     if (list.length === 0 && newMessages.length === 0) return;
 
     if (newMessages.length > 0) {

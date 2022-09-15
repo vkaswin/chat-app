@@ -1,18 +1,17 @@
 import React from "react";
-import { Portal, Overlay } from "components";
+import { Portal } from "components";
 import { CSSTransition } from "react-transition-group";
-import PropTypes from "prop-types";
-
-import styles from "./OffCanvas.module.scss";
 import { classNames } from "utils";
 
+import styles from "./OffCanvas.module.scss";
+
 export const OffCanvas = ({
-  position,
-  isOpen,
-  toggle,
+  position = "left",
+  isOpen = false,
+  toggle = () => {},
   children,
-  className,
-  overlay,
+  className = null,
+  overlay = true,
   zIndex,
 }) => {
   return (
@@ -46,21 +45,4 @@ export const OffCanvas = ({
       </CSSTransition>
     </Portal>
   );
-};
-
-OffCanvas.propType = {
-  isOpen: PropTypes.bool,
-  position: PropTypes.oneOf(["left", "right", "bottom", "top"]),
-  toggle: PropTypes.func,
-  children: PropTypes.node,
-  className: PropTypes.string,
-  overlay: PropTypes.bool,
-};
-
-OffCanvas.defaultProps = {
-  isOpen: false,
-  position: "left",
-  className: null,
-  toggle: () => {},
-  overlay: true,
 };

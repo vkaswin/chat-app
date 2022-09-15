@@ -1,15 +1,14 @@
 import React, { useMemo } from "react";
-import PropTypes from "prop-types";
-
-import styles from "./Avatar.module.scss";
 import { classNames } from "utils";
 
+import styles from "./Avatar.module.scss";
+
 export const Avatar = ({
-  src,
-  size,
-  outline,
+  src = null,
+  size = 50,
+  outline = false,
   status = false,
-  name,
+  name = "",
   outlineSize = 3,
   upload = false,
   userId = null,
@@ -52,20 +51,4 @@ export const Avatar = ({
       )}
     </div>
   );
-};
-
-Avatar.propTypes = {
-  src: PropTypes.string,
-  size: PropTypes.number,
-  outline: PropTypes.bool,
-  status: PropTypes.bool,
-  name: PropTypes.string,
-};
-
-Avatar.defaultProps = {
-  src: null,
-  size: 50,
-  outline: false,
-  status: false,
-  name: "",
 };

@@ -1,17 +1,16 @@
 import React, { Fragment } from "react";
-import PropTypes from "prop-types";
 
 import "./Input.scss";
 
 export const Input = ({
   label,
-  type,
-  placeholder,
+  type = "text",
+  placeholder = "Enter here",
   register,
   value,
-  maxLength,
-  isReadOnly,
-  disabled,
+  maxLength = null,
+  isReadOnly = false,
+  disabled = false,
   error,
   message,
 }) => {
@@ -36,23 +35,4 @@ export const Input = ({
       {error !== undefined && <span>{message[error.type]}</span>}
     </div>
   );
-};
-
-Input.propTypes = {
-  label: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(["text", "number"]),
-  placeholder: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  maxLength: PropTypes.number,
-  isReadOnly: PropTypes.bool,
-  disabled: PropTypes.bool,
-  message: PropTypes.object,
-};
-
-Input.defaultProps = {
-  type: "text",
-  placeholder: "Enter here",
-  maxLength: null,
-  isReadOnly: false,
-  disabled: false,
 };

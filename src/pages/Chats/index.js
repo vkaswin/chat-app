@@ -44,9 +44,9 @@ const Chats = () => {
   const getChats = async () => {
     try {
       let [recent, favourite, group] = await Promise.all([
-        await getRecentChats(),
-        await getFavouriteChats(),
-        await getGroupChats(),
+        getRecentChats(),
+        getFavouriteChats(),
+        getGroupChats(),
       ]);
       setChatList({
         ...chatList,

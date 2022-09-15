@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 
 import "./PasswordInput.scss";
 
 export const PasswordInput = ({
   label,
-  placeholder,
+  placeholder = "Enter here",
   value,
   register,
-  disabled,
+  disabled = false,
   error,
   message,
 }) => {
@@ -35,17 +34,4 @@ export const PasswordInput = ({
       {error !== undefined && <span>{message[error.type]}</span>}
     </div>
   );
-};
-
-PasswordInput.propTypes = {
-  label: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  disabled: PropTypes.bool,
-  message: PropTypes.object,
-};
-
-PasswordInput.defaultProps = {
-  placeholder: "Enter here",
-  disabled: false,
 };
