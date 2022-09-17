@@ -95,11 +95,18 @@ html[theme="dark"] {
   animation: skeleton 1s infinite;
 }
 
+html[theme="dark"] {
+  .page-loader {
+    background-color: #262626;
+  }
+}
+
 .page-loader {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
+  background-color: #fff;
   .loader-wrapper {
     animation: animball_two 1s infinite;
     width: 44px;
