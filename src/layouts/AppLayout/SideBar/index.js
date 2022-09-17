@@ -57,7 +57,7 @@ export const SideBar = ({ theme, toggleTheme, className }) => {
     {
       label: "Change Password",
       icon: "bx-lock-open",
-      to: "/auth/change-password",
+      to: "/change-password",
     },
   ];
 

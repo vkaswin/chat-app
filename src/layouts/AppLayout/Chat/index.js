@@ -46,7 +46,7 @@ export const Chat = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const [pageLoader, setPageLoader] = useState(true);
+  const [pageLoader, setPageLoader] = useState();
 
   const msgId = useRef();
 
@@ -78,6 +78,12 @@ export const Chat = () => {
 
     focusMsgById(msgId.current);
   }, [chats]);
+
+  useEffect(() => {
+    if (!msgId.current || pageLoader) return;
+
+    focusMsgById(msgId.current);
+  }, [pageLoader]);
 
   const handleSocket = () => {
     socket.on("message", handleMessage);
@@ -128,6 +134,7 @@ export const Chat = () => {
 
   //   Chats
   const getChatDetails = async () => {
+    setPageLoader(true);
     let params = {
       page: 1,
       limit,
@@ -151,7 +158,7 @@ export const Chat = () => {
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     } finally {
-      setPageLoader(false);
+      setTimeout(() => setPageLoader(false), 100);
     }
   };
 

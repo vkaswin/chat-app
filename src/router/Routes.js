@@ -1,6 +1,6 @@
 export const routes = [
   {
-    path: "/auth",
+    path: "/",
     component: "layouts/AuthLayout",
     children: [
       {

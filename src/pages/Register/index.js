@@ -36,7 +36,7 @@ const Register = () => {
       } = await registerUser(data);
       cookie.remove("login_session");
       Toast({ type: "success", message });
-      router.push("/auth/login");
+      router.push("/login");
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     }

@@ -63,7 +63,7 @@ const Login = () => {
       router.push("/chats");
     } catch (error) {
       if (error?.message === "User not exist") {
-        router.push("/auth/register");
+        router.push("/register");
       }
       Toast({ type: "error", message: error?.message });
     }
@@ -112,7 +112,7 @@ const Login = () => {
         </button>
         <div className={styles.register}>
           <span>Dont't have an account ?</span>
-          <NavLink to="/auth/register">
+          <NavLink to="/register">
             <span>Register</span>
           </NavLink>
         </div>

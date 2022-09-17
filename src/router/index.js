@@ -4,22 +4,24 @@ import { ProvideAuth } from "hooks";
 import { routes } from "router/Routes";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { cookies } from "utils";
+import { Loader } from "./Loader";
 
 const PageNotFound = lazy(() => import("../pages/404"));
 
 export const Router = () => {
   const cookie = cookies();
+
   const authToken = cookie.get("authToken");
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Loader />}>
       <HashRouter>
         <ProvideAuth>
           <Routes>
             <Route
               path="/"
               element={
-                <Navigate replace to={authToken ? "/chats" : "/auth/login"} />
+                <Navigate replace to={authToken ? "/chats" : "/login"} />
               }
             />
             {routes.map(({ path, component, children = [], auth }) => {

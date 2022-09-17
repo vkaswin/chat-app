@@ -4,7 +4,7 @@ import { classNames } from "utils";
 import styles from "./PageLoader.module.scss";
 
 export const PageLoader = () => {
-  const cardWidth = ["35%", "40%", "45%", "50%"];
+  const cardWidth = ["25%", "27.5%", "30%", "32.5%", "35%"];
 
   const skeleton = Array.from(
     { length: 10 },

@@ -17,20 +17,11 @@ const AppLayout = () => {
   const [theme, setTheme] = useState();
 
   useEffect(() => {
-    Notification.permission !== "granted" && requestNotificationPermission();
     let val = storage.get("theme") ?? "light";
     let root = document.querySelector(":root");
     root.setAttribute("theme", val);
     setTheme(val);
   }, []);
-
-  const requestNotificationPermission = async () => {
-    try {
-      await Notification.requestPermission();
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const toggleTheme = (value) => () => {
     let root = document.querySelector(":root");

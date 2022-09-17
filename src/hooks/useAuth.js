@@ -58,6 +58,8 @@ export const ProvideAuth = ({ children }) => {
   };
 
   const handleChat = (chatId) => {
+    Notification.permission !== "granted" && requestNotificationPermission();
+
     const oldChatId = session.get("chatId");
 
     if (oldChatId === chatId) return;
@@ -68,6 +70,14 @@ export const ProvideAuth = ({ children }) => {
     setChatId(chatId);
   };
 
+  const requestNotificationPermission = async () => {
+    try {
+      await Notification.requestPermission();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const clearChatId = () => {
     session.remove("chatId");
     setChatId(null);
@@ -76,7 +86,7 @@ export const ProvideAuth = ({ children }) => {
   const logout = () => {
     socket.close();
     cookie.remove("authToken");
-    router.push("/auth/login");
+    router.push("/login");
   };
 
   return (
