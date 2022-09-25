@@ -2,15 +2,17 @@ import React, { Fragment, useEffect, useState } from "react";
 import { Avatar, Toast } from "components";
 import { classNames } from "utils";
 import { useAuth } from "hooks";
-import {
-  getFavouriteChats,
-  getRecentChats,
-  getGroupChats,
-} from "services/Chat";
+import { getChatByType } from "services/Chat";
 import moment from "moment";
 import { socket } from "socket";
 
 import styles from "./Chats.module.scss";
+
+const types = {
+  recent: "recent",
+  favourite: "favourite",
+  group: "group",
+};
 
 const Chats = () => {
   const { chatId, handleChat, user } = useAuth();
@@ -44,9 +46,9 @@ const Chats = () => {
   const getChats = async () => {
     try {
       let [recent, favourite, group] = await Promise.all([
-        getRecentChats(),
-        getFavouriteChats(),
-        getGroupChats(),
+        getChatByType(types.recent),
+        getChatByType(types.favourite),
+        getChatByType(types.group),
       ]);
       setChatList({
         ...chatList,
@@ -129,7 +131,12 @@ const Chats = () => {
           </div>
           {favourite.map(
             (
-              { _id, count, msg, date, name, avatar, status, userId },
+              {
+                _id,
+                count,
+                latest: { msg, date },
+                user: { name, avatar, status, id },
+              },
               index
             ) => {
               return (
@@ -147,7 +154,7 @@ const Chats = () => {
                       name={name}
                       status={status}
                       size={35}
-                      userId={userId}
+                      userId={id}
                     />
                     <div className={styles.msg} typingstatus="">
                       <span className="truncate-1">{name}</span>
@@ -175,7 +182,12 @@ const Chats = () => {
           </div>
           {recent.map(
             (
-              { _id, count, msg, date, name, avatar, status, userId },
+              {
+                _id,
+                count,
+                latest: { msg, date },
+                user: { name, avatar, status, id },
+              },
               index
             ) => {
               return (
@@ -193,7 +205,7 @@ const Chats = () => {
                       name={name}
                       status={status}
                       size={35}
-                      userId={userId}
+                      userId={id}
                     />
                     <div className={styles.msg} typingstatus="">
                       <span className="truncate-1">{name}</span>
@@ -222,34 +234,39 @@ const Chats = () => {
               <i className="bx-plus"></i>
             </button>
           </div>
-          {group.map(({ _id, count, msg, date, name, avatar }, index) => {
-            return (
-              <div
-                key={index}
-                className={classNames(styles.user_card, {
-                  [styles.active]: _id === chatId,
-                })}
-                onClick={() => handleChat(_id)}
-                chatid={_id}
-              >
-                <div className={styles.user}>
-                  <Avatar src={avatar} name={name} size={35} />
-                  <div className={styles.msg} typingstatus="">
-                    <span className="truncate-1">{name}</span>
-                    <span className="truncate-1">{msg}</span>
+          {group.map(
+            (
+              { _id, count, latest: { msg, date }, group: { name, avatar } },
+              index
+            ) => {
+              return (
+                <div
+                  key={index}
+                  className={classNames(styles.user_card, {
+                    [styles.active]: _id === chatId,
+                  })}
+                  onClick={() => handleChat(_id)}
+                  chatid={_id}
+                >
+                  <div className={styles.user}>
+                    <Avatar src={avatar} name={name} size={35} />
+                    <div className={styles.msg} typingstatus="">
+                      <span className="truncate-1">{name}</span>
+                      <span className="truncate-1">{msg}</span>
+                    </div>
+                  </div>
+                  <div
+                    className={classNames(styles.time, {
+                      [styles.top]: !count,
+                    })}
+                  >
+                    <span>{getDate(date)}</span>
+                    {count > 0 && <label>{count}</label>}
                   </div>
                 </div>
-                <div
-                  className={classNames(styles.time, {
-                    [styles.top]: !count,
-                  })}
-                >
-                  <span>{getDate(date)}</span>
-                  {count > 0 && <label>{count}</label>}
-                </div>
-              </div>
-            );
-          })}
+              );
+            }
+          )}
         </Fragment>
       )}
     </div>

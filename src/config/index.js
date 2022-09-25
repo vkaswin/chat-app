@@ -21,7 +21,7 @@ export const endpoints = {
     status: `${userURL}/status`,
   },
   chat: {
-    recentChats: `${chatUrl}/recent`,
+    list: `${chatUrl}/list`,
     favouriteChats: `${chatUrl}/favourite`,
     groupChats: `${chatUrl}/group`,
     chatDetails: `${chatUrl}/detail`,
