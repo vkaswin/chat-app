@@ -11,28 +11,28 @@ export const Conversation = ({
   onCopy,
   onReply,
   userId,
-  newMsg,
   focusMsgById,
   otherUserId,
+  unReadMsg,
 }) => {
   return (
     <Fragment>
-      {Object.entries(chats).map(([date, conversation], key) => {
+      {chats.map(({ day, messages }, key) => {
         return (
           <Fragment key={key}>
             <div className={styles.date}>
-              <span>{moment(date).format("D MMMM YYYY")}</span>
+              <span>{moment(day).format("D MMMM YYYY")}</span>
             </div>
             <div className={styles.container}>
-              {conversation.map(
+              {messages.map(
                 ({ msg, date, sender, _id, seen, reply = null }, index) => {
                   return (
                     <Fragment key={index}>
-                      {newMsg.id && newMsg.id === _id && (
+                      {unReadMsg.id && unReadMsg.id === _id && (
                         <div className={styles.unread_msg}>
                           <span>
-                            {newMsg.count} Unread Message
-                            {newMsg.count > 1 && "s"}
+                            {unReadMsg.total} Unread Message
+                            {unReadMsg.total > 1 && "s"}
                           </span>
                         </div>
                       )}

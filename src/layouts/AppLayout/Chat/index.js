@@ -30,7 +30,7 @@ export const Chat = () => {
 
   const peerConnection = useRef();
 
-  const [chats, setChats] = useState({});
+  const [chats, setChats] = useState([]);
 
   const [showInfo, setShowInfo] = useState(false);
 
@@ -42,17 +42,19 @@ export const Chat = () => {
 
   const [chatDetails, setChatDetails] = useState({});
 
-  const [newMsg, setNewMsg] = useState({ id: null, count: null, list: [] });
+  const [topLoader, setTopLoader] = useState(false);
 
-  const [loading, setLoading] = useState(false);
+  const [bottomLoader, setBottomLoader] = useState(false);
+
+  const [unReadMsg, setUnReadMsg] = useState({});
 
   const [pageLoader, setPageLoader] = useState();
 
   const msgId = useRef();
 
-  const limit = 30;
+  const iceCandidate = useRef();
 
-  let iceCandidate;
+  const limit = 50;
 
   useEffect(() => {
     document.addEventListener("socket", handleSocket);
@@ -62,20 +64,12 @@ export const Chat = () => {
   }, []);
 
   useEffect(() => {
-    Object.keys(chats).length !== 0 && setChats({});
+    chats.length !== 0 && setChats([]);
     getChatDetails();
   }, [chatId]);
 
   useEffect(() => {
-    if (newMsg.list.length > 0) {
-      const msgId = newMsg.list.map(({ _id }) => {
-        return _id;
-      });
-      updateSeenStatus({ msgId });
-    }
-
-    if (!msgId.current || Object.keys(chats).length === 0) return;
-
+    if (!msgId.current || chats.length === 0) return;
     focusMsgById(msgId.current);
   }, [chats]);
 
@@ -135,6 +129,8 @@ export const Chat = () => {
   //   Chats
   const getChatDetails = async () => {
     setPageLoader(true);
+    let chats = [];
+    let msgIds = [];
     let params = {
       page: 1,
       limit,
@@ -146,96 +142,134 @@ export const Chat = () => {
         },
         {
           data: {
-            data: { list, newMessages, pageMeta },
+            data: { list = [], pageMeta },
           },
         },
       ] = await Promise.all([
         getChatById(chatId),
         getMessagesByChatId(chatId, params),
       ]);
+      chats = list;
+      if (data.messages) {
+        let {
+          data: {
+            data: { list = [], pageMeta },
+          },
+        } = await getMessagesByChatId(chatId, {
+          page: 1,
+          limit: 10,
+          type: "new",
+        });
+        msgIds = addNewMessagesInChat(chats, list);
+        setUnReadMsg({ id: msgId.current, ...pageMeta });
+      } else {
+        let arr = list[list.length - 1].messages;
+        msgId.current = arr[arr.length - 1]._id;
+      }
       setChatDetails(data);
-      groupMessagesByDate(list, newMessages, pageMeta);
+      setPageMeta(pageMeta);
+      setChats(chats);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     } finally {
-      setTimeout(() => setPageLoader(false), 100);
+      setTimeout(() => {
+        setPageLoader(false);
+        msgIds?.length > 0 && updateSeenStatus({ msgId: msgIds });
+      }, 100);
     }
   };
 
-  const getMessages = async (page) => {
+  const getMessages = async (page, type = null) => {
+    let msgIds = [];
     try {
       let params = {
-        limit,
+        limit: type === "new" ? 10 : limit,
         page,
+        type,
       };
       let {
         data: {
-          data: { list, newMessages, pageMeta },
+          data: { list, pageMeta },
         },
       } = await getMessagesByChatId(chatId, params);
-      groupMessagesByDate(list, newMessages, pageMeta);
+      if (type === "new") {
+        let chat = [...chats];
+        msgIds = addNewMessagesInChat(chat, list);
+        console.log(msgIds);
+        setChats(chat);
+        setUnReadMsg({
+          ...unReadMsg,
+          totalPages: pageMeta.totalPages,
+          page: pageMeta.page,
+        });
+      } else {
+        sortMessagesByDate(list.reverse(), pageMeta);
+      }
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     } finally {
-      setLoading(false);
+      console.log(msgIds);
+      type === "new" ? setBottomLoader(false) : setTopLoader(false);
+      msgIds?.length > 0 && updateSeenStatus({ msgId: msgIds });
     }
   };
 
-  const groupMessagesByDate = (list, newMessages = [], pageMeta) => {
-    if (list.length === 0 && newMessages.length === 0) return;
-
-    if (newMessages.length > 0) {
-      let id = newMessages[0]?._id;
-      msgId.current = id;
-      list = list.concat(newMessages);
-      setNewMsg({
-        ...newMsg,
-        id,
-        count: newMessages.length,
-        list: newMessages,
-      });
-    } else {
-      msgId.current = list[list.length - 1]?._id;
-    }
-
-    const chatsByDate = list.reduce((initial, msg) => {
-      const key = getDate(msg.date);
-      return initial.hasOwnProperty(key)
-        ? {
-            ...initial,
-            [key]: [...initial[key], msg],
-          }
-        : { ...initial, [key]: [msg] };
-    }, {});
-
-    if (Object.keys(chatsByDate).length === 0) return;
-
+  const sortMessagesByDate = (list, pageMeta) => {
     setChats((prev) => {
-      const final = Object.entries(chatsByDate).reduce(
-        (initial, [date, msg]) => {
-          const key = getDate(date);
-          return initial.hasOwnProperty(key)
-            ? {
-                ...initial,
-                [key]: [...initial[key], ...msg].sort((a, b) => {
-                  return new Date(a.date) - new Date(b.date);
-                }),
-              }
-            : { ...initial, [key]: msg };
-        },
-        prev
-      );
+      let chats = [...prev];
+      list.forEach(({ day, messages }, i) => {
+        let index = chats.findIndex(({ day: key }) => {
+          return day === key;
+        });
+        index === -1
+          ? chats.unshift({ day, messages })
+          : chats[index].messages.unshift(...messages);
 
-      const sortByDate = Object.keys(final).sort((a, b) => {
-        return new Date(a) - new Date(b);
+        if (i === 0) {
+          msgId.current = messages[messages.length - 1]._id;
+        }
       });
 
-      return sortByDate.reduce((initial, date) => {
-        return { ...initial, [date]: final[date] };
-      }, {});
+      return chats;
+    });
+    setPageMeta(pageMeta);
+  };
+
+  const addNewMessagesInChat = (chats, list) => {
+    list.forEach(({ day, messages }, i) => {
+      let index = chats.findIndex(({ day: key }) => {
+        return day === getDate(key);
+      });
+      index === -1
+        ? chats.push({ day, messages })
+        : chats[index].messages.push(...messages);
+      if (i === 0) {
+        msgId.current = list[0].messages[0]._id;
+      }
     });
 
-    setPageMeta(pageMeta);
+    let msgIds = list.reduce((arr, { messages }) => {
+      return [
+        ...arr,
+        ...messages.map(({ _id }) => {
+          return _id;
+        }),
+      ];
+    }, []);
+
+    console.log(msgIds, chats, list);
+
+    return msgIds;
+  };
+
+  const addMessageInChat = (chats, messages, day) => {
+    let index = chats.findIndex(({ day: key }) => {
+      return day === key;
+    });
+
+    index === -1
+      ? chats.push({ day, messages: [messages] })
+      : chats[index].messages.push(messages);
   };
 
   const updateSeenStatus = async (data) => {
@@ -243,21 +277,31 @@ export const Chat = () => {
 
     try {
       await markAsRead(chatId, data);
-      setNewMsg({ ...newMsg, list: [] });
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleScroll = ({ target: { scrollTop } }) => {
-    if (pageLoader) return;
+    if (pageLoader || topLoader || bottomLoader) return;
 
-    const { page, totalPages } = pageMeta;
+    if (scrollTop === 0) {
+      const { page, totalPages } = pageMeta;
+      if (page >= totalPages) return;
+      setTopLoader(true);
+      setTimeout(() => getMessages(page + 1), 500);
+    }
 
-    if (scrollTop !== 0 || page >= totalPages) return;
-
-    setLoading(true);
-    setTimeout(() => getMessages(page + 1), 500);
+    if (
+      chatContainerRef.current.scrollHeight -
+        chatContainerRef.current.scrollTop ===
+      chatContainerRef.current.clientHeight
+    ) {
+      const { page = null, totalPages = null } = unReadMsg;
+      if (!page || !totalPages || page >= totalPages) return;
+      setBottomLoader(true);
+      setTimeout(() => getMessages(page + 1, "new"), 500);
+    }
   };
 
   const onSend = async (msg) => {
@@ -270,22 +314,16 @@ export const Chat = () => {
       let {
         data: { data },
       } = await createMessage(chatId, body);
-      addMessageInChat(data);
+      setChats((prev) => {
+        let chats = [...prev];
+        addMessageInChat(chats, data, getDate(data.date));
+        msgId.current = data._id;
+        return chats;
+      });
       replyId && clearReplyMsg();
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     }
-  };
-
-  const addMessageInChat = (data) => {
-    const key = getDate(data.date);
-    msgId.current = data._id;
-
-    setChats((prev) => {
-      return prev.hasOwnProperty(key)
-        ? { ...prev, [key]: [...prev[key], data] }
-        : { ...prev, [key]: [data] };
-    });
   };
 
   const onDelete = (date, id) => {
@@ -333,7 +371,12 @@ export const Chat = () => {
 
     showNotification(data.msg);
     playMessageRingTone();
-    addMessageInChat(data);
+    setChats((prev) => {
+      let chats = [...prev];
+      addMessageInChat(chats, data, getDate(data.date));
+      msgId.current = data._id;
+      return chats;
+    });
     updateSeenStatus({ msgId: data._id });
   };
 
@@ -436,20 +479,20 @@ export const Chat = () => {
       candidate,
     } = e;
     if (candidate) {
-      iceCandidate = candidate;
+      iceCandidate.current = candidate;
     }
 
-    if (!candidate || !iceCandidate) {
+    if (!candidate || !iceCandidate.current) {
       if (localDescription.type === "offer") {
         let data = {
           offer: localDescription,
-          iceCandidate,
+          iceCandidate: iceCandidate.current,
         };
         socket.emit("send-offer", data, chatId);
       } else if (localDescription.type === "answer") {
         let data = {
           answer: localDescription,
-          iceCandidate,
+          iceCandidate: iceCandidate.current,
         };
         socket.emit("send-answer", data, chatId);
       }
@@ -510,7 +553,7 @@ export const Chat = () => {
         toggleInfo={toggleInfo}
         show={!!chatId}
       />
-      {loading && <Loader />}
+      {topLoader && <Loader />}
       <div className={styles.chat_section}>
         {pageLoader ? (
           <PageLoader />
@@ -523,11 +566,12 @@ export const Chat = () => {
             userId={user?.id}
             otherUserId={chatDetails?.userId || chatDetails?.users}
             focusMsgById={focusMsgById}
-            newMsg={newMsg}
             chatId={chatId}
+            unReadMsg={unReadMsg}
           />
         )}
       </div>
+      {bottomLoader && <Loader />}
       <TextArea
         onSend={onSend}
         onFocus={handleFocus}

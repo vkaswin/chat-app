@@ -63,6 +63,20 @@ const Chats = () => {
     }
   };
 
+  const handleClickOnChat = (id, type, index) => {
+    clearCount(type, index);
+    handleChat(id);
+  };
+
+  const clearCount = (type, index) => {
+    setChatList((prev) => {
+      const chats = { ...prev };
+      chats[type][index].count = 0;
+
+      return chats;
+    });
+  };
+
   const handleNewMessage = (data, senderId, userId) => {
     const chatId = sessionStorage.getItem("chatId");
 
@@ -84,7 +98,7 @@ const Chats = () => {
       if (chatId === data._id || userId === senderId) {
         data.count = 0;
       } else {
-        data.count = oldChat.count + 1;
+        data.count = (oldChat.count || 0) + 1;
       }
       return {
         ...prev,
@@ -145,7 +159,7 @@ const Chats = () => {
                   className={classNames(styles.user_card, {
                     [styles.active]: _id === chatId,
                   })}
-                  onClick={() => handleChat(_id)}
+                  onClick={() => handleClickOnChat(_id, types.favourite, index)}
                   chatid={_id}
                 >
                   <div className={styles.user}>
@@ -196,7 +210,7 @@ const Chats = () => {
                   className={classNames(styles.user_card, {
                     [styles.active]: _id === chatId,
                   })}
-                  onClick={() => handleChat(_id)}
+                  onClick={() => handleClickOnChat(_id, types.recent, index)}
                   chatid={_id}
                 >
                   <div className={styles.user}>
@@ -245,7 +259,7 @@ const Chats = () => {
                   className={classNames(styles.user_card, {
                     [styles.active]: _id === chatId,
                   })}
-                  onClick={() => handleChat(_id)}
+                  onClick={() => handleClickOnChat(_id, types.group, index)}
                   chatid={_id}
                 >
                   <div className={styles.user}>

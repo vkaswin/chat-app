@@ -106,9 +106,11 @@
   justify-content: center;
   width: fit-content;
   margin: 15px auto;
+  max-width: 150px;
+  width: 100%;
   background-color: #fff6e0;
   border-radius: 6px;
-  padding: 5px 15px;
+  padding: 5px 0px;
   z-index: 1;
   span {
     display: block;
