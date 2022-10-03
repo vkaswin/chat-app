@@ -163,8 +163,10 @@ export const Chat = () => {
         msgIds = addNewMessagesInChat(chats, list);
         setUnReadMsg({ id: msgId.current, ...pageMeta });
       } else {
-        let arr = list[list.length - 1].messages;
-        msgId.current = arr[arr.length - 1]._id;
+        if (list.length > 0) {
+          let arr = list[list.length - 1].messages;
+          msgId.current = arr[arr.length - 1]._id;
+        }
       }
       setChatDetails(data);
       setPageMeta(pageMeta);
@@ -195,7 +197,6 @@ export const Chat = () => {
       if (type === "new") {
         let chat = [...chats];
         msgIds = addNewMessagesInChat(chat, list);
-        console.log(msgIds);
         setChats(chat);
         setUnReadMsg({
           ...unReadMsg,
@@ -208,7 +209,6 @@ export const Chat = () => {
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     } finally {
-      console.log(msgIds);
       type === "new" ? setBottomLoader(false) : setTopLoader(false);
       msgIds?.length > 0 && updateSeenStatus({ msgId: msgIds });
     }
@@ -256,8 +256,6 @@ export const Chat = () => {
         }),
       ];
     }, []);
-
-    console.log(msgIds, chats, list);
 
     return msgIds;
   };

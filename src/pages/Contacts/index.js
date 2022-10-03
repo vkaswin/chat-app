@@ -49,7 +49,7 @@ const Contacts = () => {
       let {
         data: { data },
       } = await getContacts();
-      sortContactsByName(data);
+      setContacts(data);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     }
@@ -82,10 +82,7 @@ const Contacts = () => {
                 <b>{word}</b>
               </div>
               {users.map(
-                (
-                  { user: { name, avatar, status, _id: userId }, chatId, _id },
-                  ind
-                ) => {
+                ({ name, avatar, status, userId, chatId, _id }, ind) => {
                   return (
                     <Fragment key={ind}>
                       <div className={classNames(styles.contact_card)}>

@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { cookies, sessionStorage } from "utils";
 import jwtDecode from "jwt-decode";
-import { useRouter } from "./useRouter";
 import { socket } from "socket";
 
 const AuthContext = createContext();
@@ -16,8 +15,6 @@ export const ProvideAuth = ({ children }) => {
   const cookie = cookies();
 
   const session = sessionStorage();
-
-  const router = useRouter();
 
   useEffect(() => {
     document.addEventListener("logout", logout);
@@ -85,8 +82,9 @@ export const ProvideAuth = ({ children }) => {
 
   const logout = () => {
     socket.close();
+    session.reset();
     cookie.remove("authToken");
-    router.push("/login");
+    window.location.href = "/login";
   };
 
   return (

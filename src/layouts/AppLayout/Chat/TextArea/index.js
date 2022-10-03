@@ -86,7 +86,7 @@ export const TextArea = ({ onSend, onFocus, chatId, otherUser }) => {
     if (text.length === 0) return;
 
     await onSend(text);
-    // inputRef.current.value = "";
+    inputRef.current.value = "";
   };
 
   const onPointerDown = () => {
