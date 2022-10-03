@@ -15,7 +15,7 @@ const types = {
 };
 
 const Chats = () => {
-  const { chatId, handleChat, user } = useAuth();
+  const { chatId, handleChat } = useAuth();
 
   const [chatList, setChatList] = useState({
     recent: [],
@@ -145,12 +145,7 @@ const Chats = () => {
           </div>
           {favourite.map(
             (
-              {
-                _id,
-                count,
-                latest: { msg, date },
-                user: { name, avatar, status, id },
-              },
+              { _id, count, msg, date, user: { name, avatar, status, id } },
               index
             ) => {
               return (
@@ -196,12 +191,7 @@ const Chats = () => {
           </div>
           {recent.map(
             (
-              {
-                _id,
-                count,
-                latest: { msg, date },
-                user: { name, avatar, status, id },
-              },
+              { _id, count, msg, date, user: { name, avatar, status, id } },
               index
             ) => {
               return (
@@ -249,10 +239,7 @@ const Chats = () => {
             </button>
           </div>
           {group.map(
-            (
-              { _id, count, latest: { msg, date }, group: { name, avatar } },
-              index
-            ) => {
+            ({ _id, count, msg, date, group: { name, avatar } }, index) => {
               return (
                 <div
                   key={index}

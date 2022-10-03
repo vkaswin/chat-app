@@ -1,7 +1,7 @@
 export const baseURL =
   process.env.NODE_ENV === "development"
     ? "http://localhost:8000"
-    : "https://chat-app-api-bn2t.onrender.com";
+    : "https://node-chat-app.cyclic.app";
 const userURL = "/api/user";
 const chatUrl = "/api/chat";
 const messageUrl = "/api/message";
