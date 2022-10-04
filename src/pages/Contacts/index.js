@@ -104,7 +104,11 @@ const Contacts = () => {
                           id={`${word}-${ind}`}
                         ></i>
                       </div>
-                      <DropDown placement="bottom" selector={`#${word}-${ind}`}>
+                      <DropDown
+                        placement="bottom"
+                        selector={`#${word}-${ind}`}
+                        zIndex={2000}
+                      >
                         <DropDownItem className="dropdown-option">
                           <span>Block</span>
                           <i className="bx-block"></i>

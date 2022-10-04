@@ -16,3 +16,19 @@ export const getMessagesByChatId = (chatId, params) => {
     params,
   });
 };
+
+export const getMessagesByMsgId = (chatId, msgId, params) => {
+  return axios({
+    url: `${endpoints.message.getMessages}/${chatId}/${msgId}`,
+    method: "get",
+    params,
+  });
+};
+
+export const getNewMessagesByChatId = (chatId, params) => {
+  return axios({
+    url: `${endpoints.message.newMessages}/${chatId}`,
+    method: "get",
+    params,
+  });
+};

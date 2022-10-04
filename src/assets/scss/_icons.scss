@@ -1,10 +1,10 @@
 @font-face {
-  font-family: "boxicons";
-  src: url("../fonts/box-icons/boxicons.eot");
-  src: url("../fonts/box-icons/boxicons.eot") format("embedded-opentype"),
-    url("../fonts/box-icons/boxicons.ttf") format("truetype"),
-    url("../fonts/box-icons/boxicons.woff") format("woff"),
-    url("../fonts/box-icons/boxicons.svg") format("svg");
+  font-family: "icomoon";
+  src: url("../fonts/icons/icons.eot");
+  src: url("../fonts/icons/icons.eot") format("embedded-opentype"),
+    url("../fonts/icons/icons.ttf") format("truetype"),
+    url("../fonts/icons/icons.woff") format("woff"),
+    url("../fonts/icons/icons.svg") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -17,7 +17,7 @@
 [class*="bx"],
 [class*="bxs"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: "boxicons" !important;
+  font-family: "icomoon" !important;
   //   speak: never;
   font-style: normal;
   font-weight: normal;

@@ -20,10 +20,16 @@ export const removeFromFavourite = (chatId) => {
   return axios({ url: endpoints.chat.removeFavourite, method: "delete" });
 };
 
-export const markAsRead = (chatId, data) => {
+export const markAsReadByMsgId = (chatId, msgId) => {
+  return axios({
+    url: `${endpoints.chat.markAsReadByMsgId}/${chatId}/${msgId}`,
+    method: "put",
+  });
+};
+
+export const markAsRead = (chatId) => {
   return axios({
     url: `${endpoints.chat.markAsRead}/${chatId}`,
     method: "put",
-    data,
   });
 };

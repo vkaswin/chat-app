@@ -1,12 +1,17 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { OffCanvas, Toast, Skeleton, ScrollBar } from "components";
+import { OffCanvas, Toast, ScrollBar } from "components";
 import { TextArea } from "./TextArea";
 import { Header } from "./Header";
 import { Conversation } from "./Conversation";
 import { VideoPopup } from "./VideoPopup";
 import { useAuth } from "hooks";
-import { createMessage, getMessagesByChatId } from "services/Message";
-import { getChatById, markAsRead } from "services/Chat";
+import {
+  createMessage,
+  getMessagesByChatId,
+  getMessagesByMsgId,
+  getNewMessagesByChatId,
+} from "services/Message";
+import { getChatById, markAsReadByMsgId, markAsRead } from "services/Chat";
 import { initiateCall } from "services/Call";
 import { debounce } from "utils";
 import { CSSTransition } from "react-transition-group";
@@ -38,8 +43,6 @@ export const Chat = () => {
 
   const [replyId, setReplyId] = useState(null);
 
-  const [pageMeta, setPageMeta] = useState({});
-
   const [chatDetails, setChatDetails] = useState({});
 
   const [topLoader, setTopLoader] = useState(false);
@@ -50,7 +53,15 @@ export const Chat = () => {
 
   const [pageLoader, setPageLoader] = useState();
 
+  const [hasMoreTop, setHasMoreTop] = useState();
+
+  const [hasMoreBottom, setHasMoreBottom] = useState();
+
   const msgId = useRef();
+
+  const topMsgId = useRef();
+
+  const bottomMsgId = useRef();
 
   const iceCandidate = useRef();
 
@@ -129,12 +140,6 @@ export const Chat = () => {
   //   Chats
   const getChatDetails = async () => {
     setPageLoader(true);
-    let chats = [];
-    let msgIds = [];
-    let params = {
-      page: 1,
-      limit,
-    };
     try {
       let [
         {
@@ -142,100 +147,88 @@ export const Chat = () => {
         },
         {
           data: {
-            data: { list = [], pageMeta },
+            data: { list = [], hasMore: top },
           },
         },
       ] = await Promise.all([
         getChatById(chatId),
-        getMessagesByChatId(chatId, params),
+        getMessagesByChatId(chatId, {
+          page: 1,
+          limit,
+        }),
       ]);
-      chats = list;
       if (data.messages) {
         let {
           data: {
-            data: { list = [], pageMeta },
+            data: { list: newMsg, total, hasMore: bottom },
           },
-        } = await getMessagesByChatId(chatId, {
-          page: 1,
-          limit: 10,
-          type: "new",
+        } = await getNewMessagesByChatId(chatId, {
+          limit,
         });
-        msgIds = addNewMessagesInChat(chats, list);
-        setUnReadMsg({ id: msgId.current, ...pageMeta });
+        let arr = newMsg[newMsg.length - 1].messages;
+        bottomMsgId.current = arr[arr.length - 1]._id;
+        if (list.length > 0) {
+          msgId.current = list[0].messages[0]._id;
+        }
+        pushMessagesInChat(list, newMsg);
+        setUnReadMsg({ id: msgId.current, total });
+        setHasMoreBottom(bottom);
+        await markAsRead(chatId);
       } else {
         if (list.length > 0) {
           let arr = list[list.length - 1].messages;
           msgId.current = arr[arr.length - 1]._id;
+          topMsgId.current = list[0].messages[0]._id;
         }
       }
       setChatDetails(data);
-      setPageMeta(pageMeta);
-      setChats(chats);
+      setChats(list);
+      setHasMoreTop(top);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     } finally {
-      setTimeout(() => {
-        setPageLoader(false);
-        msgIds?.length > 0 && updateSeenStatus({ msgId: msgIds });
-      }, 100);
+      setPageLoader(false);
     }
   };
 
-  const getMessages = async (page, type = null) => {
-    let msgIds = [];
+  const getMessages = async (latest) => {
     try {
-      let params = {
-        limit: type === "new" ? 10 : limit,
-        page,
-        type,
-      };
+      let msgId = latest ? bottomMsgId.current : topMsgId.current;
       let {
         data: {
-          data: { list, pageMeta },
+          data: { list, hasMore },
         },
-      } = await getMessagesByChatId(chatId, params);
-      if (type === "new") {
-        let chat = [...chats];
-        msgIds = addNewMessagesInChat(chat, list);
-        setChats(chat);
-        setUnReadMsg({
-          ...unReadMsg,
-          totalPages: pageMeta.totalPages,
-          page: pageMeta.page,
-        });
-      } else {
-        sortMessagesByDate(list.reverse(), pageMeta);
-      }
+      } = await getMessagesByMsgId(chatId, msgId, { limit, latest });
+      let chat = [...chats];
+      latest
+        ? pushMessagesInChat(chat, list)
+        : unShiftMessagesInChat(chat, list.reverse());
+      setChats(chat);
+      latest ? setHasMoreBottom(hasMore) : setHasMoreTop(hasMore);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     } finally {
-      type === "new" ? setBottomLoader(false) : setTopLoader(false);
-      msgIds?.length > 0 && updateSeenStatus({ msgId: msgIds });
+      latest ? setBottomLoader(false) : setTopLoader(false);
     }
   };
 
-  const sortMessagesByDate = (list, pageMeta) => {
-    setChats((prev) => {
-      let chats = [...prev];
-      list.forEach(({ day, messages }, i) => {
-        let index = chats.findIndex(({ day: key }) => {
-          return day === key;
-        });
-        index === -1
-          ? chats.unshift({ day, messages })
-          : chats[index].messages.unshift(...messages);
-
-        if (i === 0) {
-          msgId.current = messages[messages.length - 1]._id;
-        }
+  const unShiftMessagesInChat = (chats, list) => {
+    list.forEach(({ day, messages }, i) => {
+      let index = chats.findIndex(({ day: key }) => {
+        return day === key;
       });
+      index === -1
+        ? chats.unshift({ day, messages })
+        : chats[index].messages.unshift(...messages);
 
-      return chats;
+      if (i === 0) {
+        msgId.current = messages[messages.length - 1]._id;
+      }
     });
-    setPageMeta(pageMeta);
+    topMsgId.current = list[0].messages[0]._id;
   };
 
-  const addNewMessagesInChat = (chats, list) => {
+  const pushMessagesInChat = (chats, list) => {
     list.forEach(({ day, messages }, i) => {
       let index = chats.findIndex(({ day: key }) => {
         return day === getDate(key);
@@ -247,17 +240,8 @@ export const Chat = () => {
         msgId.current = list[0].messages[0]._id;
       }
     });
-
-    let msgIds = list.reduce((arr, { messages }) => {
-      return [
-        ...arr,
-        ...messages.map(({ _id }) => {
-          return _id;
-        }),
-      ];
-    }, []);
-
-    return msgIds;
+    let arr = list[list.length - 1].messages;
+    bottomMsgId.current = arr[arr.length - 1]._id;
   };
 
   const addMessageInChat = (chats, messages, day) => {
@@ -270,35 +254,31 @@ export const Chat = () => {
       : chats[index].messages.push(messages);
   };
 
-  const updateSeenStatus = async (data) => {
+  const updateSeenStatus = async (msgId) => {
     if (!chatId) return;
 
     try {
-      await markAsRead(chatId, data);
+      await markAsReadByMsgId(chatId, msgId);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleScroll = ({ target: { scrollTop } }) => {
+  const handleScroll = ({
+    target: { scrollTop, scrollHeight, clientHeight },
+  }) => {
     if (pageLoader || topLoader || bottomLoader) return;
 
     if (scrollTop === 0) {
-      const { page, totalPages } = pageMeta;
-      if (page >= totalPages) return;
+      if (!hasMoreTop) return;
       setTopLoader(true);
-      setTimeout(() => getMessages(page + 1), 500);
+      getMessages(0);
     }
 
-    if (
-      chatContainerRef.current.scrollHeight -
-        chatContainerRef.current.scrollTop ===
-      chatContainerRef.current.clientHeight
-    ) {
-      const { page = null, totalPages = null } = unReadMsg;
-      if (!page || !totalPages || page >= totalPages) return;
+    if (scrollHeight - scrollTop === clientHeight) {
+      if (!hasMoreBottom) return;
       setBottomLoader(true);
-      setTimeout(() => getMessages(page + 1, "new"), 500);
+      getMessages(1);
     }
   };
 
@@ -365,7 +345,8 @@ export const Chat = () => {
   }, [replyId]);
 
   const handleMessage = (data) => {
-    if (data.sender === user?.id) return;
+    console.log(user.id, data.sender.id);
+    if (data.sender.id === user?.id) return;
 
     showNotification(data.msg);
     playMessageRingTone();
@@ -375,7 +356,7 @@ export const Chat = () => {
       msgId.current = data._id;
       return chats;
     });
-    updateSeenStatus({ msgId: data._id });
+    updateSeenStatus(data._id);
   };
 
   const handleSeen = ({ userId, msgId }) => {
@@ -395,7 +376,7 @@ export const Chat = () => {
       return;
     }
 
-    msgId.forEach((id) => {
+    msgId.forEach(({ id }) => {
       markAsSeen(id);
     });
   };
@@ -566,6 +547,7 @@ export const Chat = () => {
             focusMsgById={focusMsgById}
             chatId={chatId}
             unReadMsg={unReadMsg}
+            isGroupChat={!!chatDetails?.group}
           />
         )}
       </div>

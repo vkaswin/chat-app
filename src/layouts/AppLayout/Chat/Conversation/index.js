@@ -14,6 +14,7 @@ export const Conversation = ({
   focusMsgById,
   otherUserId,
   unReadMsg,
+  isGroupChat,
 }) => {
   return (
     <Fragment>
@@ -25,7 +26,17 @@ export const Conversation = ({
             </div>
             <div className={styles.container}>
               {messages.map(
-                ({ msg, date, sender, _id, seen, reply = null }, index) => {
+                (
+                  {
+                    msg,
+                    date,
+                    sender: { id = null, name = null, avatar = null } = {},
+                    _id,
+                    seen,
+                    reply = null,
+                  },
+                  index
+                ) => {
                   return (
                     <Fragment key={index}>
                       {unReadMsg.id && unReadMsg.id === _id && (
@@ -38,7 +49,7 @@ export const Conversation = ({
                       )}
                       <div
                         className={classNames(styles.chat_wrapper, {
-                          [styles.end]: userId === sender,
+                          [styles.end]: userId === id,
                         })}
                         msgid={_id}
                       >
@@ -52,6 +63,14 @@ export const Conversation = ({
                             </div>
                           )}
                           <div>
+                            {isGroupChat && id !== userId && (
+                              <span
+                                style={{ color: avatar }}
+                                className={styles.user_name}
+                              >
+                                {name.split(" ")[0]}
+                              </span>
+                            )}
                             <span>{msg}</span>
                           </div>
                           <div className={styles.msg_time}>
