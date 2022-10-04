@@ -84,7 +84,7 @@ export const ProvideAuth = ({ children }) => {
     socket.close();
     session.reset();
     cookie.remove("authToken");
-    window.location.href = "/login";
+    window.location.href = "/react-chat-app/#/login";
   };
 
   return (
