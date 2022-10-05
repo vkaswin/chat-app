@@ -5,13 +5,13 @@ import { Header } from "./Header";
 import { Conversation } from "./Conversation";
 import { VideoPopup } from "./VideoPopup";
 import { useAuth } from "hooks";
+import { createMessage } from "services/Message";
 import {
-  createMessage,
-  getMessagesByChatId,
-  getMessagesByMsgId,
-  getNewMessagesByChatId,
-} from "services/Message";
-import { getChatById, markAsReadByMsgId, markAsRead } from "services/Chat";
+  getChatById,
+  markAsReadByMsgId,
+  markAsRead,
+  getChatMessagesByMsgId,
+} from "services/Chat";
 import { initiateCall } from "services/Call";
 import { debounce } from "utils";
 import { CSSTransition } from "react-transition-group";
@@ -58,10 +58,6 @@ export const Chat = () => {
   const [hasMoreBottom, setHasMoreBottom] = useState();
 
   const msgId = useRef();
-
-  const topMsgId = useRef();
-
-  const bottomMsgId = useRef();
 
   const iceCandidate = useRef();
 
@@ -141,49 +137,32 @@ export const Chat = () => {
   const getChatDetails = async () => {
     setPageLoader(true);
     try {
-      let [
-        {
-          data: { data },
-        },
-        {
+      let {
+        data: {
           data: {
-            data: { list = [], hasMore: top },
+            chatDetails = {},
+            unReadMsgList = [],
+            msgList = [],
+            hasMoreTop = false,
+            hasMoreBottom = false,
+            totalUnReadMsg = 0,
           },
         },
-      ] = await Promise.all([
-        getChatById(chatId),
-        getMessagesByChatId(chatId, {
-          page: 1,
-          limit,
-        }),
-      ]);
-      if (data.messages) {
-        let {
-          data: {
-            data: { list: newMsg, total, hasMore: bottom },
-          },
-        } = await getNewMessagesByChatId(chatId, {
-          limit,
-        });
-        let arr = newMsg[newMsg.length - 1].messages;
-        bottomMsgId.current = arr[arr.length - 1]._id;
-        if (list.length > 0) {
-          msgId.current = list[0].messages[0]._id;
-        }
-        pushMessagesInChat(list, newMsg);
-        setUnReadMsg({ id: msgId.current, total });
-        setHasMoreBottom(bottom);
+      } = await getChatById(chatId, { limit });
+      if (unReadMsgList.length > 0) {
+        msgId.current = unReadMsgList[0].messages[0]._id;
+        pushMessagesInChat(msgList, unReadMsgList);
+        setUnReadMsg({ id: msgId.current, total: totalUnReadMsg });
+        setHasMoreBottom(hasMoreBottom);
         await markAsRead(chatId);
       } else {
-        if (list.length > 0) {
-          let arr = list[list.length - 1].messages;
-          msgId.current = arr[arr.length - 1]._id;
-          topMsgId.current = list[0].messages[0]._id;
+        if (msgList.length > 0) {
+          msgId.current = msgList.at(-1).messages.at(-1)._id;
         }
       }
-      setChatDetails(data);
-      setChats(list);
-      setHasMoreTop(top);
+      setChatDetails(chatDetails);
+      setChats(msgList);
+      setHasMoreTop(hasMoreTop);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     } finally {
@@ -191,14 +170,13 @@ export const Chat = () => {
     }
   };
 
-  const getMessages = async (latest) => {
+  const getMessages = async (msgId, latest) => {
     try {
-      let msgId = latest ? bottomMsgId.current : topMsgId.current;
       let {
         data: {
           data: { list, hasMore },
         },
-      } = await getMessagesByMsgId(chatId, msgId, { limit, latest });
+      } = await getChatMessagesByMsgId(chatId, msgId, { limit, latest });
       let chat = [...chats];
       latest
         ? pushMessagesInChat(chat, list)
@@ -225,7 +203,6 @@ export const Chat = () => {
         msgId.current = messages[messages.length - 1]._id;
       }
     });
-    topMsgId.current = list[0].messages[0]._id;
   };
 
   const pushMessagesInChat = (chats, list) => {
@@ -240,8 +217,6 @@ export const Chat = () => {
         msgId.current = list[0].messages[0]._id;
       }
     });
-    let arr = list[list.length - 1].messages;
-    bottomMsgId.current = arr[arr.length - 1]._id;
   };
 
   const addMessageInChat = (chats, messages, day) => {
@@ -269,16 +244,20 @@ export const Chat = () => {
   }) => {
     if (pageLoader || topLoader || bottomLoader) return;
 
-    if (scrollTop === 0) {
-      if (!hasMoreTop) return;
+    if (hasMoreTop && scrollTop === 0) {
+      const msgId = chatContainerRef.current
+        .querySelector("[first]")
+        .getAttribute("msgid");
       setTopLoader(true);
-      getMessages(0);
+      getMessages(msgId, 0);
     }
 
-    if (scrollHeight - scrollTop === clientHeight) {
-      if (!hasMoreBottom) return;
+    if (hasMoreBottom && scrollHeight - scrollTop === clientHeight) {
+      const msgId = chatContainerRef.current
+        .querySelector("[last]")
+        .getAttribute("msgid");
       setBottomLoader(true);
-      getMessages(1);
+      getMessages(msgId, 1);
     }
   };
 
@@ -345,7 +324,6 @@ export const Chat = () => {
   }, [replyId]);
 
   const handleMessage = (data) => {
-    console.log(user.id, data.sender.id);
     if (data.sender.id === user?.id) return;
 
     showNotification(data.msg);
@@ -533,7 +511,7 @@ export const Chat = () => {
         show={!!chatId}
       />
       {topLoader && <Loader />}
-      <div className={styles.chat_section}>
+      <div id="conversation" className={styles.chat_section}>
         {pageLoader ? (
           <PageLoader />
         ) : (
@@ -551,6 +529,7 @@ export const Chat = () => {
           />
         )}
       </div>
+      <div className={styles.typing} typingstatus=""></div>
       {bottomLoader && <Loader />}
       <TextArea
         onSend={onSend}

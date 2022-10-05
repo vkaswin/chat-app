@@ -5,10 +5,19 @@ export const getChatByType = (type) => {
   return axios({ url: `${endpoints.chat.list}/${type}`, method: "get" });
 };
 
-export const getChatById = (chatId) => {
+export const getChatById = (chatId, params) => {
   return axios({
     url: `${endpoints.chat.chatDetails}/${chatId}`,
     method: "get",
+    params,
+  });
+};
+
+export const getChatMessagesByMsgId = (chatId, msgId, params) => {
+  return axios({
+    url: `${endpoints.chat.chatMessages}/${chatId}/${msgId}`,
+    method: "get",
+    params,
   });
 };
 

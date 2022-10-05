@@ -68,6 +68,22 @@
   padding: 15px;
 }
 
+.typing[typing] {
+  position: sticky;
+  bottom: 85px;
+  display: flex;
+  justify-content: center;
+  &::before {
+    content: attr(typing);
+    color: #4eac6e;
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
 @keyframes zoom-in {
   0% {
     transform: scale(1);

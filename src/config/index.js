@@ -23,16 +23,13 @@ export const endpoints = {
   },
   chat: {
     list: `${chatUrl}/list`,
-    favouriteChats: `${chatUrl}/favourite`,
-    groupChats: `${chatUrl}/group`,
     chatDetails: `${chatUrl}/detail`,
+    chatMessages: `${chatUrl}/messages`,
     markAsReadByMsgId: `${chatUrl}/markAsRead`,
     markAsRead: `${chatUrl}/markAsRead/all`,
   },
   message: {
     createMessage: `${messageUrl}/create`,
-    getMessages: `${messageUrl}`,
-    newMessages: `${messageUrl}/new`,
   },
   contact: {
     getContact: `${contactUrl}`,

@@ -8,27 +8,3 @@ export const createMessage = (chatId, data) => {
     data,
   });
 };
-
-export const getMessagesByChatId = (chatId, params) => {
-  return axios({
-    url: `${endpoints.message.getMessages}/${chatId}`,
-    method: "get",
-    params,
-  });
-};
-
-export const getMessagesByMsgId = (chatId, msgId, params) => {
-  return axios({
-    url: `${endpoints.message.getMessages}/${chatId}/${msgId}`,
-    method: "get",
-    params,
-  });
-};
-
-export const getNewMessagesByChatId = (chatId, params) => {
-  return axios({
-    url: `${endpoints.message.newMessages}/${chatId}`,
-    method: "get",
-    params,
-  });
-};
