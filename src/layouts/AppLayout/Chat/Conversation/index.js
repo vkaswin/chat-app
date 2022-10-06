@@ -52,12 +52,9 @@ export const Conversation = ({
                           [styles.end]: userId === id,
                         })}
                         msgid={_id}
-                        first={key === 0 && index === 0 && ""}
-                        last={
-                          key === chats.length - 1 &&
-                          index === messages.length - 1 &&
-                          ""
-                        }
+                        {...(key === 0 && index === 0 && { first: "" })}
+                        {...(key === chats.length - 1 &&
+                          index === messages.length - 1 && { last: "" })}
                       >
                         <div className={styles.chat_card}>
                           {reply && (

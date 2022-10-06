@@ -268,15 +268,7 @@ export const Chat = () => {
         date: new Date().toISOString(),
         ...(replyId && { reply: replyId }),
       };
-      let {
-        data: { data },
-      } = await createMessage(chatId, body);
-      setChats((prev) => {
-        let chats = [...prev];
-        addMessageInChat(chats, data, getDate(data.date));
-        msgId.current = data._id;
-        return chats;
-      });
+      await createMessage(chatId, body);
       replyId && clearReplyMsg();
     } catch (error) {
       Toast({ type: "error", message: error?.message });
@@ -323,18 +315,18 @@ export const Chat = () => {
     // return chats.find(({ _id }) => replyId === _id);
   }, [replyId]);
 
-  const handleMessage = (data) => {
-    if (data.sender.id === user?.id) return;
-
-    showNotification(data.msg);
-    playMessageRingTone();
+  const handleMessage = ({ message, chat, userId }) => {
     setChats((prev) => {
+      showNotification(message.msg);
+      playMessageRingTone();
       let chats = [...prev];
-      addMessageInChat(chats, data, getDate(data.date));
-      msgId.current = data._id;
+      addMessageInChat(chats, message, getDate(message.date));
+      msgId.current = message._id;
+      message.sender.id !== userId &&
+        sessionStorage.getItem("chatId") === chat._id &&
+        updateSeenStatus(message._id);
       return chats;
     });
-    updateSeenStatus(data._id);
   };
 
   const handleSeen = ({ userId, msgId }) => {

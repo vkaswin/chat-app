@@ -36,7 +36,7 @@ const Chats = () => {
   }, []);
 
   const handleSocket = () => {
-    socket.on("new-message", handleNewMessage);
+    socket.on("message", handleMessage);
 
     socket.on("start-typing", handleStartTyping);
 
@@ -77,32 +77,51 @@ const Chats = () => {
     });
   };
 
-  const handleNewMessage = (data, senderId, userId) => {
-    const chatId = sessionStorage.getItem("chatId");
+  const handleMessage = ({
+    message: { msg, date, sender },
+    chat: { _id: chatId, group, favourites, users },
+    userId,
+  }) => {
+    let isGroupChat = !!group;
+
+    let message = {
+      msg,
+      date,
+      _id: chatId,
+      ...(isGroupChat
+        ? { group: { name: group.name, avatar: group.avatar } }
+        : {
+            user: users.find(({ _id }) => _id !== userId),
+          }),
+    };
 
     setChatList((prev) => {
-      const key = data.type;
+      let key = isGroupChat
+        ? "group"
+        : favourites.includes(userId)
+        ? "favourite"
+        : "recent";
 
-      const index = prev[key].findIndex(({ _id }) => {
-        return _id === data._id;
+      let index = prev[key].findIndex(({ _id }) => {
+        return _id === chatId;
       });
 
       if (index === -1) {
-        data.count = 1;
-        return { ...prev, [key]: [data] };
+        message.count = 1;
+        return { ...prev, [key]: [message] };
       }
 
-      const chats = [...prev[key]];
+      let chats = [...prev[key]];
       let [oldChat] = chats.splice(index, 1);
 
-      if (chatId === data._id || userId === senderId) {
-        data.count = 0;
+      if (chatId === sessionStorage.getItem("chatId") || userId === sender.id) {
+        message.count = 0;
       } else {
-        data.count = (oldChat.count || 0) + 1;
+        message.count = (oldChat.count || 0) + 1;
       }
       return {
         ...prev,
-        [key]: [data, ...chats],
+        [key]: [message, ...chats],
       };
     });
   };
