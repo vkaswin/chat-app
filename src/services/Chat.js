@@ -42,3 +42,10 @@ export const markAsRead = (chatId) => {
     method: "put",
   });
 };
+
+export const getAllReactions = () => {
+  return axios({
+    url: `${endpoints.chat.reactions}`,
+    method: "get",
+  });
+};

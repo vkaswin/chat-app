@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
-import { DropDown, DropDownItem } from "components";
 import { classNames } from "utils";
+import { Reaction } from "./Reaction";
+import { Options } from "./Options";
 import moment from "moment";
 
 import styles from "./Conversation.module.scss";
@@ -15,6 +16,8 @@ export const Conversation = ({
   otherUserId,
   unReadMsg,
   isGroupChat,
+  reactions,
+  handleReaction,
 }) => {
   return (
     <Fragment>
@@ -56,7 +59,12 @@ export const Conversation = ({
                         {...(key === chats.length - 1 &&
                           index === messages.length - 1 && { last: "" })}
                       >
-                        <div className={styles.chat_card}>
+                        <div
+                          className={styles.chat_card}
+                          {...(userId !== id && {
+                            id: `reaction-${key}${index}`,
+                          })}
+                        >
                           {reply && (
                             <div
                               className={styles.reply_card}
@@ -98,42 +106,24 @@ export const Conversation = ({
                             className="bx-dots-vertical-rounded"
                             id={`option-${key}${index}`}
                           ></i>
-                          <DropDown
+                          <Options
                             selector={`#option-${key}${index}`}
-                            placement="bottom"
-                          >
-                            <DropDownItem
-                              className="dropdown-option"
-                              onClick={() => onReply(date, _id)}
-                            >
-                              <span>Reply</span>
-                              <i className="bx-share"></i>
-                            </DropDownItem>
-                            <DropDownItem className="dropdown-option">
-                              <span>Forward</span>
-                              <i className="bx-share-alt"></i>
-                            </DropDownItem>
-                            <DropDownItem
-                              className="dropdown-option"
-                              onClick={() => onCopy(msg)}
-                            >
-                              <span>Copy</span>
-                              <i className="bx-copy"></i>
-                            </DropDownItem>
-                            <DropDownItem className="dropdown-option">
-                              <span>Mark as Unread</span>
-                              <i className="bx-message-error"></i>
-                            </DropDownItem>
-                            <DropDownItem
-                              className="dropdown-option"
-                              onClick={() => onDelete(date, _id)}
-                            >
-                              <span>Delete</span>
-                              <i className="bx-trash"></i>
-                            </DropDownItem>
-                          </DropDown>
+                            onCopy={onCopy}
+                            onReply={onReply}
+                            onDelete={onDelete}
+                            date={date}
+                            msgId={_id}
+                            msg={msg}
+                          />
                         </div>
                       </div>
+                      {userId !== id && (
+                        <Reaction
+                          selector={`#reaction-${key}${index}`}
+                          reactions={reactions}
+                          onClick={() => handleReaction()}
+                        />
+                      )}
                     </Fragment>
                   );
                 }

@@ -26,7 +26,7 @@ import styles from "./Chat.module.scss";
 
 const audio = new Audio(messageRingTone);
 
-export const Chat = () => {
+export const Chat = ({ reactions }) => {
   const chatContainerRef = useRef();
 
   const replyContainerRef = useRef();
@@ -51,11 +51,11 @@ export const Chat = () => {
 
   const [unReadMsg, setUnReadMsg] = useState({});
 
-  const [pageLoader, setPageLoader] = useState();
+  const [pageLoader, setPageLoader] = useState(true);
 
-  const [hasMoreTop, setHasMoreTop] = useState();
+  const [hasMoreTop, setHasMoreTop] = useState(false);
 
-  const [hasMoreBottom, setHasMoreBottom] = useState();
+  const [hasMoreBottom, setHasMoreBottom] = useState(false);
 
   const msgId = useRef();
 
@@ -351,6 +351,10 @@ export const Chat = () => {
     });
   };
 
+  const handleReaction = () => {
+    console.log("reaction");
+  };
+
   // Ringtone
   const playMessageRingTone = () => {
     audio.muted = false;
@@ -518,6 +522,8 @@ export const Chat = () => {
             chatId={chatId}
             unReadMsg={unReadMsg}
             isGroupChat={!!chatDetails?.group}
+            reactions={reactions}
+            handleReaction={handleReaction}
           />
         )}
       </div>

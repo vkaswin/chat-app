@@ -92,7 +92,7 @@ export const DropDown = ({
             style={{ ...popper, ...(zIndex && { zIndex }) }}
             data-placement={position}
           >
-            <div className={styles.menu}>{children}</div>
+            <div className={classNames(styles.menu, className)}>{children}</div>
           </div>
         </DropDownContext.Provider>
       </CSSTransition>

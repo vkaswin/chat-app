@@ -8,6 +8,7 @@ const chatUrl = "/api/chat";
 const messageUrl = "/api/message";
 const contactUrl = "/api/contact";
 const callUrl = "/api/call";
+const reactionUrl = "/api/reaction";
 const othersUrl = "/api/";
 
 export const sockets = {
@@ -27,6 +28,7 @@ export const endpoints = {
     chatMessages: `${chatUrl}/messages`,
     markAsReadByMsgId: `${chatUrl}/markAsRead`,
     markAsRead: `${chatUrl}/markAsRead/all`,
+    reactions: `${reactionUrl}/all`,
   },
   message: {
     createMessage: `${messageUrl}/create`,

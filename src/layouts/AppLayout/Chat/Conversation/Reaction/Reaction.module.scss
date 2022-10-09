@@ -1,0 +1,22 @@
+.container {
+  flex-direction: row !important;
+  gap: 15px !important;
+  padding: 10px 12px !important;
+  margin-top: 10px !important;
+  .wrapper {
+    display: flex;
+    flex-direction: row;
+    padding: 0px !important;
+    &:hover {
+      background-color: transparent !important;
+      img {
+        transform: scale(1.2);
+      }
+    }
+    img {
+      width: 28px !important;
+      height: 28px !important;
+      transition: transform 0.2s ease-in;
+    }
+  }
+}
