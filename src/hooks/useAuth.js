@@ -82,7 +82,7 @@ export const ProvideAuth = ({ children }) => {
 
   const logout = () => {
     socket.close();
-    session.reset();
+    clearChatId();
     cookie.remove("authToken");
     window.location.href = "/react-chat-app/#/login";
   };

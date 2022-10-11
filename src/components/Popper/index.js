@@ -27,7 +27,6 @@ export class Popper {
     this._parent = this.getScrollParent(this._reference);
     this.onUpdate = onUpdate;
     this.init();
-    console.log(this);
   }
 
   init() {
@@ -311,7 +310,6 @@ export class Popper {
 
   handlePopper(isScroll = false) {
     const { innerWidth, innerHeight } = window;
-    console.log(this);
 
     this._innerHeight = innerHeight;
     this._innerWidth = innerWidth;

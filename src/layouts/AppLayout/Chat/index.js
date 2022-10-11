@@ -11,6 +11,8 @@ import {
   markAsReadByMsgId,
   markAsRead,
   getChatMessagesByMsgId,
+  createReaction,
+  updateReaction,
 } from "services/Chat";
 import { initiateCall } from "services/Call";
 import { debounce } from "utils";
@@ -351,8 +353,40 @@ export const Chat = ({ reactions }) => {
     });
   };
 
-  const handleReaction = () => {
-    console.log("reaction");
+  const handleReaction = async (emoji, reactions, msgId) => {
+    let reaction;
+
+    for (const [index, { users }] of reactions.entries()) {
+      reaction = users.find(({ id }, ind) => {
+        return user.id === id;
+      });
+      if (reaction) break;
+    }
+
+    reaction
+      ? handleUpdateReaction({
+          reaction: emoji,
+          id: reaction.reactionId,
+        })
+      : handleCreateReaction({ reaction: emoji, msgId });
+  };
+
+  const handleCreateReaction = async (data) => {
+    try {
+      let res = await createReaction(data);
+      console.log(res);
+    } catch (error) {
+      Toast({ type: "error", message: error?.message });
+    }
+  };
+
+  const handleUpdateReaction = async (data) => {
+    try {
+      let res = await updateReaction(data);
+      console.log(res);
+    } catch (error) {
+      Toast({ type: "error", message: error?.message });
+    }
   };
 
   // Ringtone
@@ -522,7 +556,7 @@ export const Chat = ({ reactions }) => {
             chatId={chatId}
             unReadMsg={unReadMsg}
             isGroupChat={!!chatDetails?.group}
-            reactions={reactions}
+            reactionList={reactions}
             handleReaction={handleReaction}
           />
         )}

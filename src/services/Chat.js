@@ -49,3 +49,19 @@ export const getAllReactions = () => {
     method: "get",
   });
 };
+
+export const createReaction = (data) => {
+  return axios({
+    url: `${endpoints.chat.createReaction}`,
+    method: "post",
+    data,
+  });
+};
+
+export const updateReaction = (data) => {
+  return axios({
+    url: `${endpoints.chat.updateReaction}`,
+    method: "put",
+    data,
+  });
+};

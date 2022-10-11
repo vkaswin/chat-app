@@ -16,7 +16,7 @@ export const Conversation = ({
   otherUserId,
   unReadMsg,
   isGroupChat,
-  reactions,
+  reactionList,
   handleReaction,
 }) => {
   return (
@@ -37,11 +37,12 @@ export const Conversation = ({
                     _id,
                     seen,
                     reply = null,
+                    reactions,
                   },
                   index
                 ) => {
                   return (
-                    <Fragment key={index}>
+                    <Fragment key={_id}>
                       {unReadMsg.id && unReadMsg.id === _id && (
                         <div className={styles.unread_msg}>
                           <span>
@@ -61,9 +62,7 @@ export const Conversation = ({
                       >
                         <div
                           className={styles.chat_card}
-                          {...(userId !== id && {
-                            id: `reaction-${key}${index}`,
-                          })}
+                          id={`reaction-${_id}`}
                         >
                           {reply && (
                             <div
@@ -104,10 +103,10 @@ export const Conversation = ({
                         <div className={styles.options}>
                           <i
                             className="bx-dots-vertical-rounded"
-                            id={`option-${key}${index}`}
+                            id={`option-${_id}`}
                           ></i>
                           <Options
-                            selector={`#option-${key}${index}`}
+                            selector={`#option-${_id}`}
                             onCopy={onCopy}
                             onReply={onReply}
                             onDelete={onDelete}
@@ -117,13 +116,13 @@ export const Conversation = ({
                           />
                         </div>
                       </div>
-                      {userId !== id && (
-                        <Reaction
-                          selector={`#reaction-${key}${index}`}
-                          reactions={reactions}
-                          onClick={() => handleReaction()}
-                        />
-                      )}
+                      <Reaction
+                        selector={`#reaction-${_id}`}
+                        reactions={reactionList}
+                        onClick={(emoji) =>
+                          handleReaction(emoji, reactions, _id)
+                        }
+                      />
                     </Fragment>
                   );
                 }

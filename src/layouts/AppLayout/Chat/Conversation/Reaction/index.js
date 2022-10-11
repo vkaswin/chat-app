@@ -17,7 +17,7 @@ export const Reaction = ({ reactions, selector, onClick }) => {
           <DropDownItem
             className={styles.wrapper}
             key={index}
-            onClick={onClick}
+            onClick={() => onClick(emoji)}
           >
             <img id={emoji} src={`${baseURL}/reaction/${emoji}.png`} />
           </DropDownItem>

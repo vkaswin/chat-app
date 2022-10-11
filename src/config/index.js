@@ -29,6 +29,8 @@ export const endpoints = {
     markAsReadByMsgId: `${chatUrl}/markAsRead`,
     markAsRead: `${chatUrl}/markAsRead/all`,
     reactions: `${reactionUrl}/all`,
+    createReaction: `${reactionUrl}/create`,
+    updateReaction: `${reactionUrl}/update`,
   },
   message: {
     createMessage: `${messageUrl}/create`,
