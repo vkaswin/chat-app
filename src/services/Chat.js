@@ -43,13 +43,6 @@ export const markAsRead = (chatId) => {
   });
 };
 
-export const getAllReactions = () => {
-  return axios({
-    url: `${endpoints.chat.reactions}`,
-    method: "get",
-  });
-};
-
 export const createReaction = (data) => {
   return axios({
     url: `${endpoints.chat.createReaction}`,

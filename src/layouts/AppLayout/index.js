@@ -5,10 +5,11 @@ import { Chat } from "./Chat";
 import { ScrollBar } from "components";
 import { useAuth } from "hooks";
 import { classNames, localStorage } from "utils";
-import { getAllReactions } from "services/Chat";
 import { Outlet } from "react-router-dom";
 
 import styles from "./AppLayout.module.scss";
+
+const reactions = ["like", "love", "haha", "wow", "sad", "angry", "care"];
 
 const AppLayout = () => {
   const { chatId, isLoading } = useAuth();
@@ -17,8 +18,6 @@ const AppLayout = () => {
 
   const [theme, setTheme] = useState();
 
-  const [reactions, setReactions] = useState([]);
-
   useEffect(() => {
     let val = storage.get("theme") ?? "light";
     let root = document.querySelector(":root");
@@ -26,17 +25,6 @@ const AppLayout = () => {
     getReactions();
     setTheme(val);
   }, []);
-
-  const getReactions = async () => {
-    try {
-      let {
-        data: { data },
-      } = await getAllReactions();
-      setReactions(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const toggleTheme = (value) => () => {
     let root = document.querySelector(":root");
