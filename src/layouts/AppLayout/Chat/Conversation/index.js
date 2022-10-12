@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { classNames } from "utils";
+import { classNames, getReactionUrl } from "utils";
 import { Reaction } from "./Reaction";
 import { Options } from "./Options";
 import moment from "moment";
@@ -38,6 +38,7 @@ export const Conversation = ({
                     seen,
                     reply = null,
                     reactions,
+                    totalReactions,
                   },
                   index
                 ) => {
@@ -60,62 +61,74 @@ export const Conversation = ({
                         {...(key === chats.length - 1 &&
                           index === messages.length - 1 && { last: "" })}
                       >
-                        <div
-                          className={styles.chat_card}
-                          id={`reaction-${_id}`}
-                        >
-                          {reply && (
-                            <div
-                              className={styles.reply_card}
-                              onClick={() => focusMsgById(reply._id, "smooth")}
-                            >
-                              <span>{reply.msg}</span>
-                            </div>
-                          )}
-                          <div>
-                            {isGroupChat && id !== userId && (
-                              <span
-                                style={{ color: avatar }}
-                                className={styles.user_name}
+                        <div>
+                          <div
+                            className={styles.chat_card}
+                            id={`reaction-${_id}`}
+                          >
+                            {reply && (
+                              <div
+                                className={styles.reply_card}
+                                onClick={() =>
+                                  focusMsgById(reply._id, "smooth")
+                                }
                               >
-                                {name.split(" ")[0]}
-                              </span>
+                                <span>{reply.msg}</span>
+                              </div>
                             )}
-                            <span>{msg}</span>
+                            <div>
+                              {isGroupChat && id !== userId && (
+                                <span
+                                  style={{ color: avatar }}
+                                  className={styles.user_name}
+                                >
+                                  {name.split(" ")[0]}
+                                </span>
+                              )}
+                              <span>{msg}</span>
+                            </div>
+                            <div className={styles.msg_time}>
+                              <i className={`bx-time ${styles.clock}`}></i>
+                              <span>
+                                {moment(new Date(date)).format("h:mm a")}
+                              </span>
+                              <i
+                                className={`bx bx-check-double ${styles.tick}`}
+                                seen={
+                                  Array.isArray(otherUserId)
+                                    ? (
+                                        seen.length === otherUserId.length
+                                      ).toString()
+                                    : seen.includes(otherUserId).toString()
+                                }
+                              ></i>
+                            </div>
                           </div>
-                          <div className={styles.msg_time}>
-                            <i className={`bx-time ${styles.clock}`}></i>
-                            <span>
-                              {moment(new Date(date)).format("h:mm a")}
-                            </span>
+                          <div className={styles.options}>
                             <i
-                              className={`bx bx-check-double ${styles.tick}`}
-                              seen={
-                                Array.isArray(otherUserId)
-                                  ? (
-                                      seen.length === otherUserId.length
-                                    ).toString()
-                                  : seen.includes(otherUserId).toString()
-                              }
+                              className="bx-dots-vertical-rounded"
+                              id={`option-${_id}`}
                             ></i>
                           </div>
                         </div>
-                        <div className={styles.options}>
-                          <i
-                            className="bx-dots-vertical-rounded"
-                            id={`option-${_id}`}
-                          ></i>
-                          <Options
-                            selector={`#option-${_id}`}
-                            onCopy={onCopy}
-                            onReply={onReply}
-                            onDelete={onDelete}
-                            date={date}
-                            msgId={_id}
-                            msg={msg}
-                          />
-                        </div>
+                        {totalReactions > 0 && (
+                          <div className={styles.reactions}>
+                            {reactions.map(({ reaction }) => {
+                              return <img src={getReactionUrl(reaction)} />;
+                            })}
+                            <span>{totalReactions}</span>
+                          </div>
+                        )}
                       </div>
+                      <Options
+                        selector={`#option-${_id}`}
+                        onCopy={onCopy}
+                        onReply={onReply}
+                        onDelete={onDelete}
+                        date={date}
+                        msgId={_id}
+                        msg={msg}
+                      />
                       <Reaction
                         selector={`#reaction-${_id}`}
                         reactions={reactionList}

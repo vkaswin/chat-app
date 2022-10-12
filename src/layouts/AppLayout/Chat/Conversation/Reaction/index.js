@@ -1,6 +1,6 @@
 import React from "react";
-import { baseURL } from "config";
 import { DropDown, DropDownItem } from "components";
+import { getReactionUrl } from "utils";
 
 import styles from "./Reaction.module.scss";
 
@@ -19,7 +19,7 @@ export const Reaction = ({ reactions, selector, onClick }) => {
             key={index}
             onClick={() => onClick(emoji)}
           >
-            <img id={emoji} src={`${baseURL}/reaction/${emoji}.png`} />
+            <img id={emoji} src={getReactionUrl(emoji)} />
           </DropDownItem>
         );
       })}

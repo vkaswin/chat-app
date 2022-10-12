@@ -1,3 +1,5 @@
+import { baseURL } from "config";
+
 export const debounce = (fn, delay) => {
   let timeoutID;
   return (...args) => {
@@ -180,4 +182,9 @@ export const sessionStorage = () => {
     remove,
     reset,
   };
+};
+
+export const getReactionUrl = (reaction) => {
+  if (!reaction) return;
+  return `${baseURL}/reaction/${reaction}.png`;
 };
