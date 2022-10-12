@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useLayoutEffect, useState } from "react";
 import { SideBar } from "./SideBar";
 import { EmptyChat } from "./EmptyChat";
 import { Chat } from "./Chat";
@@ -18,11 +18,10 @@ const AppLayout = () => {
 
   const [theme, setTheme] = useState();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let val = storage.get("theme") ?? "light";
     let root = document.querySelector(":root");
     root.setAttribute("theme", val);
-    getReactions();
     setTheme(val);
   }, []);
 
