@@ -1,9 +1,9 @@
 export class Popper {
-  constructor({ reference, popper, placement, onUpdate }) {
+  constructor({ reference, popper, placement, onPositionChange }) {
     this._reference = reference;
     this._popper = popper;
-    this._referenceRect = reference.getBoundingClientRect();
-    this._popperRect = popper.getBoundingClientRect();
+    this._referenceRect = undefined;
+    this._popperRect = undefined;
     this._placement = placement;
     this._innerWidth = window.innerWidth;
     this._innerHeight = window.innerHeight;
@@ -25,27 +25,21 @@ export class Popper {
       "bottom-end": this.placeOnBottomEnd.bind(this),
     };
     this._parent = this.getScrollParent(this._reference);
-    this.onUpdate = onUpdate;
+    this.onPositionChange = onPositionChange;
     this.init();
   }
 
   init() {
     this.handlePopper();
     if (this._parent) {
-      this._parent.addEventListener(
-        "scroll",
-        this.handlePopper.bind(this, true)
-      );
+      this._parent.addEventListener("scroll", this.handlePopper.bind(this));
     }
     window.addEventListener("resize", this.handlePopper.bind(this));
   }
 
   destroy() {
     if (this._parent) {
-      this._parent.removeEventListener(
-        "scroll",
-        this.handlePopper.bind(this, true)
-      );
+      this._parent.removeEventListener("scroll", this.handlePopper.bind(this));
     }
     window.removeEventListener("resize", this.handlePopper.bind(this));
   }
@@ -301,28 +295,32 @@ export class Popper {
     if (posiblePositions.length !== 0) {
       let placement = `${posiblePositions[0]}-center`;
       let rect = this._popperPositions[placement]?.();
-      this.onUpdate({ popper: rect.popper, placement });
+      this.onPositionChange({ popper: rect.popper, placement });
     } else {
       let rect = this._popperPositions["bottom-start"](true);
-      this.onUpdate({ popper: rect.popper, placaement: "bottom-start" });
+      this.onPositionChange({
+        popper: rect.popper,
+        placaement: "bottom-start",
+      });
     }
   };
 
-  handlePopper(isScroll = false) {
+  handlePopper() {
     const { innerWidth, innerHeight } = window;
 
     this._innerHeight = innerHeight;
     this._innerWidth = innerWidth;
-
-    if (isScroll) {
-      this._referenceRect = this._reference.getBoundingClientRect();
-    }
+    this._referenceRect = this._reference.getBoundingClientRect();
+    this._popperRect = this._popper.getBoundingClientRect();
 
     const rect = this._popperPositions[this._placement]?.();
     if (rect) {
-      this.onUpdate({ popper: rect.popper, placement: this._placement });
+      this.onPositionChange({
+        popper: rect.popper,
+        placement: this._placement,
+      });
     } else {
-      this.autoPlacement(isScroll);
+      this.autoPlacement();
     }
   }
 

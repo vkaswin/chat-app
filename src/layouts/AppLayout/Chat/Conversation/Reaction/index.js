@@ -10,7 +10,6 @@ export const Reaction = ({ reactions, selector, onClick }) => {
       selector={selector}
       className={styles.container}
       placement="bottom"
-      zIndex={2000}
     >
       {reactions.map((emoji, index) => {
         return (

@@ -42,7 +42,7 @@ export const Header = ({
         <i className="bx-video" onClick={() => handleCall("video")}></i>
         <i className="bxs-info-circle" onClick={toggleInfo}></i>
         <i className="bx-dots-vertical-rounded" id="more-option"></i>
-        <DropDown selector="#more-option" placement="bottom-end" zIndex={2001}>
+        <DropDown selector="#more-option" placement="bottom-end">
           {matches && (
             <Fragment>
               <DropDownItem className="dropdown-option" onClick={toggleInfo}>

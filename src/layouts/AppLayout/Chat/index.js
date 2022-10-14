@@ -389,6 +389,17 @@ export const Chat = ({ reactions }) => {
     }
   };
 
+  const findMsgByMsgId = (msgId) => {
+    let message;
+    for (let { messages } of chats) {
+      message = messages.find(({ _id }) => {
+        return _id === msgId;
+      });
+      if (message) break;
+    }
+    if (message) return message;
+  };
+
   // Ringtone
   const playMessageRingTone = () => {
     audio.muted = false;
@@ -558,6 +569,7 @@ export const Chat = ({ reactions }) => {
             isGroupChat={!!chatDetails?.group}
             reactionList={reactions}
             handleReaction={handleReaction}
+            findMsgByMsgId={findMsgByMsgId}
           />
         )}
       </div>

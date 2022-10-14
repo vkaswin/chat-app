@@ -1,10 +1,12 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { classNames, getReactionUrl } from "utils";
 import { Reaction } from "./Reaction";
 import { Options } from "./Options";
 import moment from "moment";
 
 import styles from "./Conversation.module.scss";
+import ReactionPopup from "../ReactionPopup";
+import SeenPopup from "../SeenPopup";
 
 export const Conversation = ({
   chats,
@@ -18,7 +20,19 @@ export const Conversation = ({
   isGroupChat,
   reactionList,
   handleReaction,
+  findMsgByMsgId,
 }) => {
+  let [message, setMessage] = useState({});
+  let [isOpen, setIsOpen] = useState({ reaction: false, seen: false });
+
+  const toggle = ({ msgId, type }) => {
+    if (isOpen[type]) return setIsOpen({ ...isOpen, [type]: false });
+    let msg = findMsgByMsgId(msgId);
+    if (!msg) return;
+    setMessage(msg);
+    setIsOpen({ ...isOpen, [type]: true });
+  };
+
   return (
     <Fragment>
       {chats.map(({ day, messages }, key) => {
@@ -64,7 +78,7 @@ export const Conversation = ({
                         <div>
                           <div
                             className={styles.chat_card}
-                            id={`reaction-${_id}`}
+                            {...(userId !== id && { id: `reaction-${_id}` })}
                           >
                             {reply && (
                               <div
@@ -99,8 +113,15 @@ export const Conversation = ({
                                     ? (
                                         seen.length === otherUserId.length
                                       ).toString()
-                                    : seen.includes(otherUserId).toString()
+                                    : seen
+                                        .some((id) => id === otherUserId)
+                                        .toString()
                                 }
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  console.log("seen");
+                                  toggle({ msgId: _id, type: "seen" });
+                                }}
                               ></i>
                             </div>
                           </div>
@@ -112,9 +133,16 @@ export const Conversation = ({
                           </div>
                         </div>
                         {totalReactions > 0 && (
-                          <div className={styles.reactions}>
-                            {reactions.map(({ reaction }) => {
-                              return <img src={getReactionUrl(reaction)} />;
+                          <div
+                            className={styles.reactions}
+                            onClick={() =>
+                              toggle({ msgId: _id, type: "reaction" })
+                            }
+                          >
+                            {reactions.map(({ reaction }, ind) => {
+                              return (
+                                <img key={ind} src={getReactionUrl(reaction)} />
+                              );
                             })}
                             <span>{totalReactions}</span>
                           </div>
@@ -144,6 +172,16 @@ export const Conversation = ({
           </Fragment>
         );
       })}
+      <ReactionPopup
+        isOpen={isOpen.reaction}
+        message={message}
+        toggle={() => toggle({ type: "reaction" })}
+      />
+      <SeenPopup
+        isOpen={isOpen.seen}
+        message={message}
+        toggle={() => toggle({ type: "seen" })}
+      />
     </Fragment>
   );
 };

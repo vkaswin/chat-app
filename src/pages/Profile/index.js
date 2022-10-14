@@ -32,7 +32,7 @@ const Profile = () => {
         <div className={styles.title}>
           <b>My Profile</b>
           <i className="bx-dots-vertical-rounded" id="my-profile"></i>
-          <DropDown selector="#my-profile" placement="bottom" zIndex={2001}>
+          <DropDown selector="#my-profile" placement="bottom">
             {dropDown.map(({ label, icon }, index) => {
               return (
                 <DropDownItem key={index} className="dropdown-option">

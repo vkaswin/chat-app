@@ -10,7 +10,7 @@ export const Modal = ({
   toggle,
   children,
   width = 550,
-  closeClickOnOutside = false,
+  closeClickOnOutside = true,
   zIndex,
 }) => {
   const Portal = ({ children }) => {

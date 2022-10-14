@@ -54,7 +54,6 @@ export const Emoji = ({ toggle, isOpen, selector, onChange }) => {
       toggle={toggle}
       selector={selector}
       placement="top-center"
-      zIndex={2000}
     >
       <div className={styles.emoji_container}>
         <div className={styles.emoji_header}>
