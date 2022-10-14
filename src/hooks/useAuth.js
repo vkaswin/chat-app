@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { cookies, sessionStorage } from "utils";
 import jwtDecode from "jwt-decode";
 import { socket } from "socket";
+import { useRouter } from "./useRouter";
 
 const AuthContext = createContext();
 
@@ -15,6 +16,8 @@ export const ProvideAuth = ({ children }) => {
   const cookie = cookies();
 
   const session = sessionStorage();
+
+  const router = useRouter();
 
   useEffect(() => {
     document.addEventListener("logout", logout);
@@ -83,7 +86,7 @@ export const ProvideAuth = ({ children }) => {
   const logout = () => {
     socket.close();
     cookie.remove("authToken");
-    window.location.href = "/react-chat-app/#/login";
+    router.push("/login");
     clearChatId();
   };
 
