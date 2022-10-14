@@ -52,6 +52,7 @@ export const TextArea = ({ onSend, onFocus, chatId, otherUser }) => {
   }, []);
 
   const getUsers = () => {
+    console.log(otherUser);
     return Array.isArray(otherUser)
       ? otherUser.map(({ _id, name }) => {
           return {

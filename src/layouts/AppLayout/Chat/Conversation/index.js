@@ -15,7 +15,7 @@ export const Conversation = ({
   onReply,
   userId,
   focusMsgById,
-  otherUserId,
+  users,
   unReadMsg,
   isGroupChat,
   reactionList,
@@ -108,15 +108,7 @@ export const Conversation = ({
                               </span>
                               <i
                                 className={`bx bx-check-double ${styles.tick}`}
-                                seen={
-                                  Array.isArray(otherUserId)
-                                    ? (
-                                        seen.length === otherUserId.length
-                                      ).toString()
-                                    : seen
-                                        .some((id) => id === otherUserId)
-                                        .toString()
-                                }
+                                seen={(seen.length === users.length).toString()}
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   console.log("seen");

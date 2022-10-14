@@ -562,7 +562,7 @@ export const Chat = ({ reactions }) => {
             onCopy={onCopy}
             onReply={onReply}
             userId={user?.id}
-            otherUserId={chatDetails?.userId || chatDetails?.users}
+            users={chatDetails?.users}
             focusMsgById={focusMsgById}
             chatId={chatId}
             unReadMsg={unReadMsg}
