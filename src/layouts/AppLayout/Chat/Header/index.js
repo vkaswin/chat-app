@@ -29,8 +29,8 @@ export const Header = ({
         <div className={styles.user_name}>
           <b>{chatDetails?.name}</b>
           <span userid={chatDetails?.userId}>
-            {chatDetails?.users
-              ? `${chatDetails?.users?.length} Members`
+            {chatDetails?.totalMembers
+              ? `${chatDetails?.totalMembers} Members`
               : chatDetails?.status
               ? "Online"
               : "Offline"}

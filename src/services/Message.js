@@ -8,3 +8,26 @@ export const createMessage = (chatId, data) => {
     data,
   });
 };
+
+export const getReactions = (msgId) => {
+  return axios({
+    url: `${endpoints.message.getReaction}/${msgId}`,
+    method: "get",
+  });
+};
+
+export const getReactionsByType = (msgId, params) => {
+  return axios({
+    url: `${endpoints.message.getReactionByType}/${msgId}`,
+    method: "get",
+    params,
+  });
+};
+
+export const getSeenByMsgId = (msgId, params) => {
+  return axios({
+    url: `${endpoints.message.getSeen}/${msgId}`,
+    method: "get",
+    params,
+  });
+};

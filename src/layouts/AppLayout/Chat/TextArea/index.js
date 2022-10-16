@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { fileUpload } from "services/Others";
 import { Emoji } from "./Emoji";
 import { Toast } from "components/Toast";
@@ -7,7 +7,7 @@ import { socket } from "socket";
 
 import styles from "./TextArea.module.scss";
 
-export const TextArea = ({ onSend, onFocus, chatId, otherUser }) => {
+export const TextArea = ({ onSend, onFocus, chatId, users }) => {
   const [showEmoji, setShowEmoji] = useState(false);
 
   const [text, setText] = useState("");
@@ -51,26 +51,25 @@ export const TextArea = ({ onSend, onFocus, chatId, otherUser }) => {
     setRec(recognition);
   }, []);
 
-  const getUsers = () => {
-    console.log(otherUser);
-    return Array.isArray(otherUser)
-      ? otherUser.map(({ _id, name }) => {
+  const usersList = useMemo(() => {
+    return Array.isArray(users)
+      ? users.map(({ _id, name }) => {
           return {
             id: _id,
             name,
           };
         })
-      : otherUser;
-  };
+      : users;
+  }, [users]);
 
   const handleTyping = () => {
-    socket.emit("end-typing", chatId, getUsers());
+    socket.emit("end-typing", chatId, usersList);
     setTyping(false);
   };
 
   const handleKeyDown = () => {
     if (typing) return;
-    socket.emit("start-typing", chatId, getUsers());
+    socket.emit("start-typing", chatId, usersList);
     setTyping(true);
   };
 

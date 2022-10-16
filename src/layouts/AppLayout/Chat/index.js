@@ -11,8 +11,7 @@ import {
   markAsReadByMsgId,
   markAsRead,
   getChatMessagesByMsgId,
-  createReaction,
-  updateReaction,
+  sendReaction,
 } from "services/Chat";
 import { initiateCall } from "services/Call";
 import { debounce } from "utils";
@@ -353,36 +352,10 @@ export const Chat = ({ reactions }) => {
     });
   };
 
-  const handleReaction = async (emoji, reactions, msgId) => {
-    let reaction;
-
-    for (const [index, { users }] of reactions.entries()) {
-      reaction = users.find(({ id }, ind) => {
-        return user.id === id;
-      });
-      if (reaction) break;
-    }
-
-    reaction
-      ? handleUpdateReaction({
-          reaction: emoji,
-          id: reaction.reactionId,
-        })
-      : handleCreateReaction({ reaction: emoji, msgId });
-  };
-
-  const handleCreateReaction = async (data) => {
+  const handleReaction = async (reaction, msgId) => {
+    console.log(reaction, msgId);
     try {
-      let res = await createReaction(data);
-      console.log(res);
-    } catch (error) {
-      Toast({ type: "error", message: error?.message });
-    }
-  };
-
-  const handleUpdateReaction = async (data) => {
-    try {
-      let res = await updateReaction(data);
+      let res = await sendReaction(msgId, { reaction });
       console.log(res);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
@@ -562,14 +535,12 @@ export const Chat = ({ reactions }) => {
             onCopy={onCopy}
             onReply={onReply}
             userId={user?.id}
-            users={chatDetails?.users}
             focusMsgById={focusMsgById}
             chatId={chatId}
             unReadMsg={unReadMsg}
             isGroupChat={!!chatDetails?.group}
             reactionList={reactions}
             handleReaction={handleReaction}
-            findMsgByMsgId={findMsgByMsgId}
           />
         )}
       </div>
@@ -579,7 +550,7 @@ export const Chat = ({ reactions }) => {
         onSend={onSend}
         onFocus={handleFocus}
         chatId={chatId}
-        otherUser={
+        users={
           chatDetails?.userId
             ? { id: chatDetails?.userId, name: chatDetails?.name }
             : chatDetails?.users

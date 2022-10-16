@@ -1,14 +1,10 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Avatar, Modal } from "components";
 
 import styles from "./SeenPopup.module.scss";
 
-const SeenPopup = ({ isOpen, toggle, message }) => {
-  const users = useMemo(() => {
-    if (!message.hasOwnProperty("seen")) return [];
-    return message.seen;
-  }, [message]);
-
+const SeenPopup = ({ isOpen, toggle }) => {
+  let users = [];
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
       <div className={styles.popup}>
@@ -18,7 +14,7 @@ const SeenPopup = ({ isOpen, toggle, message }) => {
           </div>
         </div>
         <div className={styles.users}>
-          {users.map(({ avatar, email, id, name, status }, index) => {
+          {users?.map(({ avatar, email, id, name, status }, index) => {
             return (
               <div key={index} className={styles.card}>
                 <Avatar

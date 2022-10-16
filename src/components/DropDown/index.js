@@ -37,7 +37,6 @@ export const DropDown = ({
   const [show, setShow] = useState(false);
 
   const open = () => {
-    console.log("dropdown");
     setShow(true);
   };
 

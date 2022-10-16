@@ -43,18 +43,10 @@ export const markAsRead = (chatId) => {
   });
 };
 
-export const createReaction = (data) => {
+export const sendReaction = (msgId, data) => {
   return axios({
-    url: `${endpoints.chat.createReaction}`,
+    url: `${endpoints.chat.sendReaction}/${msgId}`,
     method: "post",
-    data,
-  });
-};
-
-export const updateReaction = (data) => {
-  return axios({
-    url: `${endpoints.chat.updateReaction}`,
-    method: "put",
     data,
   });
 };

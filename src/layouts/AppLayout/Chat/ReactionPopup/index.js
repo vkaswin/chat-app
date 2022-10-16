@@ -1,34 +1,76 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Modal } from "components";
 import { getReactionUrl } from "utils";
+import { getReactions, getReactionsByType } from "services/Message";
 
 import styles from "./ReactionPopup.module.scss";
 
-const ReactionPopup = ({ isOpen, toggle, message }) => {
-  let [activeIndex, setActiveIndex] = useState();
+const ReactionPopup = ({ isOpen, toggle, msgId }) => {
+  const [reactions, setReactions] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [type, setType] = useState();
 
-  const reaction = useMemo(() => {
-    if (!message.hasOwnProperty("reactions")) return [];
-    return activeIndex === 0 || activeIndex
-      ? message.reactions[activeIndex].users
-      : message.reactions.reduce((initial, { users }) => {
-          return initial.concat(users);
-        }, []);
-  }, [activeIndex, message]);
+  let limit = 25;
+
+  useEffect(() => {
+    if (!isOpen) return;
+    getReaction();
+  }, [isOpen]);
+
+  const getReaction = async () => {
+    let params = {
+      page: 1,
+      limit,
+    };
+    try {
+      let [
+        {
+          data: { data: reaction },
+        },
+        {
+          data: { data: list },
+        },
+      ] = await Promise.all([
+        getReactions(msgId),
+        getReactionsByType(msgId, params),
+      ]);
+      setReactions(reaction);
+      setUsers(list);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getReactionList = async (reaction) => {
+    let params = {
+      page: 1,
+      limit,
+      type: reaction,
+    };
+    try {
+      let {
+        data: { data },
+      } = await getReactionsByType(msgId, params);
+      setType(reaction);
+      setUsers(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
       <div className={styles.popup}>
         <div className={styles.reactions}>
-          <div className={styles.all} onClick={() => setActiveIndex()}>
+          <div className={styles.all} onClick={() => getReactionList()}>
             <span>All</span>
           </div>
-          {message?.reactions?.map(({ reaction, total }, index) => {
+          {reactions?.map(({ reaction, total }, index) => {
             return (
               <div
                 key={index}
                 className={styles.card}
-                onClick={() => setActiveIndex(index)}
+                onClick={() => getReactionList(reaction)}
               >
                 <img src={getReactionUrl(reaction)} />
                 <span>{total}</span>
@@ -37,7 +79,7 @@ const ReactionPopup = ({ isOpen, toggle, message }) => {
           })}
         </div>
         <div className={styles.users}>
-          {reaction.map(({ avatar, email, id, name, status }, index) => {
+          {users.map(({ avatar, email, id, name, status, date }, index) => {
             return (
               <div key={index} className={styles.card}>
                 <Avatar

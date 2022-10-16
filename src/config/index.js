@@ -28,12 +28,13 @@ export const endpoints = {
     chatMessages: `${chatUrl}/messages`,
     markAsReadByMsgId: `${chatUrl}/markAsRead`,
     markAsRead: `${chatUrl}/markAsRead/all`,
-    reactions: `${reactionUrl}/all`,
-    createReaction: `${reactionUrl}/create`,
-    updateReaction: `${reactionUrl}/update`,
+    sendReaction: `${messageUrl}/send`,
   },
   message: {
     createMessage: `${messageUrl}/create`,
+    getReaction: `${messageUrl}/reaction`,
+    getReactionByType: `${messageUrl}/reaction/type`,
+    getSeen: `${messageUrl}/seen`,
   },
   contact: {
     getContact: `${contactUrl}`,

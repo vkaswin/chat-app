@@ -15,21 +15,17 @@ export const Conversation = ({
   onReply,
   userId,
   focusMsgById,
-  users,
   unReadMsg,
   isGroupChat,
   reactionList,
   handleReaction,
-  findMsgByMsgId,
 }) => {
-  let [message, setMessage] = useState({});
   let [isOpen, setIsOpen] = useState({ reaction: false, seen: false });
+  let [msgId, setMsgId] = useState();
 
-  const toggle = ({ msgId, type }) => {
+  const toggle = async ({ msgId, type }) => {
     if (isOpen[type]) return setIsOpen({ ...isOpen, [type]: false });
-    let msg = findMsgByMsgId(msgId);
-    if (!msg) return;
-    setMessage(msg);
+    setMsgId(msgId);
     setIsOpen({ ...isOpen, [type]: true });
   };
 
@@ -106,15 +102,16 @@ export const Conversation = ({
                               <span>
                                 {moment(new Date(date)).format("h:mm a")}
                               </span>
-                              <i
-                                className={`bx bx-check-double ${styles.tick}`}
-                                seen={(seen.length === users.length).toString()}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  console.log("seen");
-                                  toggle({ msgId: _id, type: "seen" });
-                                }}
-                              ></i>
+                              {userId === id && (
+                                <i
+                                  className={`bx bx-check-double ${styles.tick}`}
+                                  seen={seen.toString()}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggle({ msgId: _id, type: "seen" });
+                                  }}
+                                ></i>
+                              )}
                             </div>
                           </div>
                           <div className={styles.options}>
@@ -131,7 +128,7 @@ export const Conversation = ({
                               toggle({ msgId: _id, type: "reaction" })
                             }
                           >
-                            {reactions.map(({ reaction }, ind) => {
+                            {reactions.map((reaction, ind) => {
                               return (
                                 <img key={ind} src={getReactionUrl(reaction)} />
                               );
@@ -152,9 +149,7 @@ export const Conversation = ({
                       <Reaction
                         selector={`#reaction-${_id}`}
                         reactions={reactionList}
-                        onClick={(emoji) =>
-                          handleReaction(emoji, reactions, _id)
-                        }
+                        onClick={(reaction) => handleReaction(reaction, _id)}
                       />
                     </Fragment>
                   );
@@ -166,12 +161,12 @@ export const Conversation = ({
       })}
       <ReactionPopup
         isOpen={isOpen.reaction}
-        message={message}
+        msgId={msgId}
         toggle={() => toggle({ type: "reaction" })}
       />
       <SeenPopup
         isOpen={isOpen.seen}
-        message={message}
+        msgId={msgId}
         toggle={() => toggle({ type: "seen" })}
       />
     </Fragment>

@@ -11,14 +11,14 @@ export const Reaction = ({ reactions, selector, onClick }) => {
       className={styles.container}
       placement="bottom"
     >
-      {reactions.map((emoji, index) => {
+      {reactions.map((reaction, index) => {
         return (
           <DropDownItem
             className={styles.wrapper}
             key={index}
-            onClick={() => onClick(emoji)}
+            onClick={() => onClick(reaction)}
           >
-            <img id={emoji} src={getReactionUrl(emoji)} />
+            <img id={reaction} src={getReactionUrl(reaction)} />
           </DropDownItem>
         );
       })}
