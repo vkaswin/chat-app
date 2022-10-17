@@ -1,10 +1,33 @@
-import React from "react";
-import { Avatar, Modal } from "components";
+import React, { useEffect, useState } from "react";
+import { Avatar, Modal, Toast } from "components";
+import { getSeenByMsgId } from "services/Message";
 
 import styles from "./SeenPopup.module.scss";
 
-const SeenPopup = ({ isOpen, toggle }) => {
-  let users = [];
+const SeenPopup = ({ isOpen, toggle, msgId }) => {
+  const [users, setUsers] = useState([]);
+  let limit = 25;
+
+  useEffect(() => {
+    if (!isOpen) return;
+    getUsers(1);
+  }, [isOpen, msgId]);
+
+  const getUsers = async (page) => {
+    let params = {
+      page,
+      limit,
+    };
+    try {
+      let {
+        data: { data },
+      } = await getSeenByMsgId(msgId, params);
+      setUsers(data);
+    } catch (error) {
+      Toast({ type: "error", message: error?.message });
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
       <div className={styles.popup}>
@@ -14,7 +37,7 @@ const SeenPopup = ({ isOpen, toggle }) => {
           </div>
         </div>
         <div className={styles.users}>
-          {users?.map(({ avatar, email, id, name, status }, index) => {
+          {users.map(({ avatar, email, id, name, status, date }, index) => {
             return (
               <div key={index} className={styles.card}>
                 <Avatar

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Modal } from "components";
+import { Avatar, Modal, Toast } from "components";
 import { getReactionUrl } from "utils";
 import { getReactions, getReactionsByType } from "services/Message";
 
@@ -15,7 +15,7 @@ const ReactionPopup = ({ isOpen, toggle, msgId }) => {
   useEffect(() => {
     if (!isOpen) return;
     getReaction();
-  }, [isOpen]);
+  }, [isOpen, msgId]);
 
   const getReaction = async () => {
     let params = {
@@ -37,7 +37,7 @@ const ReactionPopup = ({ isOpen, toggle, msgId }) => {
       setReactions(reaction);
       setUsers(list);
     } catch (error) {
-      console.log(error);
+      Toast({ type: "error", message: error?.message });
     }
   };
 
@@ -54,7 +54,7 @@ const ReactionPopup = ({ isOpen, toggle, msgId }) => {
       setType(reaction);
       setUsers(data);
     } catch (error) {
-      console.log(error);
+      Toast({ type: "error", message: error?.message });
     }
   };
 
