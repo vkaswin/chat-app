@@ -5,8 +5,8 @@ import { Options } from "./Options";
 import moment from "moment";
 
 import styles from "./Conversation.module.scss";
-import ReactionPopup from "../ReactionPopup";
-import SeenPopup from "../SeenPopup";
+import ReactionPopup from "./ReactionPopup";
+import SeenPopup from "./SeenPopup";
 
 export const Conversation = ({
   chats,
@@ -20,13 +20,14 @@ export const Conversation = ({
   reactionList,
   handleReaction,
 }) => {
-  let [isOpen, setIsOpen] = useState({ reaction: false, seen: false });
-  let [msgId, setMsgId] = useState();
+  let [popup, setPopup] = useState({
+    reaction: false,
+    seen: false,
+    msgId: null,
+  });
 
-  const toggle = async ({ msgId, type }) => {
-    if (isOpen[type]) return setIsOpen({ ...isOpen, [type]: false });
-    setMsgId(msgId);
-    setIsOpen({ ...isOpen, [type]: true });
+  const toggle = ({ msgId, type }) => {
+    setPopup({ ...popup, [type]: !popup[type], msgId });
   };
 
   return (
@@ -106,8 +107,7 @@ export const Conversation = ({
                                 <i
                                   className={`bx bx-check-double ${styles.tick}`}
                                   seen={seen.toString()}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
+                                  onClick={() => {
                                     toggle({ msgId: _id, type: "seen" });
                                   }}
                                 ></i>
@@ -160,13 +160,13 @@ export const Conversation = ({
         );
       })}
       <ReactionPopup
-        isOpen={isOpen.reaction}
-        msgId={msgId}
+        isOpen={popup.reaction}
+        msgId={popup.msgId}
         toggle={() => toggle({ type: "reaction" })}
       />
       <SeenPopup
-        isOpen={isOpen.seen}
-        msgId={msgId}
+        isOpen={popup.seen}
+        msgId={popup.msgId}
         toggle={() => toggle({ type: "seen" })}
       />
     </Fragment>
