@@ -186,5 +186,5 @@ export const sessionStorage = () => {
 
 export const getReactionUrl = (reaction) => {
   if (!reaction) return;
-  return `${baseURL}/reaction/${reaction}.png`;
+  return `https://firebasestorage.googleapis.com/v0/b/node-chat-app-88711.appspot.com/o/${reaction}.png?alt=media`;
 };
