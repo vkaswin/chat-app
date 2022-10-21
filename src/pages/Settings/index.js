@@ -17,6 +17,8 @@ const Settings = () => {
         <img
           src="https://themesbrand.com/doot/layouts/assets/images/small/img-4.jpg"
           className={styles.bg}
+          loading="lazy"
+          alt=""
         />
         <div className={styles.title}>
           <b>My Settings</b>

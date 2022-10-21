@@ -15,7 +15,7 @@ const AuthLayout = () => {
             <b>React Chat App</b>
           </div>
         </NavLink>
-        <img src={authImg} className={styles.auth_img} />
+        <img src={authImg} className={styles.auth_img} loading="lazy" alt="" />
       </div>
       <div className={styles.auth_right}>
         <div className={styles.auth_wrapper}>

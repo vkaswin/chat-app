@@ -72,7 +72,7 @@ const ReactionPopup = ({ isOpen, toggle, msgId }) => {
                 className={styles.card}
                 onClick={() => getReactionList(reaction)}
               >
-                <img src={getReactionUrl(reaction)} />
+                <img src={getReactionUrl(reaction)} loading="lazy" alt="" />
                 <span>{total}</span>
               </div>
             );

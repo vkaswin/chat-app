@@ -34,7 +34,7 @@ export const Avatar = ({
       status={status.toString()}
     >
       {isUrl ? (
-        <img src={src} />
+        <img src={src} loading="lazy" alt="" />
       ) : (
         <div className={styles.random_avatar} style={{ "--avatar-bg": src }}>
           <span>

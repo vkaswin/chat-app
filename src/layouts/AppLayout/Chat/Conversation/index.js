@@ -130,7 +130,12 @@ export const Conversation = ({
                           >
                             {reactions.map((reaction, ind) => {
                               return (
-                                <img key={ind} src={getReactionUrl(reaction)} />
+                                <img
+                                  key={ind}
+                                  src={getReactionUrl(reaction)}
+                                  loading="lazy"
+                                  alt=""
+                                />
                               );
                             })}
                             <span>{totalReactions}</span>

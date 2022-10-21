@@ -18,7 +18,12 @@ export const Reaction = ({ reactions, selector, onClick }) => {
             key={index}
             onClick={() => onClick(reaction)}
           >
-            <img id={reaction} src={getReactionUrl(reaction)} />
+            <img
+              id={reaction}
+              src={getReactionUrl(reaction)}
+              loading="lazy"
+              alt=""
+            />
           </DropDownItem>
         );
       })}
