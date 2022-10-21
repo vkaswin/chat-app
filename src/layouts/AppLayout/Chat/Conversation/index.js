@@ -20,15 +20,8 @@ export const Conversation = ({
   reactionList,
   handleReaction,
 }) => {
-  let [popup, setPopup] = useState({
-    reaction: false,
-    seen: false,
-    msgId: null,
-  });
-
-  const toggle = ({ msgId, type }) => {
-    setPopup({ ...popup, [type]: !popup[type], msgId });
-  };
+  let [reactionMsgId, setReactionMsgId] = useState();
+  let [seenMsgId, setSeenMsgId] = useState();
 
   return (
     <Fragment>
@@ -107,9 +100,7 @@ export const Conversation = ({
                                 <i
                                   className={`bx bx-check-double ${styles.tick}`}
                                   seen={seen.toString()}
-                                  onClick={() => {
-                                    toggle({ msgId: _id, type: "seen" });
-                                  }}
+                                  onClick={() => setSeenMsgId(_id)}
                                 ></i>
                               )}
                             </div>
@@ -124,9 +115,7 @@ export const Conversation = ({
                         {totalReactions > 0 && (
                           <div
                             className={styles.reactions}
-                            onClick={() =>
-                              toggle({ msgId: _id, type: "reaction" })
-                            }
+                            onClick={() => setReactionMsgId(_id)}
                           >
                             {reactions.map((reaction, ind) => {
                               return (
@@ -164,16 +153,8 @@ export const Conversation = ({
           </Fragment>
         );
       })}
-      <ReactionPopup
-        isOpen={popup.reaction}
-        msgId={popup.msgId}
-        toggle={() => toggle({ type: "reaction" })}
-      />
-      <SeenPopup
-        isOpen={popup.seen}
-        msgId={popup.msgId}
-        toggle={() => toggle({ type: "seen" })}
-      />
+      <ReactionPopup msgId={reactionMsgId} clearMsgId={setReactionMsgId} />
+      <SeenPopup msgId={seenMsgId} clearMsgId={setSeenMsgId} />
     </Fragment>
   );
 };

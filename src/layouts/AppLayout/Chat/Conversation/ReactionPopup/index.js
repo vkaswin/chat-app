@@ -5,17 +5,18 @@ import { getReactions, getReactionsByType } from "services/Message";
 
 import styles from "./ReactionPopup.module.scss";
 
-const ReactionPopup = ({ isOpen, toggle, msgId }) => {
+const ReactionPopup = ({ msgId, clearMsgId }) => {
   const [reactions, setReactions] = useState([]);
   const [users, setUsers] = useState([]);
   const [type, setType] = useState();
+  const [isOpen, setIsOpen] = useState(false);
 
   let limit = 25;
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!msgId) return;
     getReaction();
-  }, [isOpen, msgId]);
+  }, [msgId]);
 
   const getReaction = async () => {
     let params = {
@@ -38,6 +39,8 @@ const ReactionPopup = ({ isOpen, toggle, msgId }) => {
       setUsers(list);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
+    } finally {
+      setIsOpen(true);
     }
   };
 
@@ -56,6 +59,11 @@ const ReactionPopup = ({ isOpen, toggle, msgId }) => {
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     }
+  };
+
+  const toggle = () => {
+    clearMsgId();
+    setIsOpen(false);
   };
 
   return (

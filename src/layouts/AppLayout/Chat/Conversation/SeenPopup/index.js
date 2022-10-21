@@ -4,14 +4,16 @@ import { getSeenByMsgId } from "services/Message";
 
 import styles from "./SeenPopup.module.scss";
 
-const SeenPopup = ({ isOpen, toggle, msgId }) => {
+const SeenPopup = ({ clearMsgId, msgId }) => {
   const [users, setUsers] = useState([]);
+  let [isOpen, setIsOpen] = useState(false);
+
   let limit = 25;
 
   useEffect(() => {
-    if (!isOpen) return;
-    getUsers(1);
-  }, [isOpen, msgId]);
+    if (!msgId) return;
+    getUsers(1).finally(() => setIsOpen(true));
+  }, [msgId]);
 
   const getUsers = async (page) => {
     let params = {
@@ -26,6 +28,11 @@ const SeenPopup = ({ isOpen, toggle, msgId }) => {
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     }
+  };
+
+  const toggle = () => {
+    clearMsgId();
+    setIsOpen(false);
   };
 
   return (
