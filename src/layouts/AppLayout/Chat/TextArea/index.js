@@ -7,7 +7,13 @@ import { socket } from "socket";
 
 import styles from "./TextArea.module.scss";
 
-export const TextArea = ({ onSend, onFocus, chatId, users }) => {
+export const TextArea = ({
+  onSend,
+  onFocus,
+  chatId,
+  chatDetails,
+  userName,
+}) => {
   const [showEmoji, setShowEmoji] = useState(false);
 
   const [text, setText] = useState("");
@@ -52,15 +58,16 @@ export const TextArea = ({ onSend, onFocus, chatId, users }) => {
   }, []);
 
   const usersList = useMemo(() => {
-    return Array.isArray(users)
-      ? users.map(({ _id, name }) => {
+    let userIds = chatDetails?.users || chatDetails?.userId;
+    return Array.isArray(userIds)
+      ? userIds.map((id) => {
           return {
-            id: _id,
-            name,
+            id,
+            name: userName,
           };
         })
-      : users;
-  }, [users]);
+      : { id: userIds, userName };
+  }, [chatDetails]);
 
   const handleTyping = () => {
     socket.emit("end-typing", chatId, usersList);

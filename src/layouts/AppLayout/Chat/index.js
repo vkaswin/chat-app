@@ -42,7 +42,7 @@ export const Chat = ({ reactions }) => {
 
   const [showVideo, setShowVideo] = useState(false);
 
-  const [replyId, setReplyId] = useState(null);
+  const [reply, setReply] = useState(null);
 
   const [chatDetails, setChatDetails] = useState({});
 
@@ -267,10 +267,10 @@ export const Chat = ({ reactions }) => {
       let body = {
         msg: msg,
         date: new Date().toISOString(),
-        ...(replyId && { reply: replyId }),
+        ...(reply && { reply: reply._id }),
       };
       await createMessage(chatId, body);
-      replyId && clearReplyMsg();
+      reply && clearReplyMsg();
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     }
@@ -292,13 +292,14 @@ export const Chat = ({ reactions }) => {
   };
 
   //   Reply Msg
-  const onReply = (date, id) => {
-    const key = getDate(date);
-    setReplyId({ key, id });
+  const onReply = (index, msgId) => {
+    let msg = findMsgById(index, msgId);
+    console.log(msg);
+    setReply(msg);
   };
 
   const clearReplyMsg = () => {
-    setReplyId(null);
+    setReply(null);
   };
 
   const focusMsgById = (id = msgId.current || null, behavior = "auto") => {
@@ -310,11 +311,6 @@ export const Chat = ({ reactions }) => {
 
     element.scrollIntoView({ block: "center", behavior });
   };
-
-  const replyMsg = useMemo(() => {
-    return null;
-    // return chats.find(({ _id }) => replyId === _id);
-  }, [replyId]);
 
   const handleMessage = ({ message, chat, userId }) => {
     setChats((prev) => {
@@ -362,15 +358,10 @@ export const Chat = ({ reactions }) => {
     }
   };
 
-  const findMsgByMsgId = (msgId) => {
-    let message;
-    for (let { messages } of chats) {
-      message = messages.find(({ _id }) => {
-        return _id === msgId;
-      });
-      if (message) break;
-    }
-    if (message) return message;
+  const findMsgById = (index, msgId) => {
+    return chats[index].messages?.find(({ _id }) => {
+      return _id === msgId;
+    });
   };
 
   // Ringtone
@@ -550,14 +541,11 @@ export const Chat = ({ reactions }) => {
         onSend={onSend}
         onFocus={handleFocus}
         chatId={chatId}
-        users={
-          chatDetails?.userId
-            ? { id: chatDetails?.userId, name: chatDetails?.name }
-            : chatDetails?.users
-        }
+        chatDetails={chatDetails}
+        userName={user?.name}
       />
       <CSSTransition
-        in={Boolean(replyId)}
+        in={Boolean(reply)}
         timeout={250}
         classNames={{
           enterActive: styles.reply_enter,
@@ -567,7 +555,7 @@ export const Chat = ({ reactions }) => {
       >
         <div className={styles.reply_container} ref={replyContainerRef}>
           <div className={styles.reply_card}>
-            <span className="truncate-4">{replyMsg?.msg}</span>
+            <span className="truncate-4">{reply?.msg}</span>
             <i className={`bx-x ${styles.close}`} onClick={clearReplyMsg}></i>
           </div>
         </div>

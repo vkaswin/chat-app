@@ -134,7 +134,7 @@ export const Conversation = ({
                       <Options
                         selector={`#option-${_id}`}
                         onCopy={onCopy}
-                        onReply={onReply}
+                        onReply={() => onReply(key, _id)}
                         onDelete={onDelete}
                         date={date}
                         msgId={_id}
