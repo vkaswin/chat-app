@@ -57,26 +57,20 @@ export const TextArea = ({
     setRec(recognition);
   }, []);
 
-  const usersList = useMemo(() => {
-    let userIds = chatDetails?.users || chatDetails?.userId;
-    return Array.isArray(userIds)
-      ? userIds.map((id) => {
-          return {
-            id,
-            name: userName,
-          };
-        })
-      : { id: userIds, userName };
-  }, [chatDetails]);
+  useEffect(() => {
+    inputRef.current.value = "";
+  }, [chatId]);
 
   const handleTyping = () => {
-    socket.emit("end-typing", chatId, usersList);
+    let users = chatDetails?.users || chatDetails?.userId;
+    socket.emit("end-typing", chatId, users, userName);
     setTyping(false);
   };
 
   const handleKeyDown = () => {
     if (typing) return;
-    socket.emit("start-typing", chatId, usersList);
+    let users = chatDetails?.users || chatDetails?.userId;
+    socket.emit("start-typing", chatId, users, userName);
     setTyping(true);
   };
 
