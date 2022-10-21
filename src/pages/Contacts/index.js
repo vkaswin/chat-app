@@ -82,7 +82,10 @@ const Contacts = () => {
                 <b>{word}</b>
               </div>
               {users.map(
-                ({ name, avatar, status, userId, chatId, _id }, ind) => {
+                (
+                  { name, avatar, status, userId, chatId, _id, colorCode },
+                  ind
+                ) => {
                   return (
                     <Fragment key={ind}>
                       <div className={classNames(styles.contact_card)}>
@@ -91,7 +94,7 @@ const Contacts = () => {
                           onClick={() => handleChat(chatId)}
                         >
                           <Avatar
-                            src={avatar}
+                            src={avatar || colorCode}
                             name={name}
                             size={35}
                             status={status}

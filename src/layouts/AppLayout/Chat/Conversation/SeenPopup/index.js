@@ -37,20 +37,22 @@ const SeenPopup = ({ isOpen, toggle, msgId }) => {
           </div>
         </div>
         <div className={styles.users}>
-          {users.map(({ avatar, email, id, name, status, date }, index) => {
-            return (
-              <div key={index} className={styles.card}>
-                <Avatar
-                  name={name}
-                  size={40}
-                  status={status}
-                  userId={id}
-                  src={avatar}
-                />
-                <span>{name}</span>
-              </div>
-            );
-          })}
+          {users.map(
+            ({ avatar, email, id, name, status, date, colorCode }, index) => {
+              return (
+                <div key={index} className={styles.card}>
+                  <Avatar
+                    name={name}
+                    size={40}
+                    status={status}
+                    userId={id}
+                    src={avatar || colorCode}
+                  />
+                  <span>{name}</span>
+                </div>
+              );
+            }
+          )}
         </div>
       </div>
     </Modal>

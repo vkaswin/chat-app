@@ -89,7 +89,13 @@ const Chats = () => {
       date,
       _id: chatId,
       ...(isGroupChat
-        ? { group: { name: group.name, avatar: group.avatar } }
+        ? {
+            group: {
+              name: group.name,
+              avatar: group.avatar,
+              colorCode: group.colorCode,
+            },
+          }
         : {
             user: users.find(({ _id }) => _id !== userId),
           }),
@@ -164,7 +170,13 @@ const Chats = () => {
           </div>
           {favourite.map(
             (
-              { _id, count, msg, date, user: { name, avatar, status, id } },
+              {
+                _id,
+                count,
+                msg,
+                date,
+                user: { name, avatar, status, id, colorCode },
+              },
               index
             ) => {
               return (
@@ -178,7 +190,7 @@ const Chats = () => {
                 >
                   <div className={styles.user}>
                     <Avatar
-                      src={avatar}
+                      src={avatar || colorCode}
                       name={name}
                       status={status}
                       size={35}
@@ -210,7 +222,13 @@ const Chats = () => {
           </div>
           {recent.map(
             (
-              { _id, count, msg, date, user: { name, avatar, status, id } },
+              {
+                _id,
+                count,
+                msg,
+                date,
+                user: { name, avatar, status, id, colorCode },
+              },
               index
             ) => {
               return (
@@ -224,7 +242,7 @@ const Chats = () => {
                 >
                   <div className={styles.user}>
                     <Avatar
-                      src={avatar}
+                      src={avatar || colorCode}
                       name={name}
                       status={status}
                       size={35}
@@ -258,7 +276,10 @@ const Chats = () => {
             </button>
           </div>
           {group.map(
-            ({ _id, count, msg, date, group: { name, avatar } }, index) => {
+            (
+              { _id, count, msg, date, group: { name, avatar, colorCode } },
+              index
+            ) => {
               return (
                 <div
                   key={index}
@@ -269,7 +290,7 @@ const Chats = () => {
                   chatid={_id}
                 >
                   <div className={styles.user}>
-                    <Avatar src={avatar} name={name} size={35} />
+                    <Avatar src={avatar || colorCode} name={name} size={35} />
                     <div className={styles.msg} typingstatus="">
                       <span className="truncate-1">{name}</span>
                       <span className="truncate-1">{msg}</span>

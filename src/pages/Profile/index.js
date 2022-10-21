@@ -45,7 +45,7 @@ const Profile = () => {
         </div>
         <div className={styles.avatar}>
           <Avatar
-            src={user?.avatar}
+            src={user?.avatar || user?.colorCode}
             name={user?.name}
             size={75}
             outlineSize={5}

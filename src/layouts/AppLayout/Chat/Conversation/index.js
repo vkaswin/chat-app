@@ -44,7 +44,7 @@ export const Conversation = ({
                   {
                     msg,
                     date,
-                    sender: { id = null, name = null, avatar = null } = {},
+                    sender: { id, name, avatar, colorCode } = {},
                     _id,
                     seen,
                     reply = null,
@@ -90,7 +90,7 @@ export const Conversation = ({
                             <div>
                               {isGroupChat && id !== userId && (
                                 <span
-                                  style={{ color: avatar }}
+                                  style={{ color: colorCode }}
                                   className={styles.user_name}
                                 >
                                   {name.split(" ")[0]}

@@ -131,7 +131,7 @@ export const SideBar = ({ theme, toggleTheme, className }) => {
           className={classNames(styles.nav_item, styles.profile)}
         >
           <Avatar
-            src={user?.avatar}
+            src={user?.avatar || user?.colorCode}
             name={user?.name}
             size={40}
             outline

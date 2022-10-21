@@ -20,7 +20,7 @@ export const Header = ({
           <i className="bx bx-chevron-left"></i>
         </div>
         <Avatar
-          src={chatDetails?.avatar}
+          src={chatDetails?.avatar || chatDetails?.colorCode}
           name={chatDetails?.name}
           size={50}
           status={chatDetails?.status}

@@ -37,7 +37,17 @@ const Calls = () => {
       {callHistory.length > 0 &&
         callHistory.map(
           (
-            { date, type, name, status, avatar, userId, initiatedBy, chatId },
+            {
+              date,
+              type,
+              name,
+              status,
+              avatar,
+              userId,
+              initiatedBy,
+              chatId,
+              colorCode,
+            },
             index
           ) => {
             return (
@@ -48,7 +58,7 @@ const Calls = () => {
               >
                 <div className={styles.user}>
                   <Avatar
-                    src={avatar}
+                    src={avatar || colorCode}
                     name={name}
                     size={40}
                     status={status}
