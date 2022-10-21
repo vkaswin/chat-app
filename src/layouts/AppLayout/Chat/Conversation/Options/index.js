@@ -27,10 +27,6 @@ export const Options = ({
         <span>Copy</span>
         <i className="bx-copy"></i>
       </DropDownItem>
-      <DropDownItem className="dropdown-option">
-        <span>Mark as Unread</span>
-        <i className="bx-message-error"></i>
-      </DropDownItem>
       <DropDownItem
         className="dropdown-option"
         onClick={() => onDelete(date, msgId)}

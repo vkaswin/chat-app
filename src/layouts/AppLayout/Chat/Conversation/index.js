@@ -66,21 +66,16 @@ export const Conversation = ({
                           index === messages.length - 1 && { last: "" })}
                       >
                         <div>
-                          <div
-                            className={styles.chat_card}
-                            {...(userId !== id && { id: `reaction-${_id}` })}
-                          >
+                          <div className={styles.chat_card}>
                             {reply && (
                               <div
                                 className={styles.reply_card}
-                                onClick={() =>
-                                  focusMsgById(reply._id, "smooth")
-                                }
+                                onClick={() => focusMsgById(reply.id, "smooth")}
                               >
                                 <span>{reply.msg}</span>
                               </div>
                             )}
-                            <div>
+                            <div id={`reaction-${_id}`}>
                               {isGroupChat && id !== userId && (
                                 <span
                                   style={{ color: colorCode }}

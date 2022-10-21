@@ -60,10 +60,8 @@
         font-size: 14px;
       }
       div {
-        &:first-child {
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
+        span {
+          display: block;
         }
         &:last-child {
           display: flex;
