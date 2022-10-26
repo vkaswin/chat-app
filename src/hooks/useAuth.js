@@ -22,7 +22,7 @@ export const ProvideAuth = ({ children }) => {
   useEffect(() => {
     document.addEventListener("logout", logout);
     document.addEventListener("socket", handleSocket);
-    const token = cookie.get("authToken");
+    const token = cookie.get("auth_token");
     const chatId = session.get("chatId");
     if (token !== null) {
       const user = jwtDecode(token);
@@ -38,7 +38,7 @@ export const ProvideAuth = ({ children }) => {
   };
 
   const handleUserStatus = ({ userId, status }) => {
-    const token = cookie.get("authToken");
+    const token = cookie.get("auth_token");
 
     if (!token) return;
 
@@ -85,7 +85,7 @@ export const ProvideAuth = ({ children }) => {
 
   const logout = () => {
     socket.close();
-    cookie.remove("authToken");
+    cookie.remove("auth_token");
     router.push("/login");
     clearChatId();
   };

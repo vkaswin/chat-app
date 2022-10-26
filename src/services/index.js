@@ -8,7 +8,7 @@ axios.interceptors.request.use(
   (config) => {
     const cookie = cookies();
 
-    const token = cookie.get("authToken");
+    const token = cookie.get("auth_token");
     if (token) {
       config.headers.Authorization = token;
     }

@@ -11,7 +11,7 @@ const PageNotFound = lazy(() => import("../pages/404"));
 export const Router = () => {
   const cookie = cookies();
 
-  const authToken = cookie.get("authToken");
+  const authToken = cookie.get("auth_token");
 
   return (
     <Suspense fallback={<Loader />}>

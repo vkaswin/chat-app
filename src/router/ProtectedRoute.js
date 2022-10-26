@@ -5,7 +5,7 @@ import { cookies } from "utils";
 export const ProtectedRoute = ({ component, auth = true }) => {
   const cookie = cookies();
 
-  const token = cookie.get("authToken");
+  const token = cookie.get("auth_token");
 
   if (auth && token) return component;
 

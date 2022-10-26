@@ -57,7 +57,7 @@ const Login = () => {
           days: 14,
         });
       }
-      cookie.set({ name: "authToken", value: token, days: 7 });
+      cookie.set({ name: "auth_token", value: token, days: 7 });
       socket.init();
       setUser(user);
       router.push("/chats");

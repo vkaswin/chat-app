@@ -7,7 +7,7 @@ export const socket = {
   init() {
     this.io = io(baseURL, {
       auth: {
-        token: cookies().get("authToken"),
+        token: cookies().get("auth_token"),
         chatId: sessionStorage.getItem("chatId"),
       },
     });
