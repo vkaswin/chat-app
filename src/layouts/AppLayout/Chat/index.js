@@ -355,13 +355,13 @@ export const Chat = ({ reactions }) => {
   const handleReaction = async (reaction, msgId, index) => {
     try {
       await sendReaction(msgId, { reaction });
-      updateReactionInChat(reaction, msgId, index);
+      updateReactionInChat(reaction, msgId, undefined, index);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     }
   };
 
-  const updateReactionInChat = (reaction, id, index) => {
+  const updateReactionInChat = (reaction, id, reacted, index) => {
     let msgIndex;
 
     setChats((prev) => {
@@ -389,12 +389,21 @@ export const Chat = ({ reactions }) => {
 
       let msg = chat[index].messages[msgIndex];
 
-      if (!msg.reactions.includes(reaction)) msg.reactions.push(reaction);
-
-      if (!msg.isReacted) {
-        msg.totalReactions += 1;
-        msg.isReacted = true;
+      if (!msg.reacted) {
+        msg.reacted = reacted;
       }
+
+      if (msg.reactions[msg.reacted] === 1) {
+        delete msg.reactions[msg.reacted];
+      }
+
+      if (msg.reactions.hasOwnProperty(reaction)) {
+        msg.reactions[reaction] += 1;
+      } else {
+        msg.reactions[reaction] = 1;
+      }
+
+      msg.reacted = reaction;
 
       return chat;
     });

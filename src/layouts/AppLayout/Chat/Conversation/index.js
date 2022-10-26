@@ -112,7 +112,7 @@ export const Conversation = ({
                             className={styles.reactions}
                             onClick={() => setReactionMsgId(_id)}
                           >
-                            {reactions.map((reaction, ind) => {
+                            {Object.keys(reactions).map((reaction, ind) => {
                               return (
                                 <img
                                   key={ind}
