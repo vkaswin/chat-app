@@ -22,11 +22,17 @@ export const getChatMessagesByMsgId = (chatId, msgId, params) => {
 };
 
 export const addToFavourite = (chatId) => {
-  return axios({ url: endpoints.chat.addFavourite, method: "put" });
+  return axios({
+    url: `${endpoints.chat.addFavourite}/${chatId}`,
+    method: "put",
+  });
 };
 
 export const removeFromFavourite = (chatId) => {
-  return axios({ url: endpoints.chat.removeFavourite, method: "delete" });
+  return axios({
+    url: `${endpoints.chat.removeFavourite}/${chatId}`,
+    method: "delete",
+  });
 };
 
 export const markAsReadByMsgId = (chatId, msgId) => {

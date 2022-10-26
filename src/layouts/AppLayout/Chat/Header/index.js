@@ -9,6 +9,8 @@ export const Header = ({
   chatDetails,
   toggleInfo,
   handleCall,
+  handleFavourite,
+  favourite,
   show,
 }) => {
   const { matches } = matchMedia(`(max-width: 768px)`);
@@ -38,6 +40,11 @@ export const Header = ({
         </div>
       </div>
       <div className={styles.chat_icons}>
+        <i
+          onClick={handleFavourite}
+          className={`bx${favourite ? "s" : ""}-heart`}
+          favourite={favourite?.toString()}
+        ></i>
         {/* <i className="bxs-phone-call"></i> */}
         <i className="bx-video" onClick={() => handleCall("video")}></i>
         <i className="bxs-info-circle" onClick={toggleInfo}></i>

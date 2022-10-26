@@ -41,6 +41,8 @@ const Chats = () => {
     socket.on("start-typing", handleStartTyping);
 
     socket.on("end-typing", handleEndTyping);
+
+    socket.on("favourite", handleFavourite);
   };
 
   const getChats = async () => {
@@ -79,7 +81,7 @@ const Chats = () => {
 
   const handleMessage = ({
     message: { msg, date, sender },
-    chat: { _id: chatId, group, favourites, users },
+    chat: { _id: chatId, group, favourites, user },
     userId,
   }) => {
     let isGroupChat = !!group;
@@ -97,7 +99,7 @@ const Chats = () => {
             },
           }
         : {
-            user: users.find(({ _id }) => _id !== userId),
+            user,
           }),
     };
 
@@ -129,6 +131,28 @@ const Chats = () => {
         ...prev,
         [key]: [message, ...chats],
       };
+    });
+  };
+
+  const handleFavourite = (data, isFavourite, isGroupChat) => {
+    setChatList((prev) => {
+      let key = isGroupChat ? "group" : "recent";
+      let chats = { ...prev };
+      if (isFavourite) {
+        chats.favourite.unshift(data);
+        let index = chats[key].findIndex(({ _id }) => {
+          return data._id === _id;
+        });
+        if (index < 0) return;
+        chats[key].splice(index, 1);
+      } else {
+        let index = chats.favourite.findIndex(({ _id }) => {
+          return data._id === _id;
+        });
+        if (index < 0) return;
+        chats.favourite.splice(index, 1);
+      }
+      return chats;
     });
   };
 

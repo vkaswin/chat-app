@@ -12,6 +12,8 @@ import {
   markAsRead,
   getChatMessagesByMsgId,
   sendReaction,
+  addToFavourite,
+  removeFromFavourite,
 } from "services/Chat";
 import { initiateCall } from "services/Call";
 import { debounce } from "utils";
@@ -398,6 +400,18 @@ export const Chat = ({ reactions }) => {
     });
   };
 
+  const handleFavourite = async () => {
+    try {
+      let isFavourite = chatDetails?.favourite;
+      isFavourite
+        ? await removeFromFavourite(chatId)
+        : await addToFavourite(chatId);
+      setChatDetails({ ...chatDetails, favourite: !isFavourite });
+    } catch (error) {
+      Toast({ type: "error", message: error?.message });
+    }
+  };
+
   const findMsgById = (index, msgId) => {
     return chats[index].messages?.find(({ _id }) => {
       return _id === msgId;
@@ -553,6 +567,8 @@ export const Chat = ({ reactions }) => {
         chatDetails={chatDetails}
         handleCall={handleCall}
         toggleInfo={toggleInfo}
+        handleFavourite={handleFavourite}
+        favourite={chatDetails?.favourite}
         show={!!chatId}
       />
       {topLoader && <Loader />}

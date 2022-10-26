@@ -49,6 +49,9 @@
       color: var(--chat-icon);
       cursor: pointer;
     }
+    i[favourite="true"] {
+      color: #f63b2c;
+    }
   }
 }
 
