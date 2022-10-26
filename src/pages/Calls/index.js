@@ -40,13 +40,9 @@ const Calls = () => {
             {
               date,
               type,
-              name,
-              status,
-              avatar,
-              userId,
               initiatedBy,
               chatId,
-              colorCode,
+              user: { colorCode, name, status, avatar, email, id },
             },
             index
           ) => {
@@ -62,7 +58,7 @@ const Calls = () => {
                     name={name}
                     size={40}
                     status={status}
-                    userId={userId}
+                    userId={id}
                   />
                   <div className={styles.call_info}>
                     <span className="truncate-1">{name}</span>

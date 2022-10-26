@@ -99,6 +99,8 @@ export const Chat = ({ reactions }) => {
     socket.on("start-typing", handleStartTyping);
 
     socket.on("end-typing", handleEndTyping);
+
+    socket.on("reaction", updateReactionInChat);
   };
 
   const handleStartTyping = (chatId, userName) => {
@@ -348,14 +350,52 @@ export const Chat = ({ reactions }) => {
     });
   };
 
-  const handleReaction = async (reaction, msgId) => {
-    console.log(reaction, msgId);
+  const handleReaction = async (reaction, msgId, index) => {
     try {
-      let res = await sendReaction(msgId, { reaction });
-      console.log(res);
+      await sendReaction(msgId, { reaction });
+      updateReactionInChat(reaction, msgId, index);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     }
+  };
+
+  const updateReactionInChat = (reaction, id, index) => {
+    let msgIndex;
+
+    setChats((prev) => {
+      let chat = [...prev];
+      msgId.current = id;
+
+      if (!index) {
+        chat.forEach(({ messages }, key) => {
+          let msgIndex = messages.findIndex(({ _id }) => {
+            return _id === id;
+          });
+          if (msgIndex !== -1) {
+            msgIndex = key;
+            index = msgIndex;
+            return;
+          }
+        });
+      }
+
+      if (!msgIndex) {
+        msgIndex = chat[index].messages.findIndex(({ _id }) => {
+          return _id === id;
+        });
+      }
+
+      let msg = chat[index].messages[msgIndex];
+
+      if (!msg.reactions.includes(reaction)) msg.reactions.push(reaction);
+
+      if (!msg.isReacted) {
+        msg.totalReactions += 1;
+        msg.isReacted = true;
+      }
+
+      return chat;
+    });
   };
 
   const findMsgById = (index, msgId) => {

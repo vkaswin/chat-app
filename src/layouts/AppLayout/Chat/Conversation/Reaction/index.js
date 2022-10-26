@@ -9,7 +9,7 @@ export const Reaction = ({ reactions, selector, onClick }) => {
     <DropDown
       selector={selector}
       className={styles.container}
-      placement="bottom"
+      placement="bottom-start"
     >
       {reactions.map((reaction, index) => {
         return (

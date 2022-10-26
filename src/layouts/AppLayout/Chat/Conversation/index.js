@@ -138,7 +138,9 @@ export const Conversation = ({
                       <Reaction
                         selector={`#reaction-${_id}`}
                         reactions={reactionList}
-                        onClick={(reaction) => handleReaction(reaction, _id)}
+                        onClick={(reaction) =>
+                          handleReaction(reaction, _id, key)
+                        }
                       />
                     </Fragment>
                   );
