@@ -86,7 +86,7 @@ export const ProvideAuth = ({ children }) => {
   const logout = () => {
     socket.close();
     cookie.remove("auth_token");
-    router.push("/login");
+    router.push("/auth/login");
     clearChatId();
   };
 

@@ -1,32 +1,6 @@
 export const routes = [
   {
     path: "/",
-    component: "layouts/AuthLayout",
-    children: [
-      {
-        path: "login",
-        auth: false,
-        component: "pages/Login",
-      },
-      {
-        path: "register",
-        auth: false,
-        component: "pages/Register",
-      },
-      {
-        path: "reset-password",
-        auth: false,
-        component: "pages/ResetPassword",
-      },
-      {
-        path: "change-password",
-        auth: true,
-        component: "pages/ChangePassword",
-      },
-    ],
-  },
-  {
-    path: "/",
     component: "layouts/AppLayout",
     children: [
       {
@@ -53,6 +27,32 @@ export const routes = [
         path: "settings",
         auth: true,
         component: "pages/Settings",
+      },
+    ],
+  },
+  {
+    path: "/auth",
+    component: "layouts/AuthLayout",
+    children: [
+      {
+        path: "login",
+        auth: false,
+        component: "pages/Login",
+      },
+      {
+        path: "register",
+        auth: false,
+        component: "pages/Register",
+      },
+      {
+        path: "reset-password",
+        auth: false,
+        component: "pages/ResetPassword",
+      },
+      {
+        path: "change-password",
+        auth: true,
+        component: "pages/ChangePassword",
       },
     ],
   },

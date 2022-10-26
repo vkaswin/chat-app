@@ -21,7 +21,7 @@ export const Router = () => {
             <Route
               path="/"
               element={
-                <Navigate replace to={authToken ? "/chats" : "/login"} />
+                <Navigate replace to={authToken ? "/chats" : "/auth/login"} />
               }
             />
             {routes.map(({ path, component, children = [], auth }) => {
