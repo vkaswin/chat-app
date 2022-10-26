@@ -6,35 +6,6 @@ import { getContacts } from "services/Contact";
 
 import styles from "./Contacts.module.scss";
 
-const alphabets = [
-  "a",
-  "b",
-  "c",
-  "d",
-  "e",
-  "f",
-  "g",
-  "h",
-  "i",
-  "j",
-  "k",
-  "l",
-  "m",
-  "n",
-  "o",
-  "p",
-  "q",
-  "r",
-  "s",
-  "t",
-  "u",
-  "v",
-  "w",
-  "x",
-  "y",
-  "z",
-];
-
 const Contacts = () => {
   const { handleChat } = useAuth();
 
@@ -53,23 +24,6 @@ const Contacts = () => {
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     }
-  };
-
-  const sortContactsByName = (contactList) => {
-    let contactByAlphabets = alphabets.map((letter) => {
-      let list = contactList.filter(({ user: { name } }) => {
-        return name.charAt(0).toLowerCase() === letter;
-      });
-
-      return {
-        word: letter.toUpperCase(),
-        users:
-          list.length > 0
-            ? list.sort((a, b) => a.user.name.localeCompare(b.user.name))
-            : list,
-      };
-    });
-    setContacts([...contacts, ...contactByAlphabets]);
   };
 
   return (
@@ -102,10 +56,7 @@ const Contacts = () => {
                           />
                           <span>{name}</span>
                         </div>
-                        <i
-                          className="bx-dots-vertical-rounded"
-                          id={`${word}-${ind}`}
-                        ></i>
+                        <i className="bx-dots-vertical-rounded" id={_id}></i>
                       </div>
                       <DropDown placement="bottom" selector={`#${word}-${ind}`}>
                         <DropDownItem className="dropdown-option">

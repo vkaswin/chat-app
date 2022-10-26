@@ -122,7 +122,10 @@ const Chats = () => {
       let chats = [...prev[key]];
       let [oldChat] = chats.splice(index, 1);
 
-      if (chatId === sessionStorage.getItem("chatId") || userId === sender.id) {
+      if (
+        chatId === sessionStorage.getItem("chatId") ||
+        userId === sender._id
+      ) {
         message.count = 0;
       } else {
         message.count = (oldChat.count || 0) + 1;
@@ -199,7 +202,7 @@ const Chats = () => {
                 count,
                 msg,
                 date,
-                user: { name, avatar, status, id, colorCode },
+                user: { name, avatar, status, _id: userId, colorCode },
               },
               index
             ) => {
@@ -218,7 +221,7 @@ const Chats = () => {
                       name={name}
                       status={status}
                       size={35}
-                      userId={id}
+                      userId={userId}
                     />
                     <div className={styles.msg} typingstatus="">
                       <span className="truncate-1">{name}</span>
@@ -251,7 +254,7 @@ const Chats = () => {
                 count,
                 msg,
                 date,
-                user: { name, avatar, status, id, colorCode },
+                user: { name, avatar, status, id: userId, colorCode },
               },
               index
             ) => {
@@ -270,7 +273,7 @@ const Chats = () => {
                       name={name}
                       status={status}
                       size={35}
-                      userId={id}
+                      userId={userId}
                     />
                     <div className={styles.msg} typingstatus="">
                       <span className="truncate-1">{name}</span>

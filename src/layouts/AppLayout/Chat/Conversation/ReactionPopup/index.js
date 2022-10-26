@@ -88,14 +88,14 @@ const ReactionPopup = ({ msgId, clearMsgId }) => {
         </div>
         <div className={styles.users}>
           {users.map(
-            ({ avatar, email, id, name, status, date, colorCode }, index) => {
+            ({ avatar, email, _id, name, status, date, colorCode }, index) => {
               return (
                 <div key={index} className={styles.card}>
                   <Avatar
                     name={name}
                     size={40}
                     status={status}
-                    userId={id}
+                    userId={_id}
                     src={avatar || colorCode}
                   />
                   <span>{name}</span>

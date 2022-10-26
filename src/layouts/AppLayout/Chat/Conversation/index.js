@@ -37,7 +37,7 @@ export const Conversation = ({
                   {
                     msg,
                     date,
-                    sender: { id, name, avatar, colorCode } = {},
+                    sender: { id: senderId, name, avatar, colorCode } = {},
                     _id,
                     seen,
                     reply = null,
@@ -58,7 +58,7 @@ export const Conversation = ({
                       )}
                       <div
                         className={classNames(styles.chat_wrapper, {
-                          [styles.end]: userId === id,
+                          [styles.end]: userId === senderId,
                         })}
                         msgid={_id}
                         {...(key === 0 && index === 0 && { first: "" })}
@@ -76,7 +76,7 @@ export const Conversation = ({
                               </div>
                             )}
                             <div id={`reaction-${_id}`}>
-                              {isGroupChat && id !== userId && (
+                              {isGroupChat && senderId !== userId && (
                                 <span
                                   style={{ color: colorCode }}
                                   className={styles.user_name}
@@ -91,7 +91,7 @@ export const Conversation = ({
                               <span>
                                 {moment(new Date(date)).format("h:mm a")}
                               </span>
-                              {userId === id && (
+                              {userId === senderId && (
                                 <i
                                   className={`bx bx-check-double ${styles.tick}`}
                                   seen={seen.toString()}

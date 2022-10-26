@@ -42,7 +42,7 @@ const Calls = () => {
               type,
               initiatedBy,
               chatId,
-              user: { colorCode, name, status, avatar, email, id },
+              user: { colorCode, name, status, avatar, email, _id: userId },
             },
             index
           ) => {
@@ -58,7 +58,7 @@ const Calls = () => {
                     name={name}
                     size={40}
                     status={status}
-                    userId={id}
+                    userId={userId}
                   />
                   <div className={styles.call_info}>
                     <span className="truncate-1">{name}</span>
