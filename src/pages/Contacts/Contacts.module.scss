@@ -6,24 +6,4 @@
       color: #4eac6e;
     }
   }
-  .contact_card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    padding: 10px 15px;
-    cursor: pointer;
-    .user {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      span {
-        color: var(--text-clr);
-        font-size: 14px;
-      }
-    }
-    i {
-      color: var(--text-clr);
-    }
-  }
 }

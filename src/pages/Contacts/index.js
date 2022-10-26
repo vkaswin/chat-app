@@ -1,8 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Avatar, DropDown, Toast, DropDownItem } from "components";
-import { classNames } from "utils";
+import { Toast } from "components";
+import { debounce } from "utils";
 import { useAuth } from "hooks";
 import { getContacts } from "services/Contact";
+import { searchUsers } from "services/User";
+import ContactCard from "./Card";
 
 import styles from "./Contacts.module.scss";
 
@@ -11,9 +13,20 @@ const Contacts = () => {
 
   const [contacts, setContacts] = useState([]);
 
+  const [users, setUsers] = useState([]);
+
+  const [search, setSearch] = useState("");
+
+  let limit = 25;
+
   useEffect(() => {
     getAllContacts();
   }, []);
+
+  useEffect(() => {
+    if (search.length === 0) return;
+    getUsers(1);
+  }, [search]);
 
   const getAllContacts = async () => {
     try {
@@ -26,56 +39,64 @@ const Contacts = () => {
     }
   };
 
+  const getUsers = async (page) => {
+    let params = {
+      page,
+      limit,
+      search,
+    };
+
+    try {
+      let {
+        data: { data },
+      } = await searchUsers(params);
+      setUsers(data);
+    } catch (error) {
+      Toast({ type: "error", message: error?.response });
+    }
+  };
+
+  const handleChange = async ({ target: { value } }) => {
+    value.length === 0 ? setSearch("") : setSearch(value);
+  };
+
   return (
-    <div id="contacts-container" className={styles.contacts_list}>
-      {contacts?.map(({ word, users }, index) => {
-        return (
-          users.length > 0 && (
-            <Fragment key={index}>
-              <div className={styles.title}>
-                <b>{word}</b>
-              </div>
-              {users.map(
-                (
-                  { name, avatar, status, userId, chatId, _id, colorCode },
-                  ind
-                ) => {
-                  return (
-                    <Fragment key={ind}>
-                      <div className={classNames(styles.contact_card)}>
-                        <div
-                          className={styles.user}
-                          onClick={() => handleChat(chatId)}
-                        >
-                          <Avatar
-                            src={avatar || colorCode}
-                            name={name}
-                            size={35}
-                            status={status}
-                            userId={userId}
-                          />
-                          <span>{name}</span>
-                        </div>
-                        <i className="bx-dots-vertical-rounded" id={_id}></i>
-                      </div>
-                      <DropDown placement="bottom" selector={`#${word}-${ind}`}>
-                        <DropDownItem className="dropdown-option">
-                          <span>Block</span>
-                          <i className="bx-block"></i>
-                        </DropDownItem>
-                        <DropDownItem className="dropdown-option">
-                          <span>Remove</span>
-                          <i className="bx-trash"></i>
-                        </DropDownItem>
-                      </DropDown>
-                    </Fragment>
-                  );
-                }
-              )}
-            </Fragment>
-          )
-        );
-      })}
+    <div className={styles.contacts_list}>
+      <div>
+        <input type="text" onChange={debounce(handleChange, 500)} />
+      </div>
+      {search.length === 0 ? (
+        <Fragment>
+          {contacts?.map(({ word, users }, index) => {
+            return (
+              users.length > 0 && (
+                <Fragment key={index}>
+                  <div className={styles.title}>
+                    <b>{word}</b>
+                  </div>
+                  {users.map((user, ind) => {
+                    return (
+                      <ContactCard
+                        key={ind}
+                        handleChat={handleChat}
+                        {...user}
+                      />
+                    );
+                  })}
+                </Fragment>
+              )
+            );
+          })}
+        </Fragment>
+      ) : (
+        <Fragment>
+          {users.map((user, index) => {
+            return (
+              <ContactCard key={index} handleChat={handleChat} {...user} />
+            );
+          })}
+        </Fragment>
+      )}
     </div>
   );
 };

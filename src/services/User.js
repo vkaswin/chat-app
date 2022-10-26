@@ -9,3 +9,7 @@ export const loginUser = (data) => {
 export const registerUser = (data) => {
   return axios({ url: endpoints.user.register, method: "post", data });
 };
+
+export const searchUsers = (params) => {
+  return axios({ url: endpoints.user.search, method: "get", params });
+};
