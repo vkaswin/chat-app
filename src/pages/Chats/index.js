@@ -1,12 +1,9 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { Avatar, SearchBox, Toast } from "components";
-import { classNames } from "utils";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
+import { SearchBox, Toast } from "components";
 import { useAuth } from "hooks";
 import { getChatByType } from "services/Chat";
-import moment from "moment";
 import { socket } from "socket";
-
-import styles from "./Chats.module.scss";
+import ChatCard from "./Card";
 
 const types = {
   recent: "recent",
@@ -18,14 +15,14 @@ const Chats = () => {
   const { chatId, handleChat } = useAuth();
 
   const [chatList, setChatList] = useState({
-    recent: [],
     favourite: [],
+    recent: [],
     group: [],
   });
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const { favourite, recent, group } = chatList;
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     document.addEventListener("socket", handleSocket);
@@ -65,7 +62,7 @@ const Chats = () => {
     }
   };
 
-  const handleClickOnChat = (id, type, index) => {
+  const handleClick = (id, type, index) => {
     clearCount(type, index);
     handleChat(id);
   };
@@ -92,14 +89,12 @@ const Chats = () => {
       _id: chatId,
       ...(isGroupChat
         ? {
-            group: {
-              name: group.name,
-              avatar: group.avatar,
-              colorCode: group.colorCode,
-            },
+            name: group.name,
+            avatar: group.avatar,
+            colorCode: group.colorCode,
           }
         : {
-            user,
+            ...user,
           }),
     };
 
@@ -159,15 +154,6 @@ const Chats = () => {
     });
   };
 
-  const getDate = (date) => {
-    const isCurrentDate =
-      date.split("T")[0] === new Date().toISOString().split("T")[0];
-
-    return isCurrentDate
-      ? moment(date).format("h:mm a")
-      : moment(date).format("DD/MM/YY");
-  };
-
   const handleStartTyping = (chatId, userName) => {
     const element = document.querySelector(`[chatid='${chatId}']`);
 
@@ -186,167 +172,43 @@ const Chats = () => {
     element.querySelector("[typingstatus]").removeAttribute("typing");
   };
 
-  const handleChange = ({ taget: { value } }) => {
-    console.log(value);
+  const handleChange = ({ target: { value } }) => {
+    setSearch(value.length === 0 ? "" : value);
   };
+
+  const chats = useMemo(() => {
+    if (search.length === 0) return chatList;
+
+    return Object.entries(chatList).reduce((value, [key, chats]) => {
+      value[key] = chats.filter(({ name }) => {
+        return name.toLowerCase().includes(search.toLocaleLowerCase());
+      });
+      return value;
+    }, {});
+  }, [search, chatList]);
 
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className={styles.chat_list_container}>
+    <Fragment>
       <SearchBox
         title="Chats"
         placeholder="Search here..."
         onChange={handleChange}
       />
-      {favourite.length > 0 && (
-        <Fragment>
-          <div className={styles.title}>
-            <b>Favourites</b>
-          </div>
-          {favourite.map(
-            (
-              {
-                _id,
-                count,
-                msg,
-                date,
-                user: { name, avatar, status, _id: userId, colorCode },
-              },
-              index
-            ) => {
-              return (
-                <div
-                  key={index}
-                  className={classNames(styles.user_card, {
-                    [styles.active]: _id === chatId,
-                  })}
-                  onClick={() => handleClickOnChat(_id, types.favourite, index)}
-                  chatid={_id}
-                >
-                  <div className={styles.user}>
-                    <Avatar
-                      src={avatar || colorCode}
-                      name={name}
-                      status={status}
-                      size={35}
-                      userId={userId}
-                    />
-                    <div className={styles.msg} typingstatus="">
-                      <span className="truncate-1">{name}</span>
-                      <span className="truncate-1">{msg}</span>
-                    </div>
-                  </div>
-                  <div
-                    className={classNames(styles.time, {
-                      [styles.top]: !count,
-                    })}
-                  >
-                    <span>{getDate(date)}</span>
-                    {count > 0 && <label>{count}</label>}
-                  </div>
-                </div>
-              );
-            }
-          )}
-        </Fragment>
-      )}
-      {recent.length > 0 && (
-        <Fragment>
-          <div className={styles.title}>
-            <b>Recent Chats</b>
-          </div>
-          {recent.map(
-            (
-              {
-                _id,
-                count,
-                msg,
-                date,
-                user: { name, avatar, status, id: userId, colorCode },
-              },
-              index
-            ) => {
-              return (
-                <div
-                  key={index}
-                  className={classNames(styles.user_card, {
-                    [styles.active]: _id === chatId,
-                  })}
-                  onClick={() => handleClickOnChat(_id, types.recent, index)}
-                  chatid={_id}
-                >
-                  <div className={styles.user}>
-                    <Avatar
-                      src={avatar || colorCode}
-                      name={name}
-                      status={status}
-                      size={35}
-                      userId={userId}
-                    />
-                    <div className={styles.msg} typingstatus="">
-                      <span className="truncate-1">{name}</span>
-                      <span className="truncate-1">{msg}</span>
-                    </div>
-                  </div>
-                  <div
-                    className={classNames(styles.time, {
-                      [styles.top]: !count,
-                    })}
-                  >
-                    <span>{getDate(date)}</span>
-                    {count > 0 && <label>{count}</label>}
-                  </div>
-                </div>
-              );
-            }
-          )}
-        </Fragment>
-      )}
-      {group.length > 0 && (
-        <Fragment>
-          <div className={styles.title}>
-            <b>Groups</b>
-            <button>
-              <i className="bx-plus"></i>
-            </button>
-          </div>
-          {group.map(
-            (
-              { _id, count, msg, date, group: { name, avatar, colorCode } },
-              index
-            ) => {
-              return (
-                <div
-                  key={index}
-                  className={classNames(styles.user_card, {
-                    [styles.active]: _id === chatId,
-                  })}
-                  onClick={() => handleClickOnChat(_id, types.group, index)}
-                  chatid={_id}
-                >
-                  <div className={styles.user}>
-                    <Avatar src={avatar || colorCode} name={name} size={35} />
-                    <div className={styles.msg} typingstatus="">
-                      <span className="truncate-1">{name}</span>
-                      <span className="truncate-1">{msg}</span>
-                    </div>
-                  </div>
-                  <div
-                    className={classNames(styles.time, {
-                      [styles.top]: !count,
-                    })}
-                  >
-                    <span>{getDate(date)}</span>
-                    {count > 0 && <label>{count}</label>}
-                  </div>
-                </div>
-              );
-            }
-          )}
-        </Fragment>
-      )}
-    </div>
+      {Object.entries(chats).map(([key, value], index) => {
+        return (
+          <ChatCard
+            key={index}
+            title={key}
+            list={value}
+            type={key}
+            chatId={chatId}
+            handleClick={handleClick}
+          />
+        );
+      })}
+    </Fragment>
   );
 };
 
