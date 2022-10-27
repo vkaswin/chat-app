@@ -12,12 +12,12 @@ const ContactCard = ({
   chatId,
   _id,
   colorCode,
-  handleChat,
+  handleClick,
 }) => {
   return (
     <Fragment>
       <div className={classNames(styles.contact_card)}>
-        <div className={styles.user} onClick={() => handleChat(chatId)}>
+        <div className={styles.user} onClick={() => handleClick(chatId, _id)}>
           <Avatar
             src={avatar || colorCode}
             name={name}

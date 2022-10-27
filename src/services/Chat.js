@@ -56,3 +56,7 @@ export const sendReaction = (msgId, data) => {
     data,
   });
 };
+
+export const getChatId = (userId) => {
+  return axios({ url: `${endpoints.chat.getChatId}/${userId}`, method: "get" });
+};

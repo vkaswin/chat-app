@@ -4,6 +4,7 @@ import { debounce } from "utils";
 import { useAuth } from "hooks";
 import { getContacts } from "services/Contact";
 import { searchUsers } from "services/User";
+import { getChatId } from "services/Chat";
 import ContactCard from "./Card";
 
 import styles from "./Contacts.module.scss";
@@ -52,12 +53,26 @@ const Contacts = () => {
       } = await searchUsers(params);
       setUsers(data);
     } catch (error) {
-      Toast({ type: "error", message: error?.response });
+      Toast({ type: "error", message: error?.message });
     }
   };
 
   const handleChange = async ({ target: { value } }) => {
     value.length === 0 ? setSearch("") : setSearch(value);
+  };
+
+  const handleClick = async (chatId, userId) => {
+    if (chatId) return handleChat(chatId);
+
+    try {
+      let {
+        data: { data },
+      } = await getChatId(userId);
+      handleChat(data);
+    } catch (error) {
+      console.log(error);
+      Toast({ type: "error", message: error?.message });
+    }
   };
 
   return (
@@ -78,7 +93,7 @@ const Contacts = () => {
                     return (
                       <ContactCard
                         key={ind}
-                        handleChat={handleChat}
+                        handleClick={handleClick}
                         {...user}
                       />
                     );
@@ -92,7 +107,7 @@ const Contacts = () => {
         <Fragment>
           {users.map((user, index) => {
             return (
-              <ContactCard key={index} handleChat={handleChat} {...user} />
+              <ContactCard key={index} handleClick={handleClick} {...user} />
             );
           })}
         </Fragment>

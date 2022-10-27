@@ -31,6 +31,7 @@ export const endpoints = {
     sendReaction: `${messageUrl}/send`,
     addFavourite: `${chatUrl}/favourite`,
     removeFavourite: `${chatUrl}/favourite`,
+    getChatId: `${chatUrl}/chatId`,
   },
   message: {
     createMessage: `${messageUrl}/create`,
