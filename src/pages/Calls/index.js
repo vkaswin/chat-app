@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Toast } from "components";
+import { Avatar, Toast, SearchBox } from "components";
 import { useAuth } from "hooks";
 import { getCallHistory } from "services/Call";
 import moment from "moment";
@@ -30,10 +30,19 @@ const Calls = () => {
     }
   };
 
+  const handleChange = ({ target: { value } }) => {
+    console.log(value);
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
     <div className={styles.calls_container}>
+      <SearchBox
+        title="Calls"
+        placeholder="Search here..."
+        onChange={handleChange}
+      />
       {callHistory.length > 0 &&
         callHistory.map(
           (

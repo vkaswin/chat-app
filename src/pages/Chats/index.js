@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Avatar, Toast } from "components";
+import { Avatar, SearchBox, Toast } from "components";
 import { classNames } from "utils";
 import { useAuth } from "hooks";
 import { getChatByType } from "services/Chat";
@@ -186,10 +186,19 @@ const Chats = () => {
     element.querySelector("[typingstatus]").removeAttribute("typing");
   };
 
+  const handleChange = ({ taget: { value } }) => {
+    console.log(value);
+  };
+
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className={styles.chat_list_container}>
+      <SearchBox
+        title="Chats"
+        placeholder="Search here..."
+        onChange={handleChange}
+      />
       {favourite.length > 0 && (
         <Fragment>
           <div className={styles.title}>

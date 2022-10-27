@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Toast } from "components";
-import { debounce } from "utils";
+import { SearchBox, Toast } from "components";
 import { useAuth } from "hooks";
 import { getContacts } from "services/Contact";
 import { searchUsers } from "services/User";
@@ -77,9 +76,11 @@ const Contacts = () => {
 
   return (
     <div className={styles.contacts_list}>
-      <div>
-        <input type="text" onChange={debounce(handleChange, 500)} />
-      </div>
+      <SearchBox
+        title="Contacts"
+        placeholder="Search Contacts..."
+        onChange={handleChange}
+      />
       {search.length === 0 ? (
         <Fragment>
           {contacts?.map(({ word, users }, index) => {

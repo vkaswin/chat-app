@@ -12,3 +12,4 @@ export { Avatar } from "./Avatar";
 export { Input } from "./Input";
 export { PasswordInput } from "./PasswordInput";
 export { ScrollBar } from "./ScrollBar";
+export { SearchBox } from "./SearchBox";
