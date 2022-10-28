@@ -224,14 +224,14 @@ export const Chat = ({ reactions }) => {
     });
   };
 
-  const addMessageInChat = (chats, messages, day) => {
+  const addMessageInChat = (chats, message, day) => {
     let index = chats.findIndex(({ day: key }) => {
       return day === key;
     });
 
     index === -1
-      ? chats.push({ day, messages: [messages] })
-      : chats[index].messages.push(messages);
+      ? chats.push({ day, messages: [message] })
+      : chats[index].messages.push(message);
   };
 
   const updateSeenStatus = async (msgId) => {
@@ -321,7 +321,13 @@ export const Chat = ({ reactions }) => {
       showNotification(message.msg);
       playMessageRingTone();
       let chats = [...prev];
-      addMessageInChat(chats, message, getDate(message.date));
+      let data = {
+        reactions: {},
+        reacted: null,
+        totalReactions: 0,
+        seen: false,
+      };
+      addMessageInChat(chats, { ...message, ...data }, getDate(message.date));
       msgId.current = message._id;
       message.sender.id !== userId &&
         sessionStorage.getItem("chatId") === chat._id &&
@@ -355,7 +361,6 @@ export const Chat = ({ reactions }) => {
   const handleReaction = async (reaction, msgId, index) => {
     try {
       await sendReaction(msgId, { reaction });
-      updateReactionInChat(reaction, msgId, undefined, index);
     } catch (error) {
       Toast({ type: "error", message: error?.message });
     }
@@ -366,16 +371,16 @@ export const Chat = ({ reactions }) => {
 
     setChats((prev) => {
       let chat = [...prev];
-      msgId.current = id;
+      msgId.current = null;
 
       if (!index) {
         chat.forEach(({ messages }, key) => {
-          let msgIndex = messages.findIndex(({ _id }) => {
+          let i = messages.findIndex(({ _id }) => {
             return _id === id;
           });
-          if (msgIndex !== -1) {
-            msgIndex = key;
-            index = msgIndex;
+          if (i !== -1) {
+            msgIndex = i;
+            index = key;
             return;
           }
         });
@@ -389,12 +394,14 @@ export const Chat = ({ reactions }) => {
 
       let msg = chat[index].messages[msgIndex];
 
-      if (!msg.reacted) {
-        msg.reacted = reacted;
-      }
-
-      if (msg.reactions[msg.reacted] === 1) {
-        delete msg.reactions[msg.reacted];
+      if (msg.reacted) {
+        if (msg.reactions[msg.reacted] === 1) {
+          delete msg.reactions[msg.reacted];
+        } else {
+          msg.reactions[msg.reacted] -= 1;
+        }
+      } else {
+        msg.totalReactions += 1;
       }
 
       if (msg.reactions.hasOwnProperty(reaction)) {
