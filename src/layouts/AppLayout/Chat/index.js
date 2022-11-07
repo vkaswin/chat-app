@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { OffCanvas, Toast, ScrollBar } from "components";
 import { TextArea } from "./TextArea";
 import { Header } from "./Header";

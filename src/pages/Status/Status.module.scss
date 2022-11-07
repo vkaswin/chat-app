@@ -1,0 +1,73 @@
+.container {
+  padding: 0px 15px;
+  .my_status {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    .avatar {
+      position: relative;
+      label {
+        position: absolute;
+        right: 0px;
+        bottom: 2px;
+        background-color: #4eac6e;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        i {
+          color: white;
+          font-size: 16px;
+        }
+      }
+    }
+    .title {
+      width: 100%;
+      color: var(--text-clr);
+      b {
+        display: block;
+        font-size: 16px;
+      }
+      span {
+        display: block;
+        font-size: 13px;
+      }
+    }
+    .icons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        background-color: #f6f6f9;
+        border-radius: 50%;
+        cursor: pointer;
+        i {
+          color: #495057;
+          font-size: 18px;
+        }
+      }
+    }
+  }
+  .status_list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    .title {
+      b {
+        color: #495057;
+        font-size: 16px;
+      }
+    }
+  }
+}

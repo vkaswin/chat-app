@@ -63,7 +63,7 @@ const Login = () => {
       router.push("/chats");
     } catch (error) {
       if (error?.message === "User not exist") {
-        router.push("/register");
+        router.push("/auth/register");
       }
       Toast({ type: "error", message: error?.message });
     }

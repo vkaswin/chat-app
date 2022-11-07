@@ -28,6 +28,11 @@ export const routes = [
         auth: true,
         component: "pages/Settings",
       },
+      {
+        path: "status",
+        auth: true,
+        component: "pages/Status",
+      },
     ],
   },
   {

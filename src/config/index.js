@@ -8,6 +8,7 @@ const chatUrl = "/api/chat";
 const messageUrl = "/api/message";
 const contactUrl = "/api/contact";
 const callUrl = "/api/call";
+const statusUrl = "/api/status";
 const othersUrl = "/api/";
 
 export const sockets = {
@@ -48,6 +49,10 @@ export const endpoints = {
     history: `${callUrl}/history`,
     initiate: `${callUrl}/initiate`,
     join: `${callUrl}/join`,
+  },
+  status: {
+    create: `${statusUrl}/create`,
+    allStatus: `${statusUrl}/list`,
   },
   others: {
     metaData: `${othersUrl}/metadata`,

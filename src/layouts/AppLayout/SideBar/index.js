@@ -27,6 +27,11 @@ export const SideBar = ({ theme, toggleTheme, className }) => {
       to: "chats",
     },
     {
+      icon: "bx-news",
+      label: "Status",
+      to: "status",
+    },
+    {
       icon: "bxs-user-detail",
       label: "Contacts",
       to: "contacts",
