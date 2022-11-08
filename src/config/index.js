@@ -33,6 +33,7 @@ export const endpoints = {
     addFavourite: `${chatUrl}/favourite`,
     removeFavourite: `${chatUrl}/favourite`,
     getChatId: `${chatUrl}/chatId`,
+    chatMessageByRange: `${chatUrl}/messages/range`,
   },
   message: {
     createMessage: `${messageUrl}/create`,

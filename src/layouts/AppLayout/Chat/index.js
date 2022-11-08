@@ -14,6 +14,7 @@ import {
   sendReaction,
   addToFavourite,
   removeFromFavourite,
+  getChatMessageByRange,
 } from "services/Chat";
 import { initiateCall } from "services/Call";
 import { debounce } from "utils";
@@ -185,7 +186,7 @@ export const Chat = ({ reactions }) => {
       let chat = [...chats];
       latest
         ? pushMessagesInChat(chat, list)
-        : unShiftMessagesInChat(chat, list.reverse());
+        : unShiftMessagesInChat(chat, list);
       setChats(chat);
       latest ? setHasMoreBottom(hasMore) : setHasMoreTop(hasMore);
     } catch (error) {
@@ -296,9 +297,7 @@ export const Chat = ({ reactions }) => {
   };
 
   //   Reply Msg
-  const onReply = (index, msgId) => {
-    let msg = findMsgById(index, msgId);
-    console.log(msg);
+  const onReply = (msg) => {
     setReply(msg);
   };
 
@@ -306,12 +305,28 @@ export const Chat = ({ reactions }) => {
     setReply(null);
   };
 
-  const focusMsgById = (id = msgId.current || null, behavior = "auto") => {
+  const focusMsgById = async (
+    id = msgId.current || null,
+    behavior = "auto",
+    reply
+  ) => {
     if (!id) return;
 
-    const element = document.querySelector(`[msgid='${id}']`);
-
-    if (!element) return;
+    const element = document.querySelector(
+      `[msgid='${reply ? reply._id : id}']`
+    );
+    if (!element) {
+      let params = {
+        startDate: findMsgById(id).date,
+        endDate: reply.date,
+      };
+      try {
+        let res = await getChatMessageByRange(chatId, params);
+        console.log(res);
+      } catch (error) {
+        Toast({ type: "error", message: error?.message });
+      }
+    }
 
     element.scrollIntoView({ block: "center", behavior });
   };
@@ -358,7 +373,7 @@ export const Chat = ({ reactions }) => {
     });
   };
 
-  const handleReaction = async (reaction, msgId, index) => {
+  const handleReaction = async (reaction, msgId) => {
     try {
       await sendReaction(msgId, { reaction });
     } catch (error) {
@@ -366,31 +381,17 @@ export const Chat = ({ reactions }) => {
     }
   };
 
-  const updateReactionInChat = (reaction, id, reacted, index) => {
-    let msgIndex;
+  const updateReactionInChat = (reaction, msgid) => {
+    let element = document.querySelector(`[msgid='${msgid}']`);
+    if (!element) return;
 
     setChats((prev) => {
       let chat = [...prev];
+      let index = element.parentElement.getAttribute("index");
+      let msgIndex = chat[index].messages.findIndex(({ _id }) => {
+        return _id === msgid;
+      });
       msgId.current = null;
-
-      if (!index) {
-        chat.forEach(({ messages }, key) => {
-          let i = messages.findIndex(({ _id }) => {
-            return _id === id;
-          });
-          if (i !== -1) {
-            msgIndex = i;
-            index = key;
-            return;
-          }
-        });
-      }
-
-      if (!msgIndex) {
-        msgIndex = chat[index].messages.findIndex(({ _id }) => {
-          return _id === id;
-        });
-      }
 
       let msg = chat[index].messages[msgIndex];
 
@@ -428,8 +429,13 @@ export const Chat = ({ reactions }) => {
     }
   };
 
-  const findMsgById = (index, msgId) => {
-    return chats[index].messages?.find(({ _id }) => {
+  const findMsgById = (msgId) => {
+    let element = document.querySelector(`[msgid='${msgId}']`);
+    console.log(msgId);
+    if (!element) return;
+    let index = +element.parentElement.getAttribute("index");
+    console.log(index);
+    return chats[+index].messages?.find(({ _id }) => {
       return _id === msgId;
     });
   };

@@ -60,3 +60,11 @@ export const sendReaction = (msgId, data) => {
 export const getChatId = (userId) => {
   return axios({ url: `${endpoints.chat.getChatId}/${userId}`, method: "get" });
 };
+
+export const getChatMessageByRange = (chatId, params) => {
+  return axios({
+    url: `${endpoints.chat.chatMessageByRange}/${chatId}`,
+    method: "get",
+    params,
+  });
+};
