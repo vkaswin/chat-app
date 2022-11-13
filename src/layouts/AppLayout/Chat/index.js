@@ -196,7 +196,7 @@ export const Chat = ({ reactions }) => {
     }
   };
 
-  const unShiftMessagesInChat = (chats, list) => {
+  const unShiftMessagesInChat = (chats, list, isFocus = true) => {
     list.forEach(({ day, messages }, i) => {
       let index = chats.findIndex(({ day: key }) => {
         return day === key;
@@ -205,7 +205,7 @@ export const Chat = ({ reactions }) => {
         ? chats.unshift({ day, messages })
         : chats[index].messages.unshift(...messages);
 
-      if (i === 0) {
+      if (isFocus && i === 0) {
         msgId.current = messages[messages.length - 1]._id;
       }
     });
@@ -256,9 +256,7 @@ export const Chat = ({ reactions }) => {
         .getAttribute("msgid");
       setTopLoader(true);
       getMessages(msgId, 0);
-    }
-
-    if (hasMoreBottom && scrollHeight - scrollTop === clientHeight) {
+    } else if (hasMoreBottom && scrollHeight - scrollTop === clientHeight) {
       const msgId = chatContainerRef.current
         .querySelector("[last]")
         .getAttribute("msgid");
@@ -315,20 +313,38 @@ export const Chat = ({ reactions }) => {
     const element = document.querySelector(
       `[msgid='${reply ? reply._id : id}']`
     );
-    if (!element) {
+    if (element) {
+      element.scrollIntoView({ block: "center", behavior });
+    } else {
+      if (!reply) return;
+
       let params = {
-        startDate: findMsgById(id).date,
-        endDate: reply.date,
+        startDate: reply.date,
+        endDate: findMsgById(
+          chatContainerRef.current
+            .querySelector("[first]")
+            .getAttribute("msgid")
+        ).date,
       };
       try {
-        let res = await getChatMessageByRange(chatId, params);
-        console.log(res);
+        let {
+          data: { data },
+        } = await getChatMessageByRange(chatId, params);
+        msgId.current = reply._id;
+        let chat = [...chats];
+        unShiftMessagesInChat(chat, data, false);
+        setChats(chat);
       } catch (error) {
         Toast({ type: "error", message: error?.message });
       }
     }
+  };
 
-    element.scrollIntoView({ block: "center", behavior });
+  const hightLightReplyMsg = (element) => {
+    element.setAttribute("focus", true);
+    setTimeout(() => {
+      element.removeAttribute("focus");
+    }, 3000);
   };
 
   const handleMessage = ({ message, chat, userId }) => {
@@ -431,10 +447,8 @@ export const Chat = ({ reactions }) => {
 
   const findMsgById = (msgId) => {
     let element = document.querySelector(`[msgid='${msgId}']`);
-    console.log(msgId);
     if (!element) return;
     let index = +element.parentElement.getAttribute("index");
-    console.log(index);
     return chats[+index].messages?.find(({ _id }) => {
       return _id === msgId;
     });

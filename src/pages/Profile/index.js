@@ -2,6 +2,8 @@ import React from "react";
 import { Avatar, DropDown, DropDownItem } from "components";
 import { useAuth } from "hooks";
 
+import profileBg from "assets/images/profile-bg.jpg";
+
 import styles from "./Profile.module.scss";
 
 const Profile = () => {
@@ -25,12 +27,7 @@ const Profile = () => {
   return (
     <div className={styles.profile_container}>
       <div className={styles.profile_bg}>
-        <img
-          src="https://themesbrand.com/doot/layouts/assets/images/small/img-4.jpg"
-          className={styles.bg}
-          loading="lazy"
-          alt=""
-        />
+        <img src={profileBg} className={styles.bg} loading="lazy" alt="" />
         <div className={styles.title}>
           <b>My Profile</b>
           <i className="bx-dots-vertical-rounded" id="my-profile"></i>
