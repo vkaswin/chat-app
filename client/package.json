@@ -1,7 +1,7 @@
 {
-    "name": "react-chat-app",
+    "name": "chat-app",
     "version": "0.1.0",
-    "homepage": "https://vkaswin.github.io/react-chat-app",
+    "homepage": "https://vkaswin.github.io/chat-app",
     "private": true,
     "dependencies": {
         "axios": "^0.27.2",

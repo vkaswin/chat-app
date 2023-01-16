@@ -104,6 +104,27 @@ export const getScrollParent = (node) => {
   }
 };
 
+
+// export const getScrollParent = (element: HTMLElement | null) => {
+//     var style = getComputedStyle(element!);
+//     var excludeStaticParent = style.position === "absolute";
+//     // var overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
+//     var regex = /(auto|scroll|hidden)/;
+  
+//     if (style.position === "fixed") return document.body;
+//     for (var parent = element; (parent = parent!.parentElement); ) {
+//       style = getComputedStyle(parent);
+//       if (excludeStaticParent && style.position === "static") {
+//         continue;
+//       }
+//       if (regex.test(style.overflow + style.overflowY + style.overflowX))
+//         return parent;
+//     }
+  
+//     return document.body;
+//   };
+  
+
 export const cookies = () => {
   const set = ({ name, value, days }) => {
     let expireDate = new Date();
