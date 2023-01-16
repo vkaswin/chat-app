@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkchat_app=self.webpackChunkchat_app||[]).push([[4329],{4329:function(c,a,p){c.exports=p.p+"static/media/favicon.6072f0ecd8b7685691ff.ico"}}]);

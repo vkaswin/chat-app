@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkchat_app=self.webpackChunkchat_app||[]).push([[8731],{8731:function(t,e,_){_.r(e),e.default={chat_input:"TextArea_chat_input__+dl6x",input_field:"TextArea_input_field__++nq-"}}}]);
+//# sourceMappingURL=8731.e16473a1.chunk.js.map

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkchat_app=self.webpackChunkchat_app||[]).push([[850],{850:function(p,c,a){p.exports=a.p+"static/media/profile-bg.8111c4656c8bc3b62569.jpg"}}]);

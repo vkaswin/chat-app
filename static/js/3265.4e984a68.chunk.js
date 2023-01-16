@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkchat_app=self.webpackChunkchat_app||[]).push([[3265],{3265:function(a,c,t){t.r(c),c.default={contact_card:"ContactCard_contact_card__vHenm",user:"ContactCard_user__usBvC"}}}]);
+//# sourceMappingURL=3265.4e984a68.chunk.js.map

@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkchat_app=self.webpackChunkchat_app||[]).push([[6484],{6484:function(a,_,e){e.r(_),_.default={change_password_container:"ChangePassword_change_password_container__jHOkx",title:"ChangePassword_title__828JK",profile:"ChangePassword_profile__qGtwK",form_field:"ChangePassword_form_field__IvBDC",btn:"ChangePassword_btn__oEGym"}}}]);
+//# sourceMappingURL=6484.fadefa16.chunk.js.map

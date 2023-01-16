@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/5790.d3987584.chunk.css","mappings":"AAAA,+BACE,iBAAkB,CADpB,sDAGI,gBAAiB,CAHrB,wDAKM,aAAc","sources":["pages/Contacts/Contacts.module.scss"],"sourcesContent":[".contacts_list {\n  position: relative;\n  .title {\n    margin: 10px 15px;\n    b {\n      color: #4eac6e;\n    }\n  }\n}\n"],"names":[],"sourceRoot":""}

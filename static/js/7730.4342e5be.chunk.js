@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkreact_chat_app=self.webpackChunkreact_chat_app||[]).push([[7730],{7730:function(t,a,c){c.r(a),a.default={empty_chat:"EmptyChat_empty_chat__akg3l"}}}]);
-//# sourceMappingURL=7730.4342e5be.chunk.js.map

@@ -1,1 +1,0 @@
-{"version":3,"file":"static/js/7730.4342e5be.chunk.js","mappings":"6HACA,WAAgB,WAAa,8B","sources":["webpack://react-chat-app/./src/layouts/AppLayout/EmptyChat/EmptyChat.module.scss?65d0"],"sourcesContent":["// extracted by mini-css-extract-plugin\nexport default {\"empty_chat\":\"EmptyChat_empty_chat__akg3l\"};"],"names":[],"sourceRoot":""}

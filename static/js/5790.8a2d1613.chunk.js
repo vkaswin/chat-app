@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkchat_app=self.webpackChunkchat_app||[]).push([[5790],{5790:function(t,c,a){a.r(c),c.default={contacts_list:"Contacts_contacts_list__70eS1",title:"Contacts_title__CFJgb"}}}]);
+//# sourceMappingURL=5790.8a2d1613.chunk.js.map

@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkchat_app=self.webpackChunkchat_app||[]).push([[6696],{6696:function(a,t,_){_.r(t),t.default={card:"StatusCard_card__Jawxr",avatar:"StatusCard_avatar__lHmGe",profile:"StatusCard_profile__fuCNK",user_info:"StatusCard_user_info__K2NI+"}}}]);
+//# sourceMappingURL=6696.60506177.chunk.js.map
