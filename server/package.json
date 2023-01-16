@@ -10,14 +10,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/vkaswin/node-chat-app.git"
+        "url": "git+https://github.com/vkaswin/chat-app.git"
     },
     "author": "Aswin Kumar",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/vkaswin/node-chat-app/issues"
+        "url": "https://github.com/vkaswin/chat-app/issues"
     },
-    "homepage": "https://github.com/vkaswin/node-chat-app#readme",
+    "homepage": "https://github.com/vkaswin/chat-app#readme",
     "dependencies": {
         "axios": "^0.27.2",
         "bcryptjs": "^2.4.3",

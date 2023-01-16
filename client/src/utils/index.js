@@ -104,13 +104,12 @@ export const getScrollParent = (node) => {
   }
 };
 
-
 // export const getScrollParent = (element: HTMLElement | null) => {
 //     var style = getComputedStyle(element!);
 //     var excludeStaticParent = style.position === "absolute";
 //     // var overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
 //     var regex = /(auto|scroll|hidden)/;
-  
+
 //     if (style.position === "fixed") return document.body;
 //     for (var parent = element; (parent = parent!.parentElement); ) {
 //       style = getComputedStyle(parent);
@@ -120,10 +119,9 @@ export const getScrollParent = (node) => {
 //       if (regex.test(style.overflow + style.overflowY + style.overflowX))
 //         return parent;
 //     }
-  
+
 //     return document.body;
 //   };
-  
 
 export const cookies = () => {
   const set = ({ name, value, days }) => {
@@ -207,5 +205,5 @@ export const sessionStorage = () => {
 
 export const getReactionUrl = (reaction) => {
   if (!reaction) return;
-  return `https://firebasestorage.googleapis.com/v0/b/node-chat-app-88711.appspot.com/o/reaction%2F${reaction}.png?alt=media`;
+  return `https://firebasestorage.googleapis.com/v0/b/chat-app-d7a32.appspot.com/o/reaction%2F${reaction}.png?alt=media`;
 };

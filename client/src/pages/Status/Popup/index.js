@@ -9,7 +9,7 @@ const StatusPopup = () => {
     name = "Karthick Kumar",
     email = "karthick@gmail.com",
     status = false,
-    avatar = "https://firebasestorage.googleapis.com/v0/b/node-chat-app-88711.appspot.com/o/image%2Favataaars%20(2).png?alt=media",
+    avatar = "https://firebasestorage.googleapis.com/v0/b/chat-app-d7a32.appspot.com/o/image%2Favataaars%20(2).png?alt=media",
     colorCode = "#11C1DA",
   } = {};
   return (
@@ -22,7 +22,7 @@ const StatusPopup = () => {
           </div>
         </div>
         <div className={styles.media}>
-          <img src="https://firebasestorage.googleapis.com/v0/b/node-chat-app-88711.appspot.com/o/image%2Fdownload (1).jpeg?alt=media" />
+          <img src="https://firebasestorage.googleapis.com/v0/b/chat-app-d7a32.appspot.com/o/image%2Fdownload (1).jpeg?alt=media" />
         </div>
         <div className={styles.footer}></div>
       </div>

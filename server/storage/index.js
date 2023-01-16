@@ -2,13 +2,13 @@ const { initializeApp } = require("firebase/app");
 const { getStorage, ref, uploadBytes } = require("firebase/storage");
 
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  appId: process.env.FIREBASE_APP_ID,
-  authDomain: "node-chat-app-88711.firebaseapp.com",
-  projectId: "node-chat-app-88711",
-  storageBucket: "node-chat-app-88711.appspot.com",
-  messagingSenderId: "117512449188",
-  measurementId: "G-RHRWSZ0863",
+  apiKey: "AIzaSyAc6KdGErlxfmNxaoU4pUyujHDQIfFyQh8",
+  authDomain: "chat-app-d7a32.firebaseapp.com",
+  projectId: "chat-app-d7a32",
+  storageBucket: "chat-app-d7a32.appspot.com",
+  messagingSenderId: "727648611633",
+  appId: "1:727648611633:web:f3b9b31212973c61a09410",
+  measurementId: "G-Q56PB18YMH",
 };
 
 const app = initializeApp(firebaseConfig);
