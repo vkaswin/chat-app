@@ -1,5 +1,5 @@
 import { axios } from "services";
-import { endpoints } from "config";
+import { endpoints } from "config/config";
 
 export const getCallHistory = () => {
   return axios({ url: endpoints.call.history, method: "get" });

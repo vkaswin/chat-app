@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-import { baseURL } from "config";
+import { baseURL } from "config/config";
 import { cookies } from "utils";
 
 export const socket = {

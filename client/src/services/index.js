@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { cookies } from "utils";
-import { baseURL } from "config";
+import { baseURL } from "config/config";
 
 export const axios = Axios.create({ baseURL });
 

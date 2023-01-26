@@ -1,5 +1,5 @@
 import { axios } from "services";
-import { endpoints } from "config";
+import { endpoints } from "config/config";
 
 export const getChatByType = (type) => {
   return axios({ url: `${endpoints.chat.list}/${type}`, method: "get" });

@@ -1,5 +1,5 @@
 import { axios } from "services";
-import { endpoints } from "config";
+import { endpoints } from "config/config";
 
 export const createStatus = (data) => {
   return axios({ url: endpoints.status.create, method: "post", data });
