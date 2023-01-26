@@ -1,5 +1,3 @@
-import { baseURL } from "config/config";
-
 export const debounce = (fn, delay) => {
   let timeoutID;
   return (...args) => {

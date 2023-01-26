@@ -1,5 +1,5 @@
 import { axios } from "services";
-import { endpoints } from "config/config";
+import { endpoints } from "./config";
 import { Toast } from "components";
 
 export const metaData = (data) => {
