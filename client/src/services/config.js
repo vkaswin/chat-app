@@ -1,7 +1,7 @@
 export const baseURL =
   process.env.NODE_ENV === "development"
     ? "http://localhost:8000"
-    : "https://chat-app-pi-olive.vercel.app";
+    : "https://chat-app-25ld.onrender.com";
 
 const userURL = "/api/user";
 const chatUrl = "/api/chat";
